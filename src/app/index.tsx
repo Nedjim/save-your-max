@@ -1,10 +1,10 @@
-import React from "react";
-import { StatusBar, StyleSheet } from "react-native";
-import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
-import { BLACK } from "../constants/colors";
-import List from "../containers/List";
-import Footer from "../containers/Footer";
-import { DATA } from "../services";
+import React from 'react';
+import { StatusBar, StyleSheet } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { BLACK } from '../constants/colors';
+import Footer from '../containers/Footer';
+import List from '../containers/List';
+import { DATA } from '../services';
 
 export default function Index() {
   const data = DATA;

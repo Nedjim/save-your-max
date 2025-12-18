@@ -1,19 +1,19 @@
-import AntDesign from "@expo/vector-icons/AntDesign";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import { BLACK, TURQUOISE } from "../constants/colors";
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { BLACK, TURQUOISE } from '../constants/colors';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
-type IconTypes = "plus" | "close" | "down" | "up";
+type IconTypes = 'plus' | 'close' | 'down' | 'up';
 
 type IconButtonProps = {
-  onPress: () => void;
   name: IconTypes;
-  type?: "default" | "primary";
+  onPress?: () => void;
+  type?: 'default' | 'primary';
   color?: string;
   size?: number;
 };
 
 const IconButton = (props: IconButtonProps) => {
-  const { onPress, name, type = "default", size = 16, color = BLACK } = props;
+  const { onPress, name, type = 'default', size = 16, color = BLACK } = props;
 
   return (
     <View style={styles.section}>
@@ -28,8 +28,8 @@ const IconButton = (props: IconButtonProps) => {
 
 const styles = StyleSheet.create({
   section: {
-    display: "flex",
-    alignItems: "flex-end",
+    display: 'flex',
+    alignItems: 'flex-end',
   },
   button: {
     width: 35,
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   icon: {
-    textAlign: "center",
+    textAlign: 'center',
   },
 });
 

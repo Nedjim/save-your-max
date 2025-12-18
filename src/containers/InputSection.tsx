@@ -1,23 +1,28 @@
-import { KeyboardTypeOptions, StyleSheet, Text, TextInput, View } from 'react-native'
-
-import IconButton from '../components/IconButton'
-import { DARK_GREY, WHITE } from '../constants/colors'
+import {
+  KeyboardTypeOptions,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
+import IconButton from '../components/IconButton';
+import { DARK_GREY, WHITE } from '../constants/colors';
 
 type InputSectionProps = {
-  value: string
-  onChange: (key: string) => void
-  label: string
-  keyboardType?: KeyboardTypeOptions
-  maxLength?: number
-}
+  value: string;
+  onChange: (key: string) => void;
+  label: string;
+  keyboardType?: KeyboardTypeOptions;
+  maxLength?: number;
+};
 
 const InputSection = (props: InputSectionProps) => {
-  const { onChange, value, label, ...rest } = props
-  const id = label.replace(/ /g, '_').toLocaleLowerCase()
+  const { onChange, value, label, ...rest } = props;
+  const id = label.replace(/ /g, '_').toLocaleLowerCase();
 
   const clearValue = () => {
-    onChange('')
-  }
+    onChange('');
+  };
 
   return (
     <View style={styles.section}>
@@ -34,21 +39,26 @@ const InputSection = (props: InputSectionProps) => {
         {...rest}
       />
       <View style={[!value.length && styles.hidden]}>
-        <IconButton name="close" onPress={clearValue} size={12} color={DARK_GREY} />
+        <IconButton
+          name="close"
+          onPress={clearValue}
+          size={12}
+          color={DARK_GREY}
+        />
       </View>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   section: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   label: {
     width: 60,
-    color: WHITE
+    color: WHITE,
   },
   input: {
     height: 40,
@@ -56,11 +66,11 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     padding: 10,
-    backgroundColor: WHITE
+    backgroundColor: WHITE,
   },
   hidden: {
-    opacity: 0
-  }
-})
+    opacity: 0,
+  },
+});
 
-export default InputSection
+export default InputSection;

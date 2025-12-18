@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { FlatList, View } from "react-native";
-import { Item as ItemType } from "../types";
-import Item from "../components/Item";
+import { useState } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
+import { Item as ItemType } from '../types';
+import Item from './Item';
 
 type ListProps = {
   data: ItemType[];
@@ -12,14 +12,18 @@ const List = (props: ListProps) => {
   const [selectedId, setSelectedId] = useState<string>();
 
   return (
-    <View>
+    <View style={styles.list}>
       <FlatList
         data={data}
         renderItem={({ item }) => {
           return (
             <Item
               item={item}
-              onPress={() => setSelectedId(item.id)}
+              onPress={() =>
+                selectedId === item.id
+                  ? setSelectedId(undefined)
+                  : setSelectedId(item.id)
+              }
               isSelected={item.id === selectedId}
             />
           );
@@ -30,5 +34,11 @@ const List = (props: ListProps) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  list: {
+    flex: 1,
+  },
+});
 
 export default List;
