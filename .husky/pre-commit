@@ -1,0 +1,13 @@
+#!/bin/sh
+
+echo "🚀 Pre-commit hook started"
+
+# Check files formatting
+npx expo lint
+
+if [ $? -ne 0 ]; then
+  echo "❌ Formatting failed. Commit aborted."
+  exit 1
+fi
+
+echo "✅ Files are correctly formatted. Commit allowed 🚀"

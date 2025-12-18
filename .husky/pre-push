@@ -1,0 +1,13 @@
+#!/bin/sh
+
+echo "🚀 Pre-push hook started"
+
+# Check files formatting
+npx expo lint
+
+if [ $? -ne 0 ]; then
+  echo "❌ Check failed. Push aborted."
+  exit 1
+fi
+
+echo "✅ All checks passed. Push allowed 🚀"

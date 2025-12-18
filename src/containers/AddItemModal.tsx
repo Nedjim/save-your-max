@@ -1,24 +1,23 @@
-import { useState } from "react";
-import { Button, Modal, StyleSheet, Text, TextInput, View } from "react-native";
-import DateTimePicker, {
-  DateType,
-  useDefaultStyles,
-} from "react-native-ui-datepicker";
-import { BLACK, TURQUOISE } from "../constants/colors";
-import InputSection from "./InputSection";
+import { useState } from 'react'
+import { Button, Modal, StyleSheet, View } from 'react-native'
+import DateTimePicker, { DateType, useDefaultStyles } from 'react-native-ui-datepicker'
+
+import { BLACK, TURQUOISE } from '../constants/colors'
+
+import InputSection from './InputSection'
 
 type AddItemModalProps = {
-  visible: boolean;
-  closeModal: () => void;
-};
+  visible: boolean
+  closeModal: () => void
+}
 
 export default function AddItemModal(props: AddItemModalProps) {
-  const { visible, closeModal } = props;
-  const [name, onChangeName] = useState("");
-  const [reps, onChangeReps] = useState("");
-  const [charge, onChangeCharge] = useState("");
-  const [date, setDate] = useState<DateType>();
-  const defaultStyles = useDefaultStyles();
+  const { visible, closeModal } = props
+  const [name, onChangeName] = useState('')
+  const [reps, onChangeReps] = useState('')
+  const [charge, onChangeCharge] = useState('')
+  const [date, setDate] = useState<DateType>()
+  const defaultStyles = useDefaultStyles()
 
   return (
     <Modal
@@ -26,22 +25,12 @@ export default function AddItemModal(props: AddItemModalProps) {
       animationType="slide"
       transparent={true}
       onRequestClose={() => {
-        closeModal();
+        closeModal()
       }}
     >
       <View style={styles.container}>
-        <InputSection
-          value={name}
-          label="Name"
-          onChange={onChangeName}
-          maxLength={20}
-        />
-        <InputSection
-          value={reps}
-          label="Reps"
-          onChange={onChangeReps}
-          keyboardType="numeric"
-        />
+        <InputSection value={name} label="Name" onChange={onChangeName} maxLength={20} />
+        <InputSection value={reps} label="Reps" onChange={onChangeReps} keyboardType="numeric" />
         <InputSection
           value={charge}
           label="Charge"
@@ -71,21 +60,21 @@ export default function AddItemModal(props: AddItemModalProps) {
         </View>
       </View>
     </Modal>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: BLACK,
-    padding: 16,
+    padding: 16
   },
   footer: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "flex-end",
-    gap: 8,
-  },
-});
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    gap: 8
+  }
+})

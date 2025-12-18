@@ -13,7 +13,7 @@ type IconButtonProps = {
 };
 
 const IconButton = (props: IconButtonProps) => {
-  const { onPress, name, type = "default", size = 24, color = BLACK } = props;
+  const { onPress, name, type = "default", size = 16, color = BLACK } = props;
 
   return (
     <View style={styles.section}>
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
   button: {
     width: 35,
-    padding: 4,
+    padding: 8,
   },
   default: {},
   primary: {
