@@ -1,10 +1,12 @@
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { BLACK, DARK_GREY, TURQUOISE } from "../constants/colors";
+import { BLACK, TURQUOISE } from "../constants/colors";
+
+type IconTypes = "plus" | "close" | "down" | "up";
 
 type IconButtonProps = {
   onPress: () => void;
-  name: "plus" | "close";
+  name: IconTypes;
   type?: "default" | "primary";
   color?: string;
   size?: number;

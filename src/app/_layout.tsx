@@ -1,5 +1,5 @@
 import { Stack } from "expo-router";
-import { BACKGROUND, DARK_GREY } from "../constants/colors";
+import { DARK_GREY, BLACK } from "../constants/colors";
 
 const TITLE = "Save your max !";
 
@@ -8,7 +8,7 @@ export default function RootLayout() {
     <Stack
       screenOptions={{
         headerStyle: {
-          backgroundColor: BACKGROUND,
+          backgroundColor: BLACK,
         },
         headerTintColor: DARK_GREY,
         headerTitle: TITLE,

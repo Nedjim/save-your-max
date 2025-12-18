@@ -4,7 +4,7 @@ import DateTimePicker, {
   DateType,
   useDefaultStyles,
 } from "react-native-ui-datepicker";
-import { BACKGROUND, TURQUOISE, WHITE } from "../constants/colors";
+import { BLACK, TURQUOISE } from "../constants/colors";
 import InputSection from "./InputSection";
 
 type AddItemModalProps = {
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: BACKGROUND,
+    backgroundColor: BLACK,
     padding: 16,
   },
   footer: {
