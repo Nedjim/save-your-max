@@ -19,9 +19,10 @@ const ItemRow = (props: ItemRowProps) => {
 const styles = StyleSheet.create({
   row: {
     display: 'flex',
-    flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 8,
+    flexDirection: 'row',
+    flex: 1,
+    padding: 4,
   },
 });
 

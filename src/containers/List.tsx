@@ -1,36 +1,70 @@
 import { useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
-import { Item as ItemType } from '../types';
+import { SectionList, StyleSheet, View } from 'react-native';
+import IconButton from '../components/IconButton';
+import ItemBanner from '../components/ItemBanner';
+import { DATA } from '../services';
+import AddSectionItemModal from './AddSectionItemModal';
 import Item from './Item';
 
-type ListProps = {
-  data: ItemType[];
-};
+const List = () => {
+  const data = DATA;
 
-const List = (props: ListProps) => {
-  const { data } = props;
-  const [selectedId, setSelectedId] = useState<string>();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedId, setSelectedId] = useState<string>('');
+
+  const selectedSection = data.find((e) => e.id === selectedId);
+
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
 
   return (
     <View style={styles.list}>
-      <FlatList
-        data={data}
-        renderItem={({ item }) => {
+      <SectionList
+        sections={data}
+        keyExtractor={(item) => item.id}
+        renderSectionHeader={({ section: { id, title } }) => {
           return (
-            <Item
-              item={item}
+            <ItemBanner
+              title={title}
+              isSelected={selectedId === id}
               onPress={() =>
-                selectedId === item.id
-                  ? setSelectedId(undefined)
-                  : setSelectedId(item.id)
+                selectedId === id ? setSelectedId(undefined) : setSelectedId(id)
               }
-              isSelected={item.id === selectedId}
             />
           );
         }}
-        keyExtractor={(item) => item.id}
+        renderItem={({ section: { id }, item }) => {
+          if (id !== selectedId) {
+            return null;
+          }
+
+          return <Item item={item} key={item.id} />;
+        }}
+        renderSectionFooter={({ section: { id } }) => {
+          if (id !== selectedId) {
+            return null;
+          }
+
+          return (
+            <View style={styles.footer}>
+              <IconButton name="plus" onPress={openModal} type="secondary" />
+            </View>
+          );
+        }}
         extraData={selectedId}
       />
+      {selectedSection && (
+        <AddSectionItemModal
+          visible={modalVisible}
+          closeModal={closeModal}
+          selectedSection={selectedSection}
+        />
+      )}
     </View>
   );
 };
@@ -38,6 +72,9 @@ const List = (props: ListProps) => {
 const styles = StyleSheet.create({
   list: {
     flex: 1,
+  },
+  footer: {
+    marginTop: 8,
   },
 });
 

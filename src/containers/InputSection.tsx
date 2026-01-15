@@ -1,24 +1,17 @@
-import {
-  KeyboardTypeOptions,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { KeyboardTypeOptions, StyleSheet, TextInput, View } from 'react-native';
 import IconButton from '../components/IconButton';
 import { DARK_GREY, WHITE } from '../constants/colors';
 
 type InputSectionProps = {
   value: string;
   onChange: (key: string) => void;
-  label: string;
   keyboardType?: KeyboardTypeOptions;
   maxLength?: number;
+  id: string;
 };
 
 const InputSection = (props: InputSectionProps) => {
-  const { onChange, value, label, ...rest } = props;
-  const id = label.replace(/ /g, '_').toLocaleLowerCase();
+  const { onChange, value, id, ...rest } = props;
 
   const clearValue = () => {
     onChange('');
@@ -26,9 +19,6 @@ const InputSection = (props: InputSectionProps) => {
 
   return (
     <View style={styles.section}>
-      <Text style={styles.label} nativeID={id}>
-        {label}
-      </Text>
       <TextInput
         id={id}
         style={styles.input}
@@ -38,7 +28,7 @@ const InputSection = (props: InputSectionProps) => {
         value={value}
         {...rest}
       />
-      <View style={[!value.length && styles.hidden]}>
+      <View style={[styles.clearInput, !value.length && styles.hidden]}>
         <IconButton
           name="close"
           onPress={clearValue}
@@ -56,17 +46,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  label: {
-    width: 60,
-    color: WHITE,
-  },
   input: {
     height: 40,
-    width: 150,
     margin: 12,
     borderWidth: 1,
     padding: 10,
     backgroundColor: WHITE,
+  },
+  clearInput: {
+    position: 'absolute',
+    right: 16,
   },
   hidden: {
     opacity: 0,
