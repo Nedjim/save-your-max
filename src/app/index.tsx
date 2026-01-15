@@ -1,7 +1,7 @@
 import React from 'react';
 import { StatusBar, StyleSheet } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { BLACK } from '../constants/colors';
+import { GREY } from '../constants/colors';
 import Footer from '../containers/Footer';
 import List from '../containers/List';
 import { DATA } from '../services';
@@ -25,6 +25,6 @@ const styles = StyleSheet.create({
     gap: 16,
     padding: 16,
     marginTop: StatusBar.currentHeight || 0,
-    backgroundColor: BLACK,
+    backgroundColor: GREY,
   },
 });

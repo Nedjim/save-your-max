@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { BLACK, TURQUOISE } from '../constants/colors';
+import { BLACK, LIGHT_GREY, TURQUOISE } from '../constants/colors';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 type IconTypes = 'plus' | 'close' | 'down' | 'up';
@@ -7,7 +7,7 @@ type IconTypes = 'plus' | 'close' | 'down' | 'up';
 type IconButtonProps = {
   name: IconTypes;
   onPress?: () => void;
-  type?: 'default' | 'primary';
+  type?: 'default' | 'primary' | 'secondary';
   color?: string;
   size?: number;
 };
@@ -34,12 +34,15 @@ const styles = StyleSheet.create({
   button: {
     width: 35,
     padding: 8,
+    borderRadius: 100,
+    elevation: 2,
   },
   default: {},
   primary: {
     backgroundColor: TURQUOISE,
-    borderRadius: 100,
-    elevation: 2,
+  },
+  secondary: {
+    backgroundColor: LIGHT_GREY,
   },
   icon: {
     textAlign: 'center',
