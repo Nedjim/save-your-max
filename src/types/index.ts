@@ -1,5 +1,12 @@
 import { Dayjs } from 'dayjs';
 
+export type Category = {
+  id: string;
+  title: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 export type Item = {
   id: string;
   title: string;

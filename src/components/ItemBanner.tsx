@@ -5,12 +5,12 @@ import ItemRow from './ItemRow';
 
 type ItemBannerProps = {
   title: string;
-  isSelected: boolean;
-  onPress: () => void;
+  isSelected?: boolean;
+  onPress?: () => void;
 };
 
 const ItemBanner = (props: ItemBannerProps) => {
-  const { title, isSelected, onPress } = props;
+  const { title, isSelected = false, onPress } = props;
 
   const backgroundColor = isSelected ? TURQUOISE : MEDIUM_GREY;
   const color = isSelected ? BLACK : LIGHT_GREY;

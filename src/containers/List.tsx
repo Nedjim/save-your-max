@@ -1,70 +1,50 @@
 import { useState } from 'react';
-import { SectionList, StyleSheet, View } from 'react-native';
-import IconButton from '../components/IconButton';
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import ItemBanner from '../components/ItemBanner';
-import { DATA } from '../services';
-import AddSectionItemModal from './AddSectionItemModal';
-import Item from './Item';
+import { useCategories } from '../hooks/categories';
 
 const List = () => {
-  const data = DATA;
+  const { data: categories = [], isLoading, isError, error } = useCategories();
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedId, setSelectedId] = useState<string>();
+  if (isLoading) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
 
-  const selectedSection = data.find((e) => e.id === selectedId);
+  if (isError) {
+    return <Text>Error: {(error as Error).message}</Text>;
+  }
 
-  const openModal = () => {
-    setModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-  };
+  if (categories.length === 0) {
+    return <Text>Categories empty</Text>;
+  }
 
   return (
     <View style={styles.list}>
-      <SectionList
-        sections={data}
+      <FlatList
+        data={categories}
         keyExtractor={(item) => item.id}
-        renderSectionHeader={({ section: { id, title } }) => {
+        renderItem={({ item }) => {
+          const { id, title } = item;
+
           return (
             <ItemBanner
               title={title}
               isSelected={selectedId === id}
               onPress={() =>
-                selectedId === id ? setSelectedId(undefined) : setSelectedId(id)
+                selectedId === id ? setSelectedId(null) : setSelectedId(id)
               }
             />
           );
         }}
-        renderItem={({ section: { id }, item }) => {
-          if (id !== selectedId) {
-            return null;
-          }
-
-          return <Item item={item} key={item.id} />;
-        }}
-        renderSectionFooter={({ section: { id } }) => {
-          if (id !== selectedId) {
-            return null;
-          }
-
-          return (
-            <View style={styles.footer}>
-              <IconButton name="plus" onPress={openModal} type="secondary" />
-            </View>
-          );
-        }}
         extraData={selectedId}
       />
-      {selectedSection && (
-        <AddSectionItemModal
-          visible={modalVisible}
-          closeModal={closeModal}
-          selectedSection={selectedSection}
-        />
-      )}
     </View>
   );
 };
@@ -72,9 +52,6 @@ const List = () => {
 const styles = StyleSheet.create({
   list: {
     flex: 1,
-  },
-  footer: {
-    marginTop: 8,
   },
 });
 
