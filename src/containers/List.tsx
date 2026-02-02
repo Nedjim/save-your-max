@@ -10,7 +10,7 @@ const List = () => {
   const data = DATA;
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedId, setSelectedId] = useState<string>('');
+  const [selectedId, setSelectedId] = useState<string>();
 
   const selectedSection = data.find((e) => e.id === selectedId);
 

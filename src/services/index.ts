@@ -1,4 +1,4 @@
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { Item } from '../types';
 
 export const DATA: Item[] = [
@@ -25,27 +25,18 @@ export const DATA: Item[] = [
   },
 ];
 
-export const removeItem = (id: string) => {
-  return DATA.filter((item) => item.id !== id);
-};
+// type addItemParams = {
+//   name: string;
+//   charge: number;
+//   reps: number;
+//   date: Dayjs;
+// };
 
-type addItemParams = {
-  name: string;
-  charge: number;
-  reps: number;
-  date: Dayjs;
-};
-
-export const addItem = (params: addItemParams) => {
-  const { name, charge, reps, date } = params;
-  const newData = [...DATA];
-
-  const formattedItem: Item = {
-    id: '',
-    title: name,
-    last_update: date,
-    data: [{ date: date, charge, reps, id: '' }],
-  };
-
-  return newData.push(formattedItem);
-};
+// export async function addCategory(title: string) {
+//   const endpoint = `${process.env.EXPO_PUBLIC_API_URL}/categories`;
+//   const res = await fetch(endpoint, {
+//     method: 'POST',
+//     headers: { 'Content-Type': 'application/json' },
+//     body: JSON.stringify({ title }),
+//   });
+// }
