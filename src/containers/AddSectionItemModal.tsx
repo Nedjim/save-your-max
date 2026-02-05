@@ -5,8 +5,8 @@ import DateTimePicker, {
   useDefaultStyles,
 } from 'react-native-ui-datepicker';
 import { BLACK, TURQUOISE, WHITE } from '../constants/colors';
+import Input from './forms/Input';
 import { Item } from '../types';
-import InputSection from './InputSection';
 
 type AddSectionItemModalProps = {
   visible: boolean;
@@ -88,12 +88,7 @@ const InputView = (props: InputViewProps) => {
       <Text style={styles.label} nativeID={id}>
         {label}
       </Text>
-      <InputSection
-        id="name"
-        value={value}
-        onChange={setValue}
-        maxLength={20}
-      />
+      <Input id="name" value={value} onChange={setValue} maxLength={20} />
     </View>
   );
 };

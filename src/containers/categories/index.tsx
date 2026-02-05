@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -6,10 +6,10 @@ import {
   Text,
   View,
 } from 'react-native';
-import ItemBanner from '../components/ItemBanner';
-import { useCategories } from '../hooks/categories';
+import { useCategories } from '../../hooks/categories';
+import CategoryBanner from './CategoryBanner';
 
-const List = () => {
+const Categories = () => {
   const { data: categories = [], isLoading, isError, error } = useCategories();
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -34,7 +34,7 @@ const List = () => {
           const { id, title } = item;
 
           return (
-            <ItemBanner
+            <CategoryBanner
               title={title}
               isSelected={selectedId === id}
               onPress={() =>
@@ -55,4 +55,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default List;
+export default memo(Categories);

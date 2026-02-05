@@ -3,8 +3,8 @@ import React from 'react';
 import { StatusBar, StyleSheet } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { GREY } from '../constants/colors';
+import Categories from '../containers/categories';
 import Footer from '../containers/Footer';
-import List from '../containers/List';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,7 +20,7 @@ export default function Index() {
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider>
         <SafeAreaView style={styles.container}>
-          <List />
+          <Categories />
           <Footer />
         </SafeAreaView>
       </SafeAreaProvider>

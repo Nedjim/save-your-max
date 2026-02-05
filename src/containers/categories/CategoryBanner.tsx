@@ -1,15 +1,20 @@
+import { memo } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { BLACK, LIGHT_GREY, MEDIUM_GREY, TURQUOISE } from '../constants/colors';
+import {
+  BLACK,
+  LIGHT_GREY,
+  MEDIUM_GREY,
+  TURQUOISE,
+} from '../../constants/colors';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import ItemRow from './ItemRow';
 
-type ItemBannerProps = {
+type CategoryBannerProps = {
   title: string;
   isSelected?: boolean;
   onPress?: () => void;
 };
 
-const ItemBanner = (props: ItemBannerProps) => {
+const CategoryBanner = (props: CategoryBannerProps) => {
   const { title, isSelected = false, onPress } = props;
 
   const backgroundColor = isSelected ? TURQUOISE : MEDIUM_GREY;
@@ -21,14 +26,31 @@ const ItemBanner = (props: ItemBannerProps) => {
         onPress={onPress}
         style={[styles.banner, { backgroundColor }]}
       >
+        <AntDesign
+          name={isSelected ? 'caret-up' : 'caret-down'}
+          size={12}
+          color={color}
+        />
         <Text style={[styles.title, { color }]}>{title}</Text>
-        <AntDesign name={isSelected ? 'up' : 'down'} size={12} color={color} />
-      </TouchableOpacity>
-      {isSelected && (
-        <View style={styles.subBanner}>
-          <ItemRow values={['Date', 'Charge', 'Reps']} />
+        <View style={styles.options}>
+          <AntDesign
+            name={'edit'}
+            size={12}
+            color={color}
+            onPress={(e) => {
+              e.stopPropagation();
+            }}
+          />
+          <AntDesign
+            name={'close'}
+            size={12}
+            color={color}
+            onPress={(e) => {
+              e.stopPropagation();
+            }}
+          />
         </View>
-      )}
+      </TouchableOpacity>
     </View>
   );
 };
@@ -49,6 +71,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
   },
+  options: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 16,
+  },
 });
 
-export default ItemBanner;
+export default memo(CategoryBanner);

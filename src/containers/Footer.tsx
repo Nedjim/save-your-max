@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { View } from 'react-native';
 import IconButton from '../components/IconButton';
-import AddCategoryModal from './AddCategoryModal';
+import AddCategoryModal from './categories/AddCategoryModal';
 
 const Footer = () => {
   const [modalVisible, setModalVisible] = useState(false);

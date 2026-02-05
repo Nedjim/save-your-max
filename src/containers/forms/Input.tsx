@@ -1,8 +1,8 @@
 import { KeyboardTypeOptions, StyleSheet, TextInput, View } from 'react-native';
-import IconButton from '../components/IconButton';
-import { DARK_GREY, WHITE } from '../constants/colors';
+import IconButton from '../../components/IconButton';
+import { DARK_GREY, WHITE } from '../../constants/colors';
 
-type InputSectionProps = {
+type InputProps = {
   value: string;
   onChange: (key: string) => void;
   keyboardType?: KeyboardTypeOptions;
@@ -10,7 +10,7 @@ type InputSectionProps = {
   id: string;
 };
 
-const InputSection = (props: InputSectionProps) => {
+const Input = (props: InputProps) => {
   const { onChange, value, id, ...rest } = props;
 
   const clearValue = () => {
@@ -62,4 +62,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default InputSection;
+export default Input;

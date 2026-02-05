@@ -1,16 +1,16 @@
 import { Text } from '@react-navigation/elements';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { Button, Modal, StyleSheet, View } from 'react-native';
-import { BLACK, TURQUOISE, WHITE } from '../constants/colors';
-import { useCreateCategory } from '../hooks/categories';
-import InputSection from './InputSection';
+import { BLACK, TURQUOISE, WHITE } from '../../constants/colors';
+import { useCreateCategory } from '../../hooks/categories';
+import Input from '../forms/Input';
 
 type AddCategoryModalProps = {
   visible: boolean;
   closeModal: () => void;
 };
 
-export default function AddCategoryModal(props: AddCategoryModalProps) {
+function AddCategoryModal(props: AddCategoryModalProps) {
   const { visible, closeModal } = props;
   const { mutate } = useCreateCategory();
   const [title, setTitle] = useState('');
@@ -38,12 +38,7 @@ export default function AddCategoryModal(props: AddCategoryModalProps) {
         <Text style={styles.label} nativeID="section">
           Name of the new category
         </Text>
-        <InputSection
-          value={title}
-          onChange={setTitle}
-          maxLength={20}
-          id="section"
-        />
+        <Input value={title} onChange={setTitle} maxLength={20} id="section" />
         <View style={styles.footer}>
           <Button
             title="Add"
@@ -85,3 +80,5 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
 });
+
+export default memo(AddCategoryModal);
