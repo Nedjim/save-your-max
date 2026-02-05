@@ -2,16 +2,28 @@ import { Text } from '@react-navigation/elements';
 import { useState } from 'react';
 import { Button, Modal, StyleSheet, View } from 'react-native';
 import { BLACK, TURQUOISE, WHITE } from '../constants/colors';
+import { useCreateCategory } from '../hooks/categories';
 import InputSection from './InputSection';
 
-type AddItemSectionProps = {
+type AddCategoryModalProps = {
   visible: boolean;
   closeModal: () => void;
 };
 
-export default function AddSectionModal(props: AddItemSectionProps) {
+export default function AddCategoryModal(props: AddCategoryModalProps) {
   const { visible, closeModal } = props;
-  const [category, setCategory] = useState('');
+  const { mutate } = useCreateCategory();
+  const [title, setTitle] = useState('');
+
+  const createCategory = () => {
+    if (!title.trim()) return;
+
+    mutate(title, {
+      onSuccess: () => {
+        setTitle('');
+      },
+    });
+  };
 
   return (
     <Modal
@@ -27,8 +39,8 @@ export default function AddSectionModal(props: AddItemSectionProps) {
           Name of the new category
         </Text>
         <InputSection
-          value={category}
-          onChange={setCategory}
+          value={title}
+          onChange={setTitle}
           maxLength={20}
           id="section"
         />
@@ -37,7 +49,10 @@ export default function AddSectionModal(props: AddItemSectionProps) {
             title="Add"
             color={TURQUOISE}
             accessibilityLabel="Add"
-            onPress={() => closeModal()}
+            onPress={() => {
+              createCategory();
+              closeModal();
+            }}
           />
           <Button
             title="Close"

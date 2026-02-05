@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { View } from 'react-native';
 import IconButton from '../components/IconButton';
-import AddSectionModal from './AddSectionModal';
+import AddCategoryModal from './AddCategoryModal';
 
 const Footer = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -17,7 +17,7 @@ const Footer = () => {
   return (
     <View>
       <IconButton name="plus" onPress={openModal} type="primary" />
-      <AddSectionModal visible={modalVisible} closeModal={closeModal} />
+      <AddCategoryModal visible={modalVisible} closeModal={closeModal} />
     </View>
   );
 };
