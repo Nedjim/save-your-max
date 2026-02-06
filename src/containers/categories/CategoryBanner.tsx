@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {
   BLACK,
@@ -6,16 +6,20 @@ import {
   MEDIUM_GREY,
   TURQUOISE,
 } from '../../constants/colors';
+import Alert from '@/src/components/Alert';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 type CategoryBannerProps = {
   title: string;
+  id: string;
+  onDelete: (id: string) => void;
   isSelected?: boolean;
   onPress?: () => void;
 };
 
 const CategoryBanner = (props: CategoryBannerProps) => {
-  const { title, isSelected = false, onPress } = props;
+  const { title, id, isSelected = false, onPress, onDelete } = props;
+  const [alertVisible, setAlertVisible] = useState(false);
 
   const backgroundColor = isSelected ? TURQUOISE : MEDIUM_GREY;
   const color = isSelected ? BLACK : LIGHT_GREY;
@@ -34,23 +38,27 @@ const CategoryBanner = (props: CategoryBannerProps) => {
         <Text style={[styles.title, { color }]}>{title}</Text>
         <View style={styles.options}>
           <AntDesign
-            name={'edit'}
-            size={12}
-            color={color}
-            onPress={(e) => {
-              e.stopPropagation();
-            }}
-          />
-          <AntDesign
             name={'close'}
-            size={12}
+            size={14}
             color={color}
             onPress={(e) => {
+              setAlertVisible(true);
               e.stopPropagation();
             }}
           />
         </View>
       </TouchableOpacity>
+      <Alert
+        visible={alertVisible}
+        onClose={() => {
+          setAlertVisible(false);
+        }}
+        description={`The category ${title} is about to be deleted.`}
+        onSubmit={() => {
+          onDelete(id);
+          setAlertVisible(false);
+        }}
+      />
     </View>
   );
 };
@@ -74,7 +82,7 @@ const styles = StyleSheet.create({
   options: {
     display: 'flex',
     flexDirection: 'row',
-    gap: 16,
+    gap: 24,
   },
 });
 

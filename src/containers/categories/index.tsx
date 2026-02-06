@@ -6,11 +6,13 @@ import {
   Text,
   View,
 } from 'react-native';
-import { useCategories } from '../../hooks/categories';
+import { useCategories, useDeleteCategory } from '../../hooks/categories';
 import CategoryBanner from './CategoryBanner';
 
 const Categories = () => {
   const { data: categories = [], isLoading, isError, error } = useCategories();
+  const { mutate: deleteCategoryMutation } = useDeleteCategory();
+
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   if (isLoading) {
@@ -25,6 +27,10 @@ const Categories = () => {
     return <Text>Categories empty</Text>;
   }
 
+  const handleDelete = (id: string) => {
+    deleteCategoryMutation(id);
+  };
+
   return (
     <View style={styles.list}>
       <FlatList
@@ -36,10 +42,12 @@ const Categories = () => {
           return (
             <CategoryBanner
               title={title}
+              id={id}
               isSelected={selectedId === id}
               onPress={() =>
                 selectedId === id ? setSelectedId(null) : setSelectedId(id)
               }
+              onDelete={handleDelete}
             />
           );
         }}
