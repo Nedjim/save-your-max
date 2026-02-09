@@ -7,10 +7,23 @@ datasource db {
 }
 
 model Category {
-    id        String    @id @default(uuid())
+    id        String   @id @default(uuid())
     title     String
-    createdAt DateTime? @default(now())
-    updatedAt DateTime? @default(now())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    items     Item[]
 
     @@unique([title])
+}
+
+model Item {
+    id        String   @id @default(uuid())
+    date      DateTime @default(now())
+    charge    Int      @default(0)
+    reps      Int      @default(0)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    category   Category? @relation(fields: [categoryId], references: [id])
+    categoryId String?
 }
