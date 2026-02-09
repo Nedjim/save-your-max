@@ -8,7 +8,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import { WHITE } from '../constants/colors';
+import { BLACK, TURQUOISE, WHITE } from '../constants/colors';
 
 type AlertProps = {
   visible: boolean;
@@ -36,12 +36,12 @@ const Alert = (props: AlertProps) => {
           onPress={onClose}
         />
         <View style={styles.content}>
-          <Text>{description}</Text>
-          <Text>Are you sure ?</Text>
+          <Text style={styles.description}>{description}</Text>
+          <Text style={styles.description}>Are you sure ?</Text>
 
           <View style={styles.actions}>
-            <Button title="Cancel" onPress={onClose} />
-            <Button title="Ok" onPress={onSubmit} />
+            <Button title="Cancel" onPress={onClose} color={TURQUOISE} />
+            <Button title="Ok" onPress={onSubmit} color={TURQUOISE} />
           </View>
         </View>
       </Modal>
@@ -66,11 +66,14 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   content: {
-    backgroundColor: WHITE,
+    backgroundColor: BLACK,
     margin: 'auto',
     padding: 16,
     borderRadius: 8,
     gap: 8,
+  },
+  description: {
+    color: WHITE,
   },
   actions: {
     display: 'flex',

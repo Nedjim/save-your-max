@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import Alert from '@/src/components/Alert';
+import EmptyState from '@/src/components/EmptyState';
 import IconButton from '@/src/components/IconButton';
 import { useDeleteItem, useItems } from '@/src/hooks/items';
 import AddItemModal from './AddItemModal';
@@ -40,11 +41,11 @@ const Items = () => {
   if (items.length === 0) {
     return (
       <View>
-        <Text>No items found.</Text>
-        <View style={styles.options}>
-          <IconButton name="plus" onPress={openModal} type="default" />
-          <Text>Add</Text>
-        </View>
+        <EmptyState
+          description="No items found in this category."
+          buttonTitle="Create a new item"
+          onPressButton={openModal}
+        />
         <AddItemModal visible={modalVisible} closeModal={closeModal} />
       </View>
     );
