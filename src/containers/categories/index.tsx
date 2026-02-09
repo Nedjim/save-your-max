@@ -7,6 +7,7 @@ import {
   View,
 } from 'react-native';
 import { useCategories, useDeleteCategory } from '../../hooks/categories';
+import Items from '../items';
 import CategoryBanner from './CategoryBanner';
 
 const Categories = () => {
@@ -35,20 +36,24 @@ const Categories = () => {
     <View style={styles.list}>
       <FlatList
         data={categories}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => {
-          const { id, title } = item;
+        keyExtractor={(category) => category.id}
+        renderItem={({ item: category }) => {
+          const { id, title } = category;
+          const isSelected = selectedId === id;
 
           return (
-            <CategoryBanner
-              title={title}
-              id={id}
-              isSelected={selectedId === id}
-              onPress={() =>
-                selectedId === id ? setSelectedId(null) : setSelectedId(id)
-              }
-              onDelete={handleDelete}
-            />
+            <View>
+              <CategoryBanner
+                title={title}
+                id={id}
+                isSelected={isSelected}
+                onPress={() =>
+                  isSelected ? setSelectedId(null) : setSelectedId(id)
+                }
+                onDelete={handleDelete}
+              />
+              {isSelected && <Items categoryId={id} />}
+            </View>
           );
         }}
         extraData={selectedId}

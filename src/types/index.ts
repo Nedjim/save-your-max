@@ -1,5 +1,3 @@
-import { Dayjs } from 'dayjs';
-
 export type Category = {
   id: string;
   title: string;
@@ -9,14 +7,15 @@ export type Category = {
 
 export type Item = {
   id: string;
-  title: string;
-  last_update: Dayjs;
-  data: ItemValue[];
+  date: Date;
+  charge: number;
+  reps: number;
+  createdAt: Date;
+  updatedAt: Date;
+  categoryId: string;
 };
 
-export type ItemValue = {
-  id: string;
-  date: Dayjs;
+export type CreateItemPayload = {
   charge: number;
   reps: number;
 };

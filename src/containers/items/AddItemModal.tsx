@@ -1,28 +1,32 @@
-import { Text } from '@react-navigation/elements';
 import { memo, useState } from 'react';
-import { Button, Modal, StyleSheet, View } from 'react-native';
+import { Button, Modal, StyleSheet, Text, View } from 'react-native';
 import { BLACK, TURQUOISE, WHITE } from '../../constants/colors';
-import { useCreateCategory } from '../../hooks/categories';
 import Input from '../forms/Input';
+import { useCreateItem } from '@/src/hooks/items';
 
-type AddCategoryModalProps = {
+type AddItemModalProps = {
   visible: boolean;
   closeModal: () => void;
+  categoryId: string;
 };
 
-function AddCategoryModal(props: AddCategoryModalProps) {
-  const { visible, closeModal } = props;
-  const { mutate } = useCreateCategory();
-  const [title, setTitle] = useState('');
+function AddItemModal(props: AddItemModalProps) {
+  const { visible, closeModal, categoryId } = props;
+  const { mutate } = useCreateItem(categoryId);
 
-  const handleCreateCategory = () => {
-    if (!title.trim()) return;
+  const [charge, setCharge] = useState('0');
+  const [reps, setReps] = useState('0');
 
-    mutate(title, {
-      onSuccess: () => {
-        setTitle('');
+  const handleCreateItem = () => {
+    mutate(
+      { charge: Number(charge), reps: Number(reps) },
+      {
+        onSuccess: () => {
+          setCharge('');
+          setReps('');
+        },
       },
-    });
+    );
   };
 
   return (
@@ -35,17 +39,21 @@ function AddCategoryModal(props: AddCategoryModalProps) {
       }}
     >
       <View style={styles.container}>
-        <Text style={styles.label} nativeID="category-label">
-          Name of the new category
+        <Text style={styles.label} nativeID="item-charge">
+          Charge (kg)
         </Text>
-        <Input value={title} onChange={setTitle} maxLength={20} id="category-label" />
+        <Input value={charge} onChange={setCharge} id="item-charge" />
+        <Text style={styles.label} nativeID="item-reps">
+          Reps
+        </Text>
+        <Input value={reps} onChange={setReps} id="item-reps" />
         <View style={styles.footer}>
           <Button
             title="Add"
             color={TURQUOISE}
             accessibilityLabel="Add"
             onPress={() => {
-              handleCreateCategory();
+              handleCreateItem();
               closeModal();
             }}
           />
@@ -81,4 +89,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(AddCategoryModal);
+export default memo(AddItemModal);
