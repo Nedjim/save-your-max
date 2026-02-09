@@ -27,7 +27,7 @@ const CategoryBanner = (props: CategoryBannerProps) => {
         <Text style={styles.title}>{title}</Text>
         <View style={styles.options}>
           <AntDesign
-            name={'close'}
+            name="close"
             size={14}
             color={LIGHT_GREY}
             onPress={(e) => {

@@ -1,3 +1,4 @@
+import { useLocalSearchParams } from 'expo-router';
 import { memo, useState } from 'react';
 import {
   ActivityIndicator,
@@ -12,12 +13,8 @@ import { useDeleteItem, useItems } from '@/src/hooks/items';
 import AddItemModal from './AddItemModal';
 import ItemRow from './ItemRow';
 
-type ItemsProps = {
-  categoryId: string;
-};
-
-const Items = (props: ItemsProps) => {
-  const { categoryId } = props;
+const Items = () => {
+  const { categoryId } = useLocalSearchParams<{ categoryId: string }>();
   const { mutate: deleteItemMutation } = useDeleteItem(categoryId);
   const { data: items = [], isLoading, isError, error } = useItems(categoryId);
 
@@ -48,11 +45,7 @@ const Items = (props: ItemsProps) => {
           <IconButton name="plus" onPress={openModal} type="default" />
           <Text>Add</Text>
         </View>
-        <AddItemModal
-          visible={modalVisible}
-          closeModal={closeModal}
-          categoryId={categoryId}
-        />
+        <AddItemModal visible={modalVisible} closeModal={closeModal} />
       </View>
     );
   }
@@ -70,11 +63,7 @@ const Items = (props: ItemsProps) => {
         <IconButton name="plus" onPress={openModal} type="default" />
         <Text>Add</Text>
       </View>
-      <AddItemModal
-        visible={modalVisible}
-        closeModal={closeModal}
-        categoryId={categoryId}
-      />
+      <AddItemModal visible={modalVisible} closeModal={closeModal} />
       <Alert
         visible={!!deleteItemId}
         onClose={() => {

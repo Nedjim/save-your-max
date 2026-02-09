@@ -1,4 +1,5 @@
-import { memo, useState } from 'react';
+import { router, useLocalSearchParams } from 'expo-router';
+import { memo } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -13,8 +14,7 @@ import CategoryBanner from './CategoryBanner';
 const Categories = () => {
   const { data: categories = [], isLoading, isError, error } = useCategories();
   const { mutate: deleteCategoryMutation } = useDeleteCategory();
-
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const { categoryId } = useLocalSearchParams();
 
   if (isLoading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
@@ -39,7 +39,7 @@ const Categories = () => {
         keyExtractor={(category) => category.id}
         renderItem={({ item: category }) => {
           const { id, title } = category;
-          const isSelected = selectedId === id;
+          const isSelected = categoryId === id;
 
           return (
             <View>
@@ -47,16 +47,20 @@ const Categories = () => {
                 title={title}
                 id={id}
                 isSelected={isSelected}
-                onPress={() =>
-                  isSelected ? setSelectedId(null) : setSelectedId(id)
-                }
+                onPress={() => {
+                  if (isSelected) {
+                    router.setParams({ categoryId: undefined });
+                  } else {
+                    router.setParams({ categoryId: id });
+                  }
+                }}
                 onDelete={handleDelete}
               />
-              {isSelected && <Items categoryId={id} />}
+              {isSelected && <Items />}
             </View>
           );
         }}
-        extraData={selectedId}
+        extraData={categoryId}
       />
     </View>
   );
