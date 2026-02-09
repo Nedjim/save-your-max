@@ -1,4 +1,4 @@
-import { CreateItemPayload, Item } from '../types';
+import { CreateItemPayload, DeleteItemPayload, Item } from '../types';
 
 const BASE_URL = 'http://192.168.1.147:3000';
 const OPTIONS = {
@@ -42,6 +42,29 @@ export async function createItem(
   } catch (error) {
     console.error('createItem error:', error);
 
+    throw error;
+  }
+}
+
+export async function deleteItem(payload: DeleteItemPayload) {
+  const { categoryId, itemId } = payload;
+
+  try {
+    const response = await fetch(
+      `${BASE_URL}/categories/${categoryId}/items/${itemId}`,
+      {
+        ...OPTIONS,
+        method: 'DELETE',
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}: ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('delete Item error: ', error);
     throw error;
   }
 }

@@ -1,11 +1,6 @@
 import { memo, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import {
-  BLACK,
-  LIGHT_GREY,
-  MEDIUM_GREY,
-  TURQUOISE,
-} from '../../constants/colors';
+import { LIGHT_GREY, MEDIUM_GREY } from '../../constants/colors';
 import Alert from '@/src/components/Alert';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
@@ -21,26 +16,20 @@ const CategoryBanner = (props: CategoryBannerProps) => {
   const { title, id, isSelected = false, onPress, onDelete } = props;
   const [alertVisible, setAlertVisible] = useState(false);
 
-  const backgroundColor = isSelected ? TURQUOISE : MEDIUM_GREY;
-  const color = isSelected ? BLACK : LIGHT_GREY;
-
   return (
     <View>
-      <TouchableOpacity
-        onPress={onPress}
-        style={[styles.banner, { backgroundColor }]}
-      >
+      <TouchableOpacity onPress={onPress} style={styles.banner}>
         <AntDesign
           name={isSelected ? 'caret-up' : 'caret-down'}
           size={12}
-          color={color}
+          color={LIGHT_GREY}
         />
-        <Text style={[styles.title, { color }]}>{title}</Text>
+        <Text style={styles.title}>{title}</Text>
         <View style={styles.options}>
           <AntDesign
             name={'close'}
             size={14}
-            color={color}
+            color={LIGHT_GREY}
             onPress={(e) => {
               setAlertVisible(true);
               e.stopPropagation();
@@ -72,12 +61,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    backgroundColor: MEDIUM_GREY,
+    color: LIGHT_GREY,
   },
   subBanner: {
     marginBottom: 16,
   },
   title: {
     fontSize: 16,
+    color: LIGHT_GREY,
   },
   options: {
     display: 'flex',

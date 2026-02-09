@@ -19,3 +19,8 @@ export type CreateItemPayload = {
   charge: number;
   reps: number;
 };
+
+export type DeleteItemPayload = {
+  categoryId: string;
+  itemId: string;
+};

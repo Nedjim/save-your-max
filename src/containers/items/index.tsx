@@ -6,8 +6,9 @@ import {
   Text,
   View,
 } from 'react-native';
+import Alert from '@/src/components/Alert';
 import IconButton from '@/src/components/IconButton';
-import { useItems } from '@/src/hooks/items';
+import { useDeleteItem, useItems } from '@/src/hooks/items';
 import AddItemModal from './AddItemModal';
 import ItemRow from './ItemRow';
 
@@ -17,9 +18,11 @@ type ItemsProps = {
 
 const Items = (props: ItemsProps) => {
   const { categoryId } = props;
-  const [modalVisible, setModalVisible] = useState(false);
-
+  const { mutate: deleteItemMutation } = useDeleteItem(categoryId);
   const { data: items = [], isLoading, isError, error } = useItems(categoryId);
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [deleteItemId, setDeleteItemId] = useState<string | null>(null);
 
   if (isLoading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
@@ -58,7 +61,9 @@ const Items = (props: ItemsProps) => {
     <View>
       <FlatList
         data={items}
-        renderItem={({ item }) => <ItemRow item={item} />}
+        renderItem={({ item }) => (
+          <ItemRow item={item} setDeleteItemId={setDeleteItemId} />
+        )}
         keyExtractor={(item) => item.id}
       />
       <View style={styles.options}>
@@ -69,6 +74,17 @@ const Items = (props: ItemsProps) => {
         visible={modalVisible}
         closeModal={closeModal}
         categoryId={categoryId}
+      />
+      <Alert
+        visible={!!deleteItemId}
+        onClose={() => {
+          setDeleteItemId(null);
+        }}
+        description={`The item is about to be deleted.`}
+        onSubmit={() => {
+          deleteItemId && deleteItemMutation(deleteItemId);
+          setDeleteItemId(null);
+        }}
       />
     </View>
   );

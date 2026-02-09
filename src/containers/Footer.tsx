@@ -16,7 +16,7 @@ const Footer = () => {
 
   return (
     <View>
-      <IconButton name="plus" onPress={openModal} type="primary" />
+      <IconButton name="plus" onPress={openModal} type="primary" size={16} />
       <AddCategoryModal visible={modalVisible} closeModal={closeModal} />
     </View>
   );
