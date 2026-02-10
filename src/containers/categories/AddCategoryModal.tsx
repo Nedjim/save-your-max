@@ -38,7 +38,12 @@ function AddCategoryModal(props: AddCategoryModalProps) {
         <Text style={styles.label} nativeID="category-label">
           Name of the new category
         </Text>
-        <Input value={title} onChange={setTitle} maxLength={20} id="category-label" />
+        <Input
+          value={title}
+          onChange={setTitle}
+          maxLength={20}
+          id="category-label"
+        />
         <View style={styles.footer}>
           <Button
             title="Add"

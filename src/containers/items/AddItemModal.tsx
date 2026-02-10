@@ -1,9 +1,9 @@
+import { useLocalSearchParams } from 'expo-router';
 import { memo, useState } from 'react';
 import { Button, Modal, StyleSheet, Text, View } from 'react-native';
 import { BLACK, TURQUOISE, WHITE } from '../../constants/colors';
 import Input from '../forms/Input';
 import { useCreateItem } from '@/src/hooks/items';
-import { useLocalSearchParams } from 'expo-router';
 
 type AddItemModalProps = {
   visible: boolean;
@@ -12,8 +12,8 @@ type AddItemModalProps = {
 
 function AddItemModal(props: AddItemModalProps) {
   const { visible, closeModal } = props;
-    const { query: categoryId } = useLocalSearchParams<{ query: string }>();
-  
+  const { categoryId } = useLocalSearchParams<{ categoryId: string }>();
+
   const { mutate } = useCreateItem(categoryId);
 
   const [charge, setCharge] = useState('0');
