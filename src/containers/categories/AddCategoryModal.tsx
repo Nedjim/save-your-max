@@ -1,9 +1,9 @@
 import { Text } from '@react-navigation/elements';
 import { memo, useState } from 'react';
-import { Button, Modal, StyleSheet, View } from 'react-native';
-import { BLACK, TURQUOISE, WHITE } from '../../constants/colors';
+import { Modal, StyleSheet, View } from 'react-native';
 import { useCreateCategory } from '../../hooks/categories';
 import Input from '../forms/Input';
+import ModalContent from '@/src/components/ModalContent';
 
 type AddCategoryModalProps = {
   visible: boolean;
@@ -23,6 +23,8 @@ function AddCategoryModal(props: AddCategoryModalProps) {
         setTitle('');
       },
     });
+
+    closeModal();
   };
 
   return (
@@ -31,58 +33,32 @@ function AddCategoryModal(props: AddCategoryModalProps) {
       animationType="slide"
       transparent={true}
       onRequestClose={() => {
+        setTitle('');
         closeModal();
       }}
     >
-      <View style={styles.container}>
-        <Text style={styles.label} nativeID="category-label">
-          Name of the new category
-        </Text>
-        <Input
-          value={title}
-          onChange={setTitle}
-          maxLength={20}
-          id="category-label"
-        />
-        <View style={styles.footer}>
-          <Button
-            title="Add"
-            color={TURQUOISE}
-            accessibilityLabel="Add"
-            onPress={() => {
-              handleCreateCategory();
-              closeModal();
-            }}
-          />
-          <Button
-            title="Close"
-            color="grey"
-            accessibilityLabel="close modal"
-            onPress={() => closeModal()}
+      <ModalContent
+        onClose={closeModal}
+        onSubmit={title.length ? handleCreateCategory : undefined}
+        submitButtonLabel="Add"
+      >
+        <View style={styles.spacing}>
+          <Text nativeID="category-label">Name of the new category</Text>
+          <Input
+            value={title}
+            onChange={setTitle}
+            maxLength={20}
+            id="category-label"
           />
         </View>
-      </View>
+      </ModalContent>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: BLACK,
-    padding: 16,
-  },
-  label: {
-    color: WHITE,
-  },
-  footer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    gap: 8,
-    marginTop: 16,
+  spacing: {
+    gap: 16,
   },
 });
 

@@ -70,7 +70,7 @@ const Items = () => {
         onClose={() => {
           setDeleteItemId(null);
         }}
-        description={`The item is about to be deleted.`}
+        description={'This item is about to be deleted.'}
         onSubmit={() => {
           deleteItemId && deleteItemMutation(deleteItemId);
           setDeleteItemId(null);

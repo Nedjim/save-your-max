@@ -1,9 +1,10 @@
 import { useLocalSearchParams } from 'expo-router';
-import { memo, useState } from 'react';
-import { Button, Modal, StyleSheet, Text, View } from 'react-native';
-import { BLACK, MODAL_OPACITY, TURQUOISE, WHITE } from '../../constants/colors';
+import { memo, useMemo, useState } from 'react';
+import { Modal, StyleSheet, Text, View } from 'react-native';
+import { BLACK } from '../../constants/colors';
 import Input from '../forms/Input';
 import DatePicker from '@/src/components/DatePicker';
+import ModalContent from '@/src/components/ModalContent';
 import { useCreateItem } from '@/src/hooks/items';
 import { CalendarDate } from 'react-native-paper-dates/lib/typescript/Date/Calendar';
 
@@ -44,6 +45,10 @@ function AddItemModal(props: AddItemModalProps) {
     );
   };
 
+  const isSubmitAvailable = useMemo(() => {
+    return Boolean(date && charge.length && reps.length);
+  }, [date, charge, reps]);
+
   return (
     <Modal
       visible={visible}
@@ -53,8 +58,12 @@ function AddItemModal(props: AddItemModalProps) {
         closeModal();
       }}
     >
-      <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
+      <ModalContent
+        onClose={handleClose}
+        onSubmit={isSubmitAvailable ? handleCreateItem : undefined}
+        submitButtonLabel="Add"
+      >
+        <View style={styles.spacing}>
           <View>
             <Text style={styles.label} nativeID="item-charge">
               Charge (kg)
@@ -68,52 +77,19 @@ function AddItemModal(props: AddItemModalProps) {
             <Input value={reps} onChange={setReps} id="item-reps" />
           </View>
           <DatePicker date={date} onChange={handleChangeDate} />
-          <View style={styles.footer}>
-            <Button
-              title="Add"
-              color={TURQUOISE}
-              accessibilityLabel="Add"
-              onPress={() => {
-                handleCreateItem();
-              }}
-            />
-            <Button
-              title="Close"
-              color="grey"
-              accessibilityLabel="close modal"
-              onPress={handleClose}
-            />
-          </View>
         </View>
-      </View>
+      </ModalContent>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: MODAL_OPACITY,
-  },
-  modalContent: {
-    width: 300,
-    padding: 40,
-    backgroundColor: WHITE,
-    borderRadius: 10,
+  spacing: {
     gap: 16,
   },
   label: {
     color: BLACK,
     marginBottom: 8,
-  },
-  footer: {
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    gap: 8,
   },
 });
 

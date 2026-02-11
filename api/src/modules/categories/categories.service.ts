@@ -18,7 +18,7 @@ export class CategoriesService {
 
   async findAll() {
     return await this.prisma.category.findMany({
-      orderBy: { createdAt: 'desc' },
+      orderBy: { title: 'asc' },
     });
   }
 }
