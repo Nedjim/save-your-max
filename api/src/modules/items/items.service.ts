@@ -47,7 +47,7 @@ export class ItemsService {
         categoryId,
       },
       orderBy: {
-        createdAt: 'desc',
+        date: 'desc',
       },
     });
   }

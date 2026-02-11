@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import { StatusBar, StyleSheet } from 'react-native';
+import { fr, registerTranslation } from 'react-native-paper-dates';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { GREY } from '../constants/colors';
 import Categories from '../containers/categories';
@@ -14,6 +15,8 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+registerTranslation('fr', fr);
 
 export default function Index() {
   return (

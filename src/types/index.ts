@@ -18,6 +18,7 @@ export type Item = {
 export type CreateItemPayload = {
   charge: number;
   reps: number;
+  date?: Date;
 };
 
 export type DeleteItemPayload = {
