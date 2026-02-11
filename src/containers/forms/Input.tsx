@@ -1,6 +1,5 @@
 import { KeyboardTypeOptions, StyleSheet, TextInput, View } from 'react-native';
 import IconButton from '../../components/IconButton';
-import { DARK_GREY, WHITE } from '../../constants/colors';
 
 type InputProps = {
   value: string;
@@ -29,12 +28,7 @@ const Input = (props: InputProps) => {
         {...rest}
       />
       <View style={[styles.clearInput, !value.length && styles.hidden]}>
-        <IconButton
-          name="close"
-          onPress={clearValue}
-          size={12}
-          color={DARK_GREY}
-        />
+        <IconButton name="close" onPress={clearValue} size={12} />
       </View>
     </View>
   );
@@ -42,20 +36,17 @@ const Input = (props: InputProps) => {
 
 const styles = StyleSheet.create({
   section: {
-    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
   },
   input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
+    flex: 1,
     padding: 10,
-    backgroundColor: WHITE,
+    borderWidth: 1,
   },
   clearInput: {
     position: 'absolute',
-    right: 16,
+    right: 4,
   },
   hidden: {
     opacity: 0,

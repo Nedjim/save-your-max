@@ -1,9 +1,9 @@
 import dayjs from 'dayjs';
-import { memo, useCallback, useState } from 'react';
+import { memo, useState } from 'react';
 import { View } from 'react-native';
 import { Button, MD3LightTheme, PaperProvider } from 'react-native-paper';
 import { DatePickerModal } from 'react-native-paper-dates';
-import { TURQUOISE, WHITE } from '../constants/colors';
+import { BLACK, TURQUOISE } from '../constants/colors';
 import { CalendarDate } from 'react-native-paper-dates/lib/typescript/Date/Calendar';
 
 const DATE_FORMAT = 'DD/MM/YYYY';
@@ -25,34 +25,35 @@ const DatePicker = (props: DatePickerProps) => {
   const { date, onChange } = props;
   const [open, setOpen] = useState(false);
 
-  const onDismissSingle = useCallback(() => {
-    setOpen(false);
-  }, [setOpen]);
-
   return (
     <View>
       <Button
-        textColor={WHITE}
+        textColor={BLACK}
         onPress={() => setOpen(true)}
         uppercase={false}
         mode="outlined"
       >
         {dayjs(date).format(DATE_FORMAT)}
       </Button>
-      <PaperProvider theme={theme}>
-        <DatePickerModal
-          locale="fr"
-          mode="single"
-          visible={open}
-          onDismiss={onDismissSingle}
-          date={date}
-          startWeekOnMonday
-          onConfirm={(event) => {
-            onChange(event);
-            setOpen(false);
-          }}
-        />
-      </PaperProvider>
+      {open && (
+        <PaperProvider theme={theme}>
+          <DatePickerModal
+            locale="fr"
+            mode="single"
+            visible={open}
+            onDismiss={() => {
+              setOpen(false);
+            }}
+            date={date}
+            startWeekOnMonday
+            onConfirm={(event) => {
+              onChange(event);
+              setOpen(false);
+            }}
+            presentationStyle="formSheet"
+          />
+        </PaperProvider>
+      )}
     </View>
   );
 };

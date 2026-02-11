@@ -1,7 +1,7 @@
 import { useLocalSearchParams } from 'expo-router';
 import { memo, useState } from 'react';
 import { Button, Modal, StyleSheet, Text, View } from 'react-native';
-import { BLACK, TURQUOISE, WHITE } from '../../constants/colors';
+import { BLACK, MODAL_OPACITY, TURQUOISE, WHITE } from '../../constants/colors';
 import Input from '../forms/Input';
 import DatePicker from '@/src/components/DatePicker';
 import { useCreateItem } from '@/src/hooks/items';
@@ -26,14 +26,19 @@ function AddItemModal(props: AddItemModalProps) {
     setDate(event.date);
   };
 
+  const handleClose = () => {
+    setCharge('');
+    setReps('');
+    setDate(nowDay);
+    closeModal();
+  };
+
   const handleCreateItem = () => {
     mutate(
       { charge: Number(charge), reps: Number(reps), date },
       {
         onSuccess: () => {
-          setCharge('');
-          setReps('');
-          setDate(nowDay);
+          handleClose();
         },
       },
     );
@@ -48,32 +53,37 @@ function AddItemModal(props: AddItemModalProps) {
         closeModal();
       }}
     >
-      <View style={styles.container}>
-        <Text style={styles.label} nativeID="item-charge">
-          Charge (kg)
-        </Text>
-        <Input value={charge} onChange={setCharge} id="item-charge" />
-        <Text style={styles.label} nativeID="item-reps">
-          Reps
-        </Text>
-        <Input value={reps} onChange={setReps} id="item-reps" />
-        <DatePicker date={date} onChange={handleChangeDate} />
-        <View style={styles.footer}>
-          <Button
-            title="Add"
-            color={TURQUOISE}
-            accessibilityLabel="Add"
-            onPress={() => {
-              handleCreateItem();
-              closeModal();
-            }}
-          />
-          <Button
-            title="Close"
-            color="grey"
-            accessibilityLabel="close modal"
-            onPress={() => closeModal()}
-          />
+      <View style={styles.modalContainer}>
+        <View style={styles.modalContent}>
+          <View>
+            <Text style={styles.label} nativeID="item-charge">
+              Charge (kg)
+            </Text>
+            <Input value={charge} onChange={setCharge} id="item-charge" />
+          </View>
+          <View>
+            <Text style={styles.label} nativeID="item-reps">
+              Reps
+            </Text>
+            <Input value={reps} onChange={setReps} id="item-reps" />
+          </View>
+          <DatePicker date={date} onChange={handleChangeDate} />
+          <View style={styles.footer}>
+            <Button
+              title="Add"
+              color={TURQUOISE}
+              accessibilityLabel="Add"
+              onPress={() => {
+                handleCreateItem();
+              }}
+            />
+            <Button
+              title="Close"
+              color="grey"
+              accessibilityLabel="close modal"
+              onPress={handleClose}
+            />
+          </View>
         </View>
       </View>
     </Modal>
@@ -81,22 +91,29 @@ function AddItemModal(props: AddItemModalProps) {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  modalContainer: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: BLACK,
-    padding: 16,
+    alignItems: 'center',
+    backgroundColor: MODAL_OPACITY,
+  },
+  modalContent: {
+    width: 300,
+    padding: 40,
+    backgroundColor: WHITE,
+    borderRadius: 10,
+    gap: 16,
   },
   label: {
-    color: WHITE,
+    color: BLACK,
+    marginBottom: 8,
   },
   footer: {
     display: 'flex',
+    justifyContent: 'center',
     flexDirection: 'row',
     alignItems: 'flex-end',
     gap: 8,
-    marginTop: 16,
   },
 });
 
