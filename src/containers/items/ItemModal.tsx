@@ -5,23 +5,28 @@ import { BLACK } from '../../constants/colors';
 import Input from '../forms/Input';
 import DatePicker from '@/src/components/DatePicker';
 import ModalContent from '@/src/components/ModalContent';
-import { useCreateItem } from '@/src/hooks/items';
+import { useCreateItem, useUpdateItem } from '@/src/hooks/items';
+import { Item, ItemModalMode } from '@/src/types';
 import { CalendarDate } from 'react-native-paper-dates/lib/typescript/Date/Calendar';
 
-type AddItemModalProps = {
-  visible: boolean;
-  closeModal: () => void;
+type ItemModalProps = {
+  resetMode: () => void;
+  mode: ItemModalMode;
+  item: Item | null;
 };
 
-function AddItemModal(props: AddItemModalProps) {
-  const { visible, closeModal } = props;
+function ItemModal(props: ItemModalProps) {
+  const { resetMode, mode, item } = props;
   const { categoryId } = useLocalSearchParams<{ categoryId: string }>();
-  const { mutate } = useCreateItem(categoryId);
+  const { mutate: createItemMutation } = useCreateItem(categoryId);
+  const { mutate: updateItemMutation } = useUpdateItem(categoryId);
   const nowDay = new Date();
 
-  const [date, setDate] = useState<CalendarDate>(nowDay);
-  const [charge, setCharge] = useState('0');
-  const [reps, setReps] = useState('0');
+  const [date, setDate] = useState<CalendarDate>(
+    item ? new Date(item.date) : nowDay,
+  );
+  const [charge, setCharge] = useState(item?.charge || '0');
+  const [reps, setReps] = useState(item?.reps || '0');
 
   const handleChangeDate = (event: { date: CalendarDate }) => {
     setDate(event.date);
@@ -31,11 +36,11 @@ function AddItemModal(props: AddItemModalProps) {
     setCharge('');
     setReps('');
     setDate(nowDay);
-    closeModal();
+    resetMode();
   };
 
-  const handleCreateItem = () => {
-    mutate(
+  const createItem = () => {
+    createItemMutation(
       { charge: Number(charge), reps: Number(reps), date },
       {
         onSuccess: () => {
@@ -45,36 +50,66 @@ function AddItemModal(props: AddItemModalProps) {
     );
   };
 
+  const updateItem = () => {
+    if (!item) return;
+
+    updateItemMutation(
+      { charge: Number(charge), reps: Number(reps), date, id: item.id },
+      {
+        onSuccess: () => {
+          handleClose();
+        },
+      },
+    );
+  };
+
+  const handleSubmit = () => {
+    switch (mode) {
+      case 'CREATE':
+        createItem();
+        return;
+      case 'UPDATE':
+        updateItem();
+        return;
+      default:
+        return;
+    }
+  };
+
   const isSubmitAvailable = useMemo(() => {
-    return Boolean(date && charge.length && reps.length);
+    return Boolean(date && charge && reps);
   }, [date, charge, reps]);
 
   return (
     <Modal
-      visible={visible}
+      visible={!!mode}
       animationType="slide"
       transparent={true}
       onRequestClose={() => {
-        closeModal();
+        handleClose();
       }}
     >
       <ModalContent
         onClose={handleClose}
-        onSubmit={isSubmitAvailable ? handleCreateItem : undefined}
-        submitButtonLabel="Add"
+        onSubmit={isSubmitAvailable ? handleSubmit : undefined}
+        submitButtonLabel={mode}
       >
         <View style={styles.spacing}>
           <View>
             <Text style={styles.label} nativeID="item-charge">
               Charge (kg)
             </Text>
-            <Input value={charge} onChange={setCharge} id="item-charge" />
+            <Input
+              value={String(charge)}
+              onChange={setCharge}
+              id="item-charge"
+            />
           </View>
           <View>
             <Text style={styles.label} nativeID="item-reps">
               Reps
             </Text>
-            <Input value={reps} onChange={setReps} id="item-reps" />
+            <Input value={String(reps)} onChange={setReps} id="item-reps" />
           </View>
           <DatePicker date={date} onChange={handleChangeDate} />
         </View>
@@ -93,4 +128,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(AddItemModal);
+export default memo(ItemModal);

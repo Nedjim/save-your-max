@@ -7,7 +7,7 @@ async function bootstrap() {
 
   app.enableCors({
     origin: '*',
-    methods: 'GET,POST,PUT,DELETE,OPTIONS',
+    methods: 'GET,POST,PATCH,PUT,DELETE,OPTIONS',
     credentials: true,
   });
 
@@ -17,6 +17,10 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
+      transform: true,
+    }),
+    new ValidationPipe({
+      whitelist: true,
       transform: true,
     }),
   );

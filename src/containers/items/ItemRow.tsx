@@ -3,15 +3,15 @@ import { memo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import IconButton from '@/src/components/IconButton';
 import { GREY, LIGHT_GREY, WHITE } from '@/src/constants/colors';
-import { Item } from '@/src/types';
+import { Item, ItemModalMode } from '@/src/types';
 
 type ItemRowProps = {
   item: Item;
-  setDeleteItemId: (id: string) => void;
+  onsSetAction: (type: ItemModalMode, item: Item) => void;
 };
 
 const ItemRow = (props: ItemRowProps) => {
-  const { item, setDeleteItemId } = props;
+  const { item, onsSetAction } = props;
   const { charge, reps } = item;
 
   const date = dayjs(item.date).format('DD/MM/YYYY');
@@ -25,12 +25,21 @@ const ItemRow = (props: ItemRowProps) => {
           <Text>{reps} reps</Text>
         </View>
       </View>
-      <View style={styles.closeButton}>
-        <IconButton
-          name="close"
-          onPress={() => setDeleteItemId(item.id)}
-          type="default"
-        />
+      <View style={styles.actions}>
+        <View style={styles.actionButton}>
+          <IconButton
+            name="edit"
+            onPress={() => onsSetAction('UPDATE', item)}
+            type="default"
+          />
+        </View>
+        <View style={styles.actionButton}>
+          <IconButton
+            name="close"
+            onPress={() => onsSetAction('DELETE', item)}
+            type="default"
+          />
+        </View>
       </View>
     </View>
   );
@@ -57,7 +66,12 @@ const styles = StyleSheet.create({
     borderLeftColor: GREY,
     paddingLeft: 24,
   },
-  closeButton: {
+  actions: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 16,
+  },
+  actionButton: {
     backgroundColor: LIGHT_GREY,
     height: 25,
   },

@@ -1,4 +1,7 @@
-import { CreateItemPayload, DeleteItemPayload, Item } from '../types';
+import { CreateItemPayload, Item, UpdateItemPayload } from '../types';
+
+
+
 
 const BASE_URL = 'http://192.168.1.147:3000';
 const OPTIONS = {
@@ -40,23 +43,23 @@ export async function createItem(
 
     return await response.json();
   } catch (error) {
-    console.error('createItem error:', error);
+    console.error('Create item error:', error);
 
     throw error;
   }
 }
 
-export async function deleteItem(payload: DeleteItemPayload) {
-  const { categoryId, itemId } = payload;
+export async function updateItem(payload: UpdateItemPayload) {
+  const { id, ...rest } = payload;
 
   try {
-    const response = await fetch(
-      `${BASE_URL}/categories/${categoryId}/items/${itemId}`,
-      {
-        ...OPTIONS,
-        method: 'DELETE',
-      },
-    );
+    const response = await fetch(`${BASE_URL}/items/${id}`, {
+      ...OPTIONS,
+      method: 'PATCH',
+      body: JSON.stringify({
+        ...rest,
+      }),
+    });
 
     if (!response.ok) {
       throw new Error(`Error ${response.status}: ${response.statusText}`);
@@ -64,7 +67,25 @@ export async function deleteItem(payload: DeleteItemPayload) {
 
     return await response.json();
   } catch (error) {
-    console.error('delete Item error: ', error);
+    console.error('Update item error: ', error);
+    throw error;
+  }
+}
+
+export async function deleteItem(itemId: string) {
+  try {
+    const response = await fetch(`${BASE_URL}/items/${itemId}`, {
+      ...OPTIONS,
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}: ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Delete item error: ', error);
     throw error;
   }
 }

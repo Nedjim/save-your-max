@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { BLACK, LIGHT_GREY, TURQUOISE } from '../constants/colors';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
-type IconTypes = 'plus' | 'close' | 'down' | 'up';
+type IconTypes = 'plus' | 'edit' | 'close' | 'down' | 'up';
 
 type IconButtonProps = {
   name: IconTypes;

@@ -1,6 +1,7 @@
+import { Type } from 'class-transformer';
 import { IsDate, IsInt, IsNotEmpty, IsOptional, Min } from 'class-validator';
 
-export class createItemDto {
+export class CreateItemDto {
   @IsNotEmpty()
   @IsInt()
   @Min(0)
@@ -12,6 +13,7 @@ export class createItemDto {
   reps: number;
 
   @IsOptional()
+  @Type(() => Date)
   @IsDate()
   date: Date;
 }
