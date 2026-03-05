@@ -10,6 +10,7 @@ import {
 import { useCategories, useDeleteCategory } from '../../hooks/categories';
 import Items from '../items';
 import CategoryBanner from './CategoryBanner';
+import EmptyCategories from './EmptyCategories';
 
 const Categories = () => {
   const { data: categories = [], isLoading, isError, error } = useCategories();
@@ -25,7 +26,7 @@ const Categories = () => {
   }
 
   if (categories.length === 0) {
-    return <Text>Categories empty</Text>;
+    return <EmptyCategories />;
   }
 
   const handleDelete = (id: string) => {

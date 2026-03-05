@@ -49,8 +49,8 @@ const Items = () => {
     <View>
       {items.length === 0 && (
         <EmptyState
-          description="No items found in this category."
-          buttonTitle="Create a new item"
+          description="You don’t have any items yet. Create your first one to get started."
+          buttonTitle="New item"
           onPressButton={() => {
             setModalMode('CREATE');
           }}
