@@ -1,5 +1,4 @@
 import { Ionicons } from '@expo/vector-icons';
-import { memo } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { GREY } from '@/src/constants/colors';
 
@@ -36,4 +35,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(ActionButton);
+export default ActionButton;

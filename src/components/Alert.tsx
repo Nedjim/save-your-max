@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import { Modal, Text, View } from 'react-native';
 import ModalContent from './ModalContent';
 
@@ -29,4 +28,4 @@ const Alert = (props: AlertProps) => {
   );
 };
 
-export default memo(Alert);
+export default Alert;

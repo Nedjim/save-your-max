@@ -1,5 +1,5 @@
 import { useHeaderHeight } from '@react-navigation/elements';
-import { memo, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import {
   ImageBackground,
   StyleSheet,
@@ -12,7 +12,7 @@ const image = require('../assets/background.jpg');
 
 type PageWrapperProps = { children: ReactNode };
 
-const PageWrapper = (props: PageWrapperProps) => {
+export default function PageWrapper(props: PageWrapperProps) {
   const { children } = props;
 
   const { height, width } = useWindowDimensions();
@@ -31,7 +31,7 @@ const PageWrapper = (props: PageWrapperProps) => {
       </View>
     </ImageBackground>
   );
-};
+}
 
 const styles = StyleSheet.create({
   background: {
@@ -44,5 +44,3 @@ const styles = StyleSheet.create({
     marginTop: 14,
   },
 });
-
-export default memo(PageWrapper);

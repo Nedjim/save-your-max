@@ -1,4 +1,4 @@
-import { memo, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Platform, useWindowDimensions, View } from 'react-native';
 
 type DesktopOnlyProps = {
@@ -6,7 +6,7 @@ type DesktopOnlyProps = {
   breakpoint?: number;
 };
 
-const DesktopOnly = (props: DesktopOnlyProps) => {
+export default function DesktopOnly(props: DesktopOnlyProps) {
   const { children, breakpoint = 1024 } = props;
   const { width } = useWindowDimensions();
 
@@ -15,6 +15,4 @@ const DesktopOnly = (props: DesktopOnlyProps) => {
   if (!isDesktop) return null;
 
   return <View>{children}</View>;
-};
-
-export default memo(DesktopOnly);
+}

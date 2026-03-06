@@ -1,11 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { memo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { WHITE } from '../constants/colors';
 import DesktopOnly from './DesktopOnly';
 
-const BackButton = () => {
+export default function BackButton() {
   const router = useRouter();
 
   if (!router.canGoBack()) {
@@ -22,7 +21,7 @@ const BackButton = () => {
       </View>
     </Pressable>
   );
-};
+}
 
 const styles = StyleSheet.create({
   backButton: {
@@ -37,5 +36,3 @@ const styles = StyleSheet.create({
     color: WHITE,
   },
 });
-
-export default memo(BackButton);

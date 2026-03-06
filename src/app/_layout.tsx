@@ -17,7 +17,7 @@ const queryClient = new QueryClient({
 
 registerTranslation('fr', fr);
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider>
@@ -36,4 +36,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </SafeAreaProvider>
     </QueryClientProvider>
   );
-}
+};
+
+export default RootLayout;

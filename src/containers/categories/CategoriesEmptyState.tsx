@@ -1,9 +1,9 @@
-import { memo, useState } from 'react';
+import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import EmptyState from '@/src/components/EmptyState';
 import AddCategoryModal from './AddCategoryModal';
 
-const EmptyCategories = () => {
+export default function CategoriesEmptyState() {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
@@ -21,7 +21,7 @@ const EmptyCategories = () => {
       />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   emptyCategories: {
@@ -30,5 +30,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-export default memo(EmptyCategories);

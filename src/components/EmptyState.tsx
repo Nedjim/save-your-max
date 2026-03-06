@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import {
   DEFAULT_CONTAINER_BACKGROUND,
@@ -11,7 +10,6 @@ type EmptyStateType = {
   buttonTitle: string;
   onPressButton: () => void;
 };
-
 const EmptyState = (props: EmptyStateType) => {
   const { description, buttonTitle, onPressButton } = props;
 
@@ -48,4 +46,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(EmptyState);
+export default EmptyState;

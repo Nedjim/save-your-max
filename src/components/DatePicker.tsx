@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { memo, useState } from 'react';
+import { useState } from 'react';
 import { View } from 'react-native';
 import { Button, MD3LightTheme, PaperProvider } from 'react-native-paper';
 import { DatePickerModal } from 'react-native-paper-dates';
@@ -21,7 +21,7 @@ type DatePickerProps = {
   onChange: (event: { date: CalendarDate }) => void;
 };
 
-const DatePicker = (props: DatePickerProps) => {
+export default function DatePicker(props: DatePickerProps) {
   const { date, onChange } = props;
   const [open, setOpen] = useState(false);
 
@@ -56,6 +56,4 @@ const DatePicker = (props: DatePickerProps) => {
       )}
     </View>
   );
-};
-
-export default memo(DatePicker);
+}

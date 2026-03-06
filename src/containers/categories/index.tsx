@@ -1,71 +1,26 @@
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { memo } from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import { useCategories, useDeleteCategory } from '../../hooks/categories';
-import CategoryBanner from './CategoryBanner';
-import EmptyCategories from './EmptyCategories';
+import { ActivityIndicator } from 'react-native';
+import { useCategories } from '../../hooks/categories';
+import Error from '@/src/components/Error';
+import { WHITE } from '@/src/constants/colors';
+import EmptyState from './CategoriesEmptyState';
+import CategoryList from './CategoryList';
 
-const Categories = () => {
+export default function Categories() {
   const { data: categories = [], isLoading, isError, error } = useCategories();
-  const { mutate: deleteCategoryMutation } = useDeleteCategory();
-  const { categoryId } = useLocalSearchParams();
-  const router = useRouter();
+
+  let content = null;
 
   if (isLoading) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
+    content = <ActivityIndicator size="large" color={WHITE} />;
   }
 
   if (isError) {
-    return <Text>Error: {(error as Error).message}</Text>;
+    content = <Error message={error.message} />;
   }
 
   if (categories.length === 0) {
-    return <EmptyCategories />;
+    content = <EmptyState />;
   }
 
-  const handleDelete = (id: string) => {
-    deleteCategoryMutation(id);
-  };
-
-  return (
-    <View style={styles.list}>
-      <FlatList
-        data={categories}
-        keyExtractor={(category) => category.id}
-        renderItem={({ item: category }) => {
-          const { id, title } = category;
-          const name = encodeURIComponent(title.replace(/\s+/g, '_'));
-
-          return (
-            <CategoryBanner
-              title={title}
-              id={id}
-              onDelete={handleDelete}
-              onPress={() => {
-                router.push({
-                  pathname: '/category/[id]',
-                  params: { id, name },
-                });
-              }}
-            />
-          );
-        }}
-        extraData={categoryId}
-      />
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  list: {
-    flex: 1,
-  },
-});
-
-export default memo(Categories);
+  return content ? content : <CategoryList categories={categories} />;
+}

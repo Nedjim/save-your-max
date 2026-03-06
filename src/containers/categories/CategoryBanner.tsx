@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { memo, useState } from 'react';
+import { useState } from 'react';
 import {
   Pressable,
   StyleSheet,
@@ -20,7 +20,7 @@ type CategoryBannerProps = {
   onPress?: () => void;
 };
 
-const CategoryBanner = (props: CategoryBannerProps) => {
+export default function CategoryBanner(props: CategoryBannerProps) {
   const { title, id, onPress, onDelete } = props;
   const [alertVisible, setAlertVisible] = useState(false);
 
@@ -54,7 +54,7 @@ const CategoryBanner = (props: CategoryBannerProps) => {
       />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   banner: {
@@ -78,5 +78,3 @@ const styles = StyleSheet.create({
     gap: 24,
   },
 });
-
-export default memo(CategoryBanner);

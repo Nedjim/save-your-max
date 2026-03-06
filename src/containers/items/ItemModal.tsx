@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from 'expo-router';
-import { memo, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Modal, StyleSheet, Text, View } from 'react-native';
 import { BLACK } from '../../constants/colors';
 import Input from '../forms/Input';
@@ -15,7 +15,7 @@ type ItemModalProps = {
   item: Item | null;
 };
 
-function ItemModal(props: ItemModalProps) {
+export default function ItemModal(props: ItemModalProps) {
   const { resetMode, mode, item } = props;
   const { categoryId } = useLocalSearchParams<{ categoryId: string }>();
   const { mutate: createItemMutation } = useCreateItem(categoryId);
@@ -76,9 +76,7 @@ function ItemModal(props: ItemModalProps) {
     }
   };
 
-  const isSubmitAvailable = useMemo(() => {
-    return Boolean(date && charge && reps);
-  }, [date, charge, reps]);
+  const isSubmitAvailable = Boolean(date && charge && reps);
 
   return (
     <Modal
@@ -127,5 +125,3 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
 });
-
-export default memo(ItemModal);

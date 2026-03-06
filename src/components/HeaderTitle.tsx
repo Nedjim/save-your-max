@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import { StyleSheet, Text } from 'react-native';
 import { WHITE } from '../constants/colors';
 
@@ -10,4 +9,4 @@ const styles = StyleSheet.create({
   header: { color: WHITE, fontSize: 28 },
 });
 
-export default memo(HeaderTitle);
+export default HeaderTitle;

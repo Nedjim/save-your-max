@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from 'expo-router';
-import { memo, useState } from 'react';
+import { useState } from 'react';
 import {
   ActivityIndicator,
   Button,
@@ -16,7 +16,7 @@ import { Item, ItemModalMode } from '@/src/types';
 import ItemModal from './ItemModal';
 import ItemRow from './ItemRow';
 
-const Items = () => {
+export default function Items() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { mutate: deleteItemMutation } = useDeleteItem(id);
   const { data: items = [], isLoading, isError, error } = useItems(id);
@@ -102,7 +102,7 @@ const Items = () => {
       )}
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   categoryPage: {
@@ -121,5 +121,3 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
   },
 });
-
-export default memo(Items);

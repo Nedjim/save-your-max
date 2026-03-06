@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import PageWrapper from '../components/PageWrapper';
 import Categories from '../containers/categories';
 
@@ -10,4 +9,4 @@ const HomePage = () => {
   );
 };
 
-export default memo(HomePage);
+export default HomePage;

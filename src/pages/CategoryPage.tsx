@@ -1,11 +1,10 @@
 import { useLocalSearchParams } from 'expo-router';
-import { memo } from 'react';
 import { StyleSheet, Text } from 'react-native';
 import PageWrapper from '../components/PageWrapper';
 import { LIGHT_GREY } from '../constants/colors';
 import Items from '../containers/items';
 
-const CategoryPage = () => {
+export default function CategoryPage() {
   const { name } = useLocalSearchParams<{ id: string; name: string }>();
 
   const formattedName = name?.replace(/_+/g, ' ');
@@ -16,7 +15,7 @@ const CategoryPage = () => {
       <Items />
     </PageWrapper>
   );
-};
+}
 
 const styles = StyleSheet.create({
   title: {
@@ -26,5 +25,3 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
 });
-
-export default memo(CategoryPage);

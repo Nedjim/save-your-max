@@ -1,5 +1,5 @@
 import { Text } from '@react-navigation/elements';
-import { memo, useState } from 'react';
+import { useState } from 'react';
 import { Modal, StyleSheet, View } from 'react-native';
 import { useCreateCategory } from '../../hooks/categories';
 import Input from '../forms/Input';
@@ -10,7 +10,7 @@ type AddCategoryModalProps = {
   closeModal: () => void;
 };
 
-function AddCategoryModal(props: AddCategoryModalProps) {
+export default function AddCategoryModal(props: AddCategoryModalProps) {
   const { visible, closeModal } = props;
   const { mutate } = useCreateCategory();
   const [title, setTitle] = useState('');
@@ -61,5 +61,3 @@ const styles = StyleSheet.create({
     gap: 16,
   },
 });
-
-export default memo(AddCategoryModal);

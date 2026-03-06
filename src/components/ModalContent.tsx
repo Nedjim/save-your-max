@@ -1,4 +1,4 @@
-import { memo, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Button, StyleSheet, View } from 'react-native';
 import {
   DARK_GREY,
@@ -66,4 +66,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(ModalContent);
+export default ModalContent;

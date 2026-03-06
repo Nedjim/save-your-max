@@ -1,5 +1,4 @@
 import dayjs from 'dayjs';
-import { memo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import {
   DEFAULT_CONTAINER_BACKGROUND,
@@ -91,4 +90,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(ItemRow);
+export default ItemRow;

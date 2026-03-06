@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 const Overlay = () => {
@@ -12,4 +11,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(Overlay);
+export default Overlay;
