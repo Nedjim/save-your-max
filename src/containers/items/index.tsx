@@ -2,6 +2,7 @@ import { useLocalSearchParams } from 'expo-router';
 import { memo, useState } from 'react';
 import {
   ActivityIndicator,
+  Button,
   FlatList,
   StyleSheet,
   Text,
@@ -9,16 +10,16 @@ import {
 } from 'react-native';
 import Alert from '@/src/components/Alert';
 import EmptyState from '@/src/components/EmptyState';
-import IconButton from '@/src/components/IconButton';
+import { TURQUOISE } from '@/src/constants/colors';
 import { useDeleteItem, useItems } from '@/src/hooks/items';
 import { Item, ItemModalMode } from '@/src/types';
 import ItemModal from './ItemModal';
 import ItemRow from './ItemRow';
 
 const Items = () => {
-  const { categoryId } = useLocalSearchParams<{ categoryId: string }>();
-  const { mutate: deleteItemMutation } = useDeleteItem(categoryId);
-  const { data: items = [], isLoading, isError, error } = useItems(categoryId);
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const { mutate: deleteItemMutation } = useDeleteItem(id);
+  const { data: items = [], isLoading, isError, error } = useItems(id);
 
   const [modalMode, setModalMode] = useState<ItemModalMode | null>(null);
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
@@ -46,7 +47,7 @@ const Items = () => {
   };
 
   return (
-    <View>
+    <View style={styles.categoryPage}>
       {items.length === 0 && (
         <EmptyState
           description="You don’t have any items yet. Create your first one to get started."
@@ -57,24 +58,25 @@ const Items = () => {
         />
       )}
       {items.length > 0 && (
-        <View>
+        <View style={styles.itemsContent}>
+          <View style={styles.options}>
+            <Button
+              title="New item"
+              onPress={() => {
+                setModalMode('CREATE');
+              }}
+              color={TURQUOISE}
+              accessibilityLabel="New item"
+            />
+          </View>
           <FlatList
             data={items}
+            style={styles.itemsList}
             renderItem={({ item }) => (
               <ItemRow item={item} onsSetAction={handleSetAction} />
             )}
             keyExtractor={(item) => item.id}
           />
-          <View style={styles.options}>
-            <IconButton
-              name="plus"
-              onPress={() => {
-                setModalMode('CREATE');
-              }}
-              type="default"
-            />
-            <Text>Add</Text>
-          </View>
         </View>
       )}
 
@@ -103,11 +105,20 @@ const Items = () => {
 };
 
 const styles = StyleSheet.create({
+  categoryPage: {
+    flex: 1,
+  },
+  itemsContent: {
+    flex: 1,
+  },
+  itemsList: {
+    flex: 1,
+  },
   options: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'flex-end',
+    paddingBottom: 24,
   },
 });
 

@@ -1,18 +1,39 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Stack } from 'expo-router';
-import { BLACK, DARK_GREY } from '../constants/colors';
+import { ReactNode } from 'react';
+import { fr, registerTranslation } from 'react-native-paper-dates';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import BackButton from '../components/BackButton';
+import HeaderTitle from '../components/HeaderTitle';
 
-const TITLE = 'Save your max !';
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
-export default function RootLayout() {
+registerTranslation('fr', fr);
+
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <Stack
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: BLACK,
-        },
-        headerTintColor: DARK_GREY,
-        headerTitle: TITLE,
-      }}
-    />
+    <QueryClientProvider client={queryClient}>
+      <SafeAreaProvider>
+        <SafeAreaView style={{ flex: 1 }}>
+          <Stack
+            screenOptions={{
+              headerTransparent: true,
+              headerTitleAlign: 'center',
+              headerTitle: () => <HeaderTitle />,
+              headerLeft: () => <BackButton />,
+            }}
+          >
+            {children}
+          </Stack>
+        </SafeAreaView>
+      </SafeAreaProvider>
+    </QueryClientProvider>
   );
 }

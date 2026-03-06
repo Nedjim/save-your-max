@@ -1,6 +1,10 @@
 import { memo } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
-import { TURQUOISE, WHITE } from '../constants/colors';
+import {
+  DEFAULT_CONTAINER_BACKGROUND,
+  TURQUOISE,
+  WHITE,
+} from '../constants/colors';
 
 type EmptyStateType = {
   description: string;
@@ -28,14 +32,14 @@ const EmptyState = (props: EmptyStateType) => {
 
 const styles = StyleSheet.create({
   emptyState: {
-    backgroundColor: WHITE,
+    backgroundColor: DEFAULT_CONTAINER_BACKGROUND,
     padding: 24,
-    paddingBottom: 8,
     borderRadius: 4,
-    gap: 16,
+    gap: 42,
   },
   description: {
     textAlign: 'center',
+    color: WHITE,
   },
   actions: {
     display: 'flex',

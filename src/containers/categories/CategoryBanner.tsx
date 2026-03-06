@@ -1,42 +1,46 @@
+import { Ionicons } from '@expo/vector-icons';
 import { memo, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { LIGHT_GREY, MEDIUM_GREY } from '../../constants/colors';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {
+  DEFAULT_CONTAINER_BACKGROUND,
+  LIGHT_GREY,
+} from '../../constants/colors';
 import Alert from '@/src/components/Alert';
-import AntDesign from '@expo/vector-icons/AntDesign';
 
 type CategoryBannerProps = {
   title: string;
   id: string;
   onDelete: (id: string) => void;
-  isSelected?: boolean;
   onPress?: () => void;
 };
 
 const CategoryBanner = (props: CategoryBannerProps) => {
-  const { title, id, isSelected = false, onPress, onDelete } = props;
+  const { title, id, onPress, onDelete } = props;
   const [alertVisible, setAlertVisible] = useState(false);
 
   return (
     <View>
       <TouchableOpacity onPress={onPress} style={styles.banner}>
-        <AntDesign
-          name={isSelected ? 'caret-up' : 'caret-down'}
-          size={12}
-          color={LIGHT_GREY}
-        />
+        <Ionicons name="chevron-forward" color={LIGHT_GREY} />
         <Text style={styles.title}>{title}</Text>
         <View style={styles.options}>
-          <AntDesign
-            name="close"
-            size={14}
-            color={LIGHT_GREY}
+          <Pressable
             onPress={(e) => {
+              e.preventDefault();
               setAlertVisible(true);
-              e.stopPropagation();
             }}
-          />
+          >
+            <Ionicons name="close" color={LIGHT_GREY} />
+          </Pressable>
         </View>
       </TouchableOpacity>
+
       <Alert
         visible={alertVisible}
         onClose={() => {
@@ -54,18 +58,15 @@ const CategoryBanner = (props: CategoryBannerProps) => {
 
 const styles = StyleSheet.create({
   banner: {
-    padding: 8,
+    padding: 16,
     marginVertical: 8,
     borderRadius: 4,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: MEDIUM_GREY,
+    backgroundColor: DEFAULT_CONTAINER_BACKGROUND,
     color: LIGHT_GREY,
-  },
-  subBanner: {
-    marginBottom: 16,
   },
   title: {
     fontSize: 16,

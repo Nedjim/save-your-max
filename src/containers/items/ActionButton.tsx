@@ -1,0 +1,39 @@
+import { Ionicons } from '@expo/vector-icons';
+import { memo } from 'react';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { GREY } from '@/src/constants/colors';
+
+type ActionsButtonProps = {
+  name: 'trash' | 'pencil';
+  onPress?: () => void;
+};
+
+const ActionButton = (props: ActionsButtonProps) => {
+  const { name, onPress } = props;
+
+  return (
+    <View style={styles.actionButton}>
+      <Pressable onPress={onPress}>
+        <Ionicons name={name} color={GREY} />
+      </Pressable>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  actionButton: {
+    display: 'flex',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(229, 224, 224, 0.26)',
+    borderRadius: 5,
+    padding: 8,
+    height: 30,
+  },
+  button: {
+    padding: 6,
+    borderRadius: 40,
+    elevation: 2,
+  },
+});
+
+export default memo(ActionButton);
