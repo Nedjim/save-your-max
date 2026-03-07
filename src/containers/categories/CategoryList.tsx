@@ -1,9 +1,11 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { FlatList, StyleSheet, View } from 'react-native';
-import AddCategoryButton from '@/src/components/AddCategoryButton';
+import { useState } from 'react';
+import { Button, FlatList, StyleSheet, View } from 'react-native';
+import { TURQUOISE } from '@/src/constants/colors';
 import { useDeleteCategory } from '@/src/hooks/categories';
 import { Category } from '@/src/types';
-import CategoryBanner from './CategoryBanner';
+import CategoryModal from './CategoryModal';
+import CategoryRow from './CategoryRow';
 
 type CategoryListProps = {
   categories: Category[];
@@ -13,8 +15,16 @@ export default function CategoryList(props: CategoryListProps) {
   const { categories } = props;
   const { categoryId } = useLocalSearchParams();
   const { mutate: deleteCategoryMutation } = useDeleteCategory();
-
+  const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
+
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
 
   const handleDelete = (id: string) => {
     deleteCategoryMutation(id);
@@ -23,7 +33,12 @@ export default function CategoryList(props: CategoryListProps) {
   return (
     <View style={styles.list}>
       <View style={styles.actions}>
-        <AddCategoryButton />
+        <Button
+          title="New category"
+          onPress={openModal}
+          color={TURQUOISE}
+          accessibilityLabel="New category"
+        />
       </View>
       <FlatList
         data={categories}
@@ -33,7 +48,7 @@ export default function CategoryList(props: CategoryListProps) {
           const name = encodeURIComponent(title.replace(/\s+/g, '_'));
 
           return (
-            <CategoryBanner
+            <CategoryRow
               title={title}
               id={id}
               onDelete={handleDelete}
@@ -48,6 +63,7 @@ export default function CategoryList(props: CategoryListProps) {
         }}
         extraData={categoryId}
       />
+      <CategoryModal visible={modalVisible} closeModal={closeModal} />
     </View>
   );
 }

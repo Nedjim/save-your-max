@@ -1,16 +1,15 @@
-import { Text } from '@react-navigation/elements';
 import { useState } from 'react';
-import { Modal, StyleSheet, View } from 'react-native';
+import { Modal } from 'react-native';
+import Input from '../../components/Input';
 import { useCreateCategory } from '../../hooks/categories';
-import Input from '../forms/Input';
-import ModalContent from '@/src/components/ModalContent';
+import ModalContent from '@/src/containers/modal/ModalContent';
 
-type AddCategoryModalProps = {
+type CategoryModalProps = {
   visible: boolean;
   closeModal: () => void;
 };
 
-export default function AddCategoryModal(props: AddCategoryModalProps) {
+export default function CategoryModal(props: CategoryModalProps) {
   const { visible, closeModal } = props;
   const { mutate } = useCreateCategory();
   const [title, setTitle] = useState('');
@@ -40,24 +39,17 @@ export default function AddCategoryModal(props: AddCategoryModalProps) {
       <ModalContent
         onClose={closeModal}
         onSubmit={title.length ? handleCreateCategory : undefined}
-        submitButtonLabel="Add"
+        submitButtonLabel="Create"
+        title="New category"
       >
-        <View style={styles.spacing}>
-          <Text nativeID="category-label">Name of the new category</Text>
-          <Input
-            value={title}
-            onChange={setTitle}
-            maxLength={20}
-            id="category-label"
-          />
-        </View>
+        <Input
+          value={title}
+          onChange={setTitle}
+          maxLength={20}
+          id="category-label"
+          placeholder="ex: Bench press"
+        />
       </ModalContent>
     </Modal>
   );
 }
-
-const styles = StyleSheet.create({
-  spacing: {
-    gap: 16,
-  },
-});

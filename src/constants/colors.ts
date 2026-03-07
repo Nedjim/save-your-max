@@ -10,5 +10,5 @@ export const PURPLE = '#bb86fc';
 export const DARK_PURPLE = '#6201ee';
 export const TURQUOISE = 'rgb(31, 173, 160)';
 
-export const MODAL_OPACITY = 'rgba(0,0,0,0.5)';
+export const MODAL_OPACITY = 'rgba(0,0,0,0.65)';
 export const DEFAULT_CONTAINER_BACKGROUND = 'rgba(28, 35, 44, 0.69)';

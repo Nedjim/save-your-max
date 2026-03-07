@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import EmptyState from '@/src/components/EmptyState';
-import AddCategoryModal from './AddCategoryModal';
+import CategoryModal from './CategoryModal';
 
 export default function CategoriesEmptyState() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -15,7 +15,7 @@ export default function CategoriesEmptyState() {
           setModalVisible(true);
         }}
       />
-      <AddCategoryModal
+      <CategoryModal
         visible={modalVisible}
         closeModal={() => setModalVisible(false)}
       />

@@ -1,45 +1,46 @@
 import { ReactNode } from 'react';
-import { Button, StyleSheet, View } from 'react-native';
-import {
-  DARK_GREY,
-  MODAL_OPACITY,
-  TURQUOISE,
-  WHITE,
-} from '../constants/colors';
+import { Button, StyleSheet, Text, View } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
+import { MODAL_OPACITY, TURQUOISE, WHITE } from '../../constants/colors';
 
 type ModalContentProps = {
   children: ReactNode;
+  title?: string;
   onClose: () => void;
-  onSubmit?: () => void;
   submitButtonLabel?: string;
+  onSubmit?: () => void;
 };
 
 const ModalContent = (props: ModalContentProps) => {
-  const { children, onClose, onSubmit, submitButtonLabel = 'Ok' } = props;
-
-  const isDisabled = !onSubmit;
+  const {
+    children,
+    title,
+    onClose,
+    onSubmit,
+    submitButtonLabel = 'Ok',
+  } = props;
 
   return (
-    <View style={styles.modalContainer}>
+    <Animated.View entering={FadeIn} style={styles.modalContainer}>
       <View style={styles.modalContent}>
-        {children}
+        <Text style={styles.title}>{title}</Text>
+        <View style={styles.main}>{children}</View>
         <View style={styles.modalFooter}>
           <Button
-            title="Close"
-            color={DARK_GREY}
+            title="Cancel"
+            color="#2A313B"
             accessibilityLabel="close modal"
             onPress={onClose}
           />
           <Button
             title={submitButtonLabel}
-            disabled={isDisabled}
             color={TURQUOISE}
             accessibilityLabel={submitButtonLabel}
             onPress={onSubmit}
           />
         </View>
       </View>
-    </View>
+    </Animated.View>
   );
 };
 
@@ -51,9 +52,9 @@ const styles = StyleSheet.create({
     backgroundColor: MODAL_OPACITY,
   },
   modalContent: {
-    width: 300,
+    width: 320,
     padding: 24,
-    backgroundColor: WHITE,
+    backgroundColor: 'rgba(28, 35, 44, 0.85);',
     borderRadius: 10,
   },
   modalFooter: {
@@ -63,6 +64,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 24,
     gap: 8,
+  },
+  title: {
+    color: WHITE,
+    textAlign: 'center',
+    fontSize: 16,
+    paddingBottom: 16,
+  },
+  main: {
+    borderColor: '#2F3945',
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
   },
 });
 

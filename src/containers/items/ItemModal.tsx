@@ -1,25 +1,27 @@
 import { useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
-import { Modal, StyleSheet, Text, View } from 'react-native';
-import { BLACK } from '../../constants/colors';
-import Input from '../forms/Input';
+import { Modal, StyleSheet, View } from 'react-native';
+import Input from '../../components/Input';
+import Label from '../../components/Label';
 import DatePicker from '@/src/components/DatePicker';
-import ModalContent from '@/src/components/ModalContent';
+import ModalContent from '@/src/containers/modal/ModalContent';
+import { useCategoryNameParams } from '@/src/hooks/categories';
 import { useCreateItem, useUpdateItem } from '@/src/hooks/items';
-import { Item, ItemModalMode } from '@/src/types';
+import { Item } from '@/src/types';
 import { CalendarDate } from 'react-native-paper-dates/lib/typescript/Date/Calendar';
 
 type ItemModalProps = {
-  resetMode: () => void;
-  mode: ItemModalMode;
-  item: Item | null;
+  onClose: () => void;
+  item?: Item | null;
 };
 
 export default function ItemModal(props: ItemModalProps) {
-  const { resetMode, mode, item } = props;
-  const { categoryId } = useLocalSearchParams<{ categoryId: string }>();
+  const { item, onClose } = props;
+  const { id: categoryId } = useLocalSearchParams<{ id: string }>();
   const { mutate: createItemMutation } = useCreateItem(categoryId);
   const { mutate: updateItemMutation } = useUpdateItem(categoryId);
+  const categoryName = useCategoryNameParams();
+
   const nowDay = new Date();
 
   const [date, setDate] = useState<CalendarDate>(
@@ -36,7 +38,7 @@ export default function ItemModal(props: ItemModalProps) {
     setCharge('');
     setReps('');
     setDate(nowDay);
-    resetMode();
+    onClose();
   };
 
   const createItem = () => {
@@ -63,24 +65,8 @@ export default function ItemModal(props: ItemModalProps) {
     );
   };
 
-  const handleSubmit = () => {
-    switch (mode) {
-      case 'CREATE':
-        createItem();
-        return;
-      case 'UPDATE':
-        updateItem();
-        return;
-      default:
-        return;
-    }
-  };
-
-  const isSubmitAvailable = Boolean(date && charge && reps);
-
   return (
     <Modal
-      visible={!!mode}
       animationType="slide"
       transparent={true}
       onRequestClose={() => {
@@ -89,14 +75,13 @@ export default function ItemModal(props: ItemModalProps) {
     >
       <ModalContent
         onClose={handleClose}
-        onSubmit={isSubmitAvailable ? handleSubmit : undefined}
-        submitButtonLabel={mode}
+        onSubmit={() => (item ? updateItem() : createItem())}
+        submitButtonLabel={item ? 'update' : 'create'}
+        title={categoryName}
       >
         <View style={styles.spacing}>
           <View>
-            <Text style={styles.label} nativeID="item-charge">
-              Charge (kg)
-            </Text>
+            <Label label="Charge (kg)" nativeId="item-charge" />
             <Input
               value={String(charge)}
               onChange={setCharge}
@@ -104,9 +89,7 @@ export default function ItemModal(props: ItemModalProps) {
             />
           </View>
           <View>
-            <Text style={styles.label} nativeID="item-reps">
-              Reps
-            </Text>
+            <Label label="Reps" nativeId="item-reps" />
             <Input value={String(reps)} onChange={setReps} id="item-reps" />
           </View>
           <DatePicker date={date} onChange={handleChangeDate} />
@@ -119,9 +102,5 @@ export default function ItemModal(props: ItemModalProps) {
 const styles = StyleSheet.create({
   spacing: {
     gap: 16,
-  },
-  label: {
-    color: BLACK,
-    marginBottom: 8,
   },
 });

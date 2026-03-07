@@ -1,9 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import {
-  createCategory,
-  deleteCategory,
-  getCategories,
-} from '../services/categories';
+import { useLocalSearchParams } from 'expo-router';
+import { createCategory, deleteCategory, getCategories } from '../services/categories';
+
+
+
+
+
 
 export function useCategories() {
   const query = useQuery({
@@ -38,4 +40,10 @@ export function useDeleteCategory() {
   });
 
   return query;
+}
+
+export function useCategoryNameParams() {
+  const { name } = useLocalSearchParams<{ name: string }>();
+
+  return name?.replace(/_+/g, ' ');
 }

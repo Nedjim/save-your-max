@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { View } from 'react-native';
 import { Button, MD3LightTheme, PaperProvider } from 'react-native-paper';
 import { DatePickerModal } from 'react-native-paper-dates';
-import { BLACK, TURQUOISE } from '../constants/colors';
+import { TURQUOISE, WHITE } from '../constants/colors';
 import { CalendarDate } from 'react-native-paper-dates/lib/typescript/Date/Calendar';
 
 const DATE_FORMAT = 'DD/MM/YYYY';
@@ -28,7 +28,7 @@ export default function DatePicker(props: DatePickerProps) {
   return (
     <View>
       <Button
-        textColor={BLACK}
+        textColor={WHITE}
         onPress={() => setOpen(true)}
         uppercase={false}
         mode="outlined"

@@ -6,9 +6,15 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
-import Overlay from './Overlay';
+import {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
+import Overlay from '../../components/Overlay';
 
-const image = require('../assets/background.jpg');
+const image = require('../../assets/background.jpg');
 
 type PageWrapperProps = { children: ReactNode };
 
@@ -17,6 +23,18 @@ export default function PageWrapper(props: PageWrapperProps) {
 
   const { height, width } = useWindowDimensions();
   const headerHeight = useHeaderHeight();
+  const randomWidth = useSharedValue(10);
+
+  const config = {
+    duration: 500,
+    easing: Easing.bezier(0.5, 0.01, 0, 1),
+  };
+
+  const style = useAnimatedStyle(() => {
+    return {
+      width: withTiming(randomWidth.value, config),
+    };
+  });
 
   return (
     <ImageBackground

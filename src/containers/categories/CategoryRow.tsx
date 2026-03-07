@@ -7,33 +7,39 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import {
   DEFAULT_CONTAINER_BACKGROUND,
   LIGHT_GREY,
 } from '../../constants/colors';
 import Alert from '@/src/components/Alert';
 
-type CategoryBannerProps = {
+type CategoryRowProps = {
   title: string;
   id: string;
   onDelete: (id: string) => void;
   onPress?: () => void;
 };
 
-export default function CategoryBanner(props: CategoryBannerProps) {
+export default function CategoryRow(props: CategoryRowProps) {
   const { title, id, onPress, onDelete } = props;
-  const [alertVisible, setAlertVisible] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+
+  const handleDelete = () => {
+    onDelete(id);
+    setShowAlert(false);
+  };
 
   return (
-    <View>
-      <TouchableOpacity onPress={onPress} style={styles.banner}>
+    <Animated.View entering={FadeIn} exiting={FadeOut}>
+      <TouchableOpacity onPress={onPress} style={styles.categoryRow}>
         <Ionicons name="chevron-forward" color={LIGHT_GREY} />
         <Text style={styles.title}>{title}</Text>
         <View style={styles.options}>
           <Pressable
             onPress={(e) => {
               e.preventDefault();
-              setAlertVisible(true);
+              setShowAlert(true);
             }}
           >
             <Ionicons name="close" color={LIGHT_GREY} />
@@ -41,23 +47,19 @@ export default function CategoryBanner(props: CategoryBannerProps) {
         </View>
       </TouchableOpacity>
 
-      <Alert
-        visible={alertVisible}
-        onClose={() => {
-          setAlertVisible(false);
-        }}
-        description={`The category ${title} is about to be deleted.`}
-        onSubmit={() => {
-          onDelete(id);
-          setAlertVisible(false);
-        }}
-      />
-    </View>
+      {showAlert && (
+        <Alert
+          onClose={() => setShowAlert(false)}
+          description={`The category ${title} is about to be deleted.`}
+          onSubmit={handleDelete}
+        />
+      )}
+    </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
-  banner: {
+  categoryRow: {
     padding: 16,
     marginVertical: 8,
     borderRadius: 4,

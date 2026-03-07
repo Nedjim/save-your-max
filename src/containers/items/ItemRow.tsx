@@ -1,27 +1,29 @@
 import dayjs from 'dayjs';
 import { StyleSheet, Text, View } from 'react-native';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import {
   DEFAULT_CONTAINER_BACKGROUND,
   GREY,
   TURQUOISE,
 } from '@/src/constants/colors';
-import { Item, ItemModalMode } from '@/src/types';
+import { Item } from '@/src/types';
 import ActionButton from './ActionButton';
 
 type ItemRowProps = {
   item: Item;
-  onsSetAction: (type: ItemModalMode, item: Item) => void;
+  onUpdate: (item: Item) => void;
+  onDelete: (item: Item) => void;
 };
 
 const ItemRow = (props: ItemRowProps) => {
-  const { item, onsSetAction } = props;
+  const { item, onUpdate, onDelete } = props;
   const { charge, reps } = item;
 
   const date = dayjs(item.date).format('DD/MM/YYYY');
   const chargeLabel = 'Charge';
 
   return (
-    <View style={styles.itemRow}>
+    <Animated.View entering={FadeIn} exiting={FadeOut} style={styles.itemRow}>
       <View style={styles.details}>
         <Text style={[styles.text, styles.date]}> {date}</Text>
         <View style={styles.charge}>
@@ -34,16 +36,10 @@ const ItemRow = (props: ItemRowProps) => {
         <Text style={[styles.text, styles.defaultTextColor]}>{reps} reps</Text>
       </View>
       <View style={styles.actions}>
-        <ActionButton
-          name="pencil"
-          onPress={() => onsSetAction('UPDATE', item)}
-        />
-        <ActionButton
-          name="trash"
-          onPress={() => onsSetAction('DELETE', item)}
-        />
+        <ActionButton name="pencil" onPress={() => onUpdate(item)} />
+        <ActionButton name="trash" onPress={() => onDelete(item)} />
       </View>
-    </View>
+    </Animated.View>
   );
 };
 

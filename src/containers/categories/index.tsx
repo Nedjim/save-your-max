@@ -14,11 +14,11 @@ export default function Categories() {
     content = <ActivityIndicator size="large" color={WHITE} />;
   }
 
-  if (isError) {
+  if (!isLoading && isError) {
     content = <Error message={error.message} />;
   }
 
-  if (categories.length === 0) {
+  if (!isLoading && !isError && !categories.length) {
     content = <EmptyState />;
   }
 

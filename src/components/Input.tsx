@@ -1,11 +1,13 @@
 import { KeyboardTypeOptions, StyleSheet, TextInput, View } from 'react-native';
-import IconButton from '../../components/IconButton';
+import { WHITE } from '@/src/constants/colors';
+import IconButton from './IconButton';
 
 type InputProps = {
   value: string;
   onChange: (key: string) => void;
   keyboardType?: KeyboardTypeOptions;
   maxLength?: number;
+  placeholder?: string;
   id: string;
 };
 
@@ -25,6 +27,7 @@ const Input = (props: InputProps) => {
         accessibilityLabelledBy={id}
         onChangeText={onChange}
         value={value}
+        placeholderTextColor="#7A8699"
         {...rest}
       />
       <View style={[styles.clearInput, !value.length && styles.hidden]}>
@@ -43,6 +46,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     borderWidth: 1,
+    backgroundColor: '#11161C',
+    color: WHITE,
   },
   clearInput: {
     position: 'absolute',

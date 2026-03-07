@@ -1,17 +1,15 @@
-import { useLocalSearchParams } from 'expo-router';
 import { StyleSheet, Text } from 'react-native';
-import PageWrapper from '../components/PageWrapper';
 import { LIGHT_GREY } from '../constants/colors';
 import Items from '../containers/items';
+import PageWrapper from '../containers/page/PageWrapper';
+import { useCategoryNameParams } from '../hooks/categories';
 
 export default function CategoryPage() {
-  const { name } = useLocalSearchParams<{ id: string; name: string }>();
-
-  const formattedName = name?.replace(/_+/g, ' ');
+  const categoryName = useCategoryNameParams();
 
   return (
     <PageWrapper>
-      <Text style={styles.title}>{formattedName}</Text>
+      <Text style={styles.title}>{categoryName}</Text>
       <Items />
     </PageWrapper>
   );
