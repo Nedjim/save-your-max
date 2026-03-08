@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import EmptyState from '@/src/components/EmptyState';
 import ItemModal from './ItemModal';
 
@@ -7,7 +8,11 @@ export default function ItemsEmptyState() {
   const [showModal, setShowModal] = useState(false);
 
   return (
-    <View style={styles.emptyItems}>
+    <Animated.View
+      entering={FadeIn}
+      exiting={FadeOut}
+      style={styles.emptyItems}
+    >
       <EmptyState
         description="You don’t have any items yet. Create your first one to get started."
         buttonTitle="Create"
@@ -16,7 +21,7 @@ export default function ItemsEmptyState() {
         }}
       />
       {showModal && <ItemModal onClose={() => setShowModal(false)} />}
-    </View>
+    </Animated.View>
   );
 }
 

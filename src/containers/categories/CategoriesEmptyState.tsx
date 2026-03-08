@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import EmptyState from '@/src/components/EmptyState';
 import CategoryModal from './CategoryModal';
 
@@ -7,7 +8,11 @@ export default function CategoriesEmptyState() {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
-    <View style={styles.emptyCategories}>
+    <Animated.View
+      entering={FadeIn}
+      exiting={FadeOut}
+      style={styles.emptyCategories}
+    >
       <EmptyState
         description="You don’t have any categories yet. Create your first one to get started."
         buttonTitle="New category"
@@ -19,7 +24,7 @@ export default function CategoriesEmptyState() {
         visible={modalVisible}
         closeModal={() => setModalVisible(false)}
       />
-    </View>
+    </Animated.View>
   );
 }
 
