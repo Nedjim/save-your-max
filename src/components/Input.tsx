@@ -28,6 +28,7 @@ const Input = (props: InputProps) => {
         onChangeText={onChange}
         value={value}
         placeholderTextColor="#7A8699"
+        autoCapitalize="none"
         {...rest}
       />
       <View style={[styles.clearInput, !value.length && styles.hidden]}>

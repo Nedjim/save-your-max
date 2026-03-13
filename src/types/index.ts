@@ -1,5 +1,12 @@
 import { CalendarDate } from 'react-native-paper-dates/lib/typescript/Date/Calendar';
 
+export type Device = 'web' | 'ios' | 'android';
+
+export type UserPayload = {
+  email: string;
+  password: string;
+};
+
 export type Category = {
   id: string;
   title: string;
@@ -19,10 +26,10 @@ export type Item = {
 
 export type ItemModalMode = 'CREATE' | 'UPDATE' | 'DELETE';
 
-export type CreateItemPayload = {
+export type CreateItemParams = {
   charge: number;
   reps: number;
   date: CalendarDate;
 };
 
-export type UpdateItemPayload = Partial<CreateItemPayload> & { id: string };
+export type UpdateItemParams = Partial<CreateItemParams> & { id: string };

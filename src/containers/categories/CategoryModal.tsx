@@ -14,16 +14,21 @@ export default function CategoryModal(props: CategoryModalProps) {
   const { mutate } = useCreateCategory();
   const [title, setTitle] = useState('');
 
+  const handleClose = () => {
+    closeModal();
+    setTitle('');
+  };
+
   const handleCreateCategory = () => {
     if (!title.trim()) return;
 
     mutate(title, {
       onSuccess: () => {
-        setTitle('');
+        // WIP: push toast
       },
     });
 
-    closeModal();
+    handleClose();
   };
 
   return (
@@ -37,7 +42,7 @@ export default function CategoryModal(props: CategoryModalProps) {
       }}
     >
       <ModalContent
-        onClose={closeModal}
+        onClose={handleClose}
         onSubmit={title.length ? handleCreateCategory : undefined}
         submitButtonLabel="Create"
         title="New category"

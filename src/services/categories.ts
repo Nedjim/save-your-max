@@ -1,51 +1,26 @@
 import { Category } from '../types';
-
-const BASE_URL = 'http://192.168.1.147:3000';
-const OPTIONS = {
-  headers: {
-    'Content-Type': 'application/json',
-  },
-};
+import { apiFetch, ApiFetchType } from './fetch';
 
 export async function getCategories(): Promise<Category[]> {
-  const response = await fetch(`${BASE_URL}/categories`);
+  const payload: ApiFetchType = { endpoint: 'categories' };
 
-  if (!response.ok) {
-    return Promise.reject(
-      new Error(`Error ${response.status}: ${response.statusText}`),
-    );
-  }
-
-  return await response.json();
+  return await apiFetch(payload);
 }
 
 export async function createCategory(title: string): Promise<Category> {
-  const response = await fetch(`${BASE_URL}/categories`, {
-    ...OPTIONS,
+  const payload: ApiFetchType = {
+    endpoint: 'categories',
     method: 'POST',
-    body: JSON.stringify({ title }),
-  });
-
-  if (!response.ok) {
-    return Promise.reject(
-      new Error(`Error ${response.status}: ${response.statusText}`),
-    );
-  }
-
-  return await response.json();
+    body: { title },
+  };
+  return await apiFetch(payload);
 }
 
 export async function deleteCategory(id: string): Promise<Category> {
-  const response = await fetch(`${BASE_URL}/categories/${id}`, {
-    ...OPTIONS,
+  const payload: ApiFetchType = {
+    endpoint: `categories/${id}`,
     method: 'DELETE',
-  });
+  };
 
-  if (!response.ok) {
-    return Promise.reject(
-      new Error(`Error ${response.status}: ${response.statusText}`),
-    );
-  }
-
-  return await response.json();
+  return await apiFetch(payload);
 }

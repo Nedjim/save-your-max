@@ -6,24 +6,32 @@ datasource db {
     provider = "postgresql"
 }
 
+model Profile {
+    id         String     @id @db.Uuid
+    createdAt  DateTime   @default(now())
+    categories Category[]
+}
+
 model Category {
     id        String   @id @default(uuid())
     title     String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     items     Item[]
+    profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+    profileId String   @db.Uuid
 
-    @@unique([title])
+    @@unique([title, profileId])
 }
 
 model Item {
-    id        String   @id @default(uuid())
-    date      DateTime @default(now())
-    charge    Int      @default(0)
-    reps      Int      @default(0)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
+    id         String   @id @default(uuid())
+    date       DateTime @default(now())
+    charge     Int      @default(0)
+    reps       Int      @default(0)
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
     categoryId String
-    category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+    category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }

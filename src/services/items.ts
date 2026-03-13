@@ -1,74 +1,41 @@
-import { CreateItemPayload, Item, UpdateItemPayload } from '../types';
-
-const BASE_URL = 'http://192.168.1.147:3000';
-const OPTIONS = {
-  headers: {
-    'Content-Type': 'application/json',
-  },
-};
+import { CreateItemParams, Item, UpdateItemParams } from '../types';
+import { apiFetch, ApiFetchType } from './fetch';
 
 export async function getItems(categoryId: string): Promise<Item[]> {
-  const response = await fetch(`${BASE_URL}/categories/${categoryId}/items`);
+  const payload: ApiFetchType = { endpoint: `categories/${categoryId}/items` };
 
-  if (!response.ok) {
-    return Promise.reject(
-      new Error(`Error ${response.status}: ${response.statusText}`),
-    );
-  }
-
-  return await response.json();
+  return await apiFetch(payload);
 }
 
 export async function createItem(
   categoryId: string,
-  payload: CreateItemPayload,
+  params: CreateItemParams,
 ): Promise<Item> {
-  const response = await fetch(`${BASE_URL}/categories/${categoryId}/items`, {
-    ...OPTIONS,
+  const payload: ApiFetchType = {
+    endpoint: `categories/${categoryId}/items`,
     method: 'POST',
-    body: JSON.stringify(payload),
-  });
+    body: { ...params },
+  };
 
-  if (!response.ok) {
-    return Promise.reject(
-      new Error(`Error ${response.status}: ${response.statusText}`),
-    );
-  }
-
-  return await response.json();
+  return await apiFetch(payload);
 }
 
-export async function updateItem(payload: UpdateItemPayload) {
-  const { id, ...rest } = payload;
+export async function updateItem(params: UpdateItemParams) {
+  const { id, ...rest } = params;
 
-  const response = await fetch(`${BASE_URL}/items/${id}`, {
-    ...OPTIONS,
+  const payload: ApiFetchType = {
+    endpoint: `items/${id}`,
     method: 'PATCH',
-    body: JSON.stringify({
+    body: {
       ...rest,
-    }),
-  });
+    },
+  };
 
-  if (!response.ok) {
-    return Promise.reject(
-      new Error(`Error ${response.status}: ${response.statusText}`),
-    );
-  }
-
-  return await response.json();
+  return await apiFetch(payload);
 }
 
-export async function deleteItem(itemId: string) {
-  const response = await fetch(`${BASE_URL}/items/${itemId}`, {
-    ...OPTIONS,
-    method: 'DELETE',
-  });
+export async function deleteItem(id: string) {
+  const payload: ApiFetchType = { endpoint: `items/${id}`, method: 'DELETE' };
 
-  if (!response.ok) {
-    return Promise.reject(
-      new Error(`Error ${response.status}: ${response.statusText}`),
-    );
-  }
-
-  return await response.json();
+  return await apiFetch(payload);
 }

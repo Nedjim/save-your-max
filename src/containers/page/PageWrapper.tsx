@@ -1,4 +1,3 @@
-import { useHeaderHeight } from '@react-navigation/elements';
 import { ReactNode } from 'react';
 import { ImageBackground, StyleSheet, useWindowDimensions } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
@@ -12,7 +11,6 @@ export default function PageWrapper(props: PageWrapperProps) {
   const { children } = props;
 
   const { height, width } = useWindowDimensions();
-  const headerHeight = useHeaderHeight();
 
   return (
     <ImageBackground
@@ -25,7 +23,7 @@ export default function PageWrapper(props: PageWrapperProps) {
       <Animated.View
         entering={FadeIn}
         exiting={FadeOut}
-        style={[styles.content, { paddingTop: headerHeight }]}
+        style={[styles.content]}
       >
         {children}
       </Animated.View>
@@ -41,6 +39,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     paddingBottom: 20,
-    marginTop: 14,
+    marginTop: 40,
   },
 });

@@ -8,7 +8,6 @@ import ModalContent from '@/src/containers/modal/ModalContent';
 import { useCategoryNameParams } from '@/src/hooks/categories';
 import { useCreateItem, useUpdateItem } from '@/src/hooks/items';
 import { Item } from '@/src/types';
-import { CalendarDate } from 'react-native-paper-dates/lib/typescript/Date/Calendar';
 
 type ItemModalProps = {
   onClose: () => void;
@@ -24,14 +23,12 @@ export default function ItemModal(props: ItemModalProps) {
 
   const nowDay = new Date();
 
-  const [date, setDate] = useState<CalendarDate>(
-    item ? new Date(item.date) : nowDay,
-  );
+  const [date, setDate] = useState<Date>(item ? new Date(item.date) : nowDay);
   const [charge, setCharge] = useState(item?.charge || '0');
   const [reps, setReps] = useState(item?.reps || '0');
 
-  const handleChangeDate = (event: { date: CalendarDate }) => {
-    setDate(event.date);
+  const handleChangeDate = (date: Date) => {
+    setDate(date);
   };
 
   const handleClose = () => {

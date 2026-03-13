@@ -5,7 +5,7 @@ import {
   getItems,
   updateItem,
 } from '../services/items';
-import { CreateItemPayload, UpdateItemPayload } from '../types';
+import { CreateItemParams, UpdateItemParams } from '../types';
 
 export function useItems(categoryId: string) {
   const query = useQuery({
@@ -20,7 +20,7 @@ export function useCreateItem(categoryId: string) {
   const queryClient = useQueryClient();
 
   const query = useMutation({
-    mutationFn: (payload: CreateItemPayload) => createItem(categoryId, payload),
+    mutationFn: (params: CreateItemParams) => createItem(categoryId, params),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['category', 'items', categoryId],
@@ -35,7 +35,7 @@ export function useUpdateItem(categoryId: string) {
   const queryClient = useQueryClient();
 
   const query = useMutation({
-    mutationFn: (payload: UpdateItemPayload) => updateItem(payload),
+    mutationFn: (params: UpdateItemParams) => updateItem(params),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['category', 'items', categoryId],

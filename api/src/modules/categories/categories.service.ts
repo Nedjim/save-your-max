@@ -6,18 +6,22 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 export class CategoriesService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: CreateCategoryDto) {
+  async create(profileId: string, dto: CreateCategoryDto) {
     return await this.prisma.category.create({
-      data,
+      data: {
+        ...dto,
+        profileId,
+      },
     });
   }
 
-  async delete(id: string) {
-    return await this.prisma.category.delete({ where: { id } });
+  async delete(profileId: string, id: string) {
+    return await this.prisma.category.deleteMany({ where: { id, profileId } });
   }
 
-  async findAll() {
+  async findAll(profileId: string) {
     return await this.prisma.category.findMany({
+      where: {profileId},
       orderBy: { title: 'asc' },
     });
   }
