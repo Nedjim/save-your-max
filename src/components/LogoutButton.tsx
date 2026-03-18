@@ -1,18 +1,14 @@
 import { Button, StyleSheet, View } from 'react-native';
 import { TURQUOISE, WHITE } from '../constants/colors';
-import { useSignOutUser } from '../hooks/auth';
+import { useSession } from '../context/AuthContext';
 
-const UserInfo = () => {
-  const { mutate: signOutMutation } = useSignOutUser();
-
-  const signOut = () => {
-    signOutMutation();
-  };
+const LogoutButton = () => {
+  const { signOutUser } = useSession();
 
   return (
     <View style={styles.userInfo}>
       {/* <Text style={styles.name}>Welcome</Text> */}
-      <Button title="Logout" onPress={signOut} color={TURQUOISE} />
+      <Button title="Logout" onPress={signOutUser} color={TURQUOISE} />
     </View>
   );
 };
@@ -31,4 +27,4 @@ const styles = StyleSheet.create({
   name: { color: WHITE },
 });
 
-export default UserInfo;
+export default LogoutButton;

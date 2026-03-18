@@ -1,7 +1,7 @@
 import AuthPage from '@/src/pages/AuthPage';
 
-const Auth = () => {
+const Login = () => {
   return <AuthPage />;
 };
 
-export default Auth;
+export default Login;

@@ -1,5 +1,12 @@
 import { CalendarDate } from 'react-native-paper-dates/lib/typescript/Date/Calendar';
 
+export type ApiFetchType = {
+  endpoint: string;
+  body?: any;
+  options?: any;
+  method?: 'GET' | 'POST' | 'DELETE' | 'PATCH';
+};
+
 export type Device = 'web' | 'ios' | 'android';
 
 export type UserPayload = {

@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
 import { Platform } from 'react-native';
 import 'expo-sqlite/localStorage/install';
-import { UserPayload } from '../types';
+import { ApiFetchType, UserPayload } from '../types';
 
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL!;
 const supabasePublishableKey =
@@ -31,6 +31,36 @@ export const supabase = createClient(supabaseUrl, supabasePublishableKey, {
   },
 });
 
+export const apiFetch = async (payload: ApiFetchType) => {
+  const { endpoint, options, method = 'GET' } = payload;
+
+  const { data } = await supabase.auth.getSession();
+  const token = data.session?.access_token;
+
+  if (!token) {
+    throw new Error('No access token available');
+  }
+
+  const res = await fetch(
+    `${process.env.EXPO_PUBLIC_API_BASE_URL}/${endpoint}`,
+    {
+      ...options,
+      method,
+      body: JSON.stringify(payload.body),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  if (res.status === 401) {
+    await supabase.auth.signOut();
+  }
+
+  return res.json();
+};
+
 export const getToken = async () => {
   const session = await supabase.auth.getSession();
 
@@ -39,12 +69,6 @@ export const getToken = async () => {
 
 export const signInUser = async (payload: UserPayload) => {
   return await supabase.auth.signInWithPassword(payload);
-};
-
-export const signupUser = (payload: UserPayload) => {
-  return supabase.auth.signUp(payload).then(async () => {
-    return await createProfile();
-  });
 };
 
 export const signOutUser = async () => {
@@ -67,15 +91,19 @@ export const getUserSession = async () => {
   }
 };
 
-export const createProfile = async () => {
-  const session = await supabase.auth.getSession();
+export const createUser = async (user: UserPayload) => {
+  try {
+    const session = await supabase.auth.signUp(user);
 
-  if (session.data.session) {
-    await fetch(`${process.env.EXPO_PUBLIC_API_BASE_URL}/profiles`, {
+    const payload: ApiFetchType = {
+      endpoint: 'profiles',
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${session.data.session.access_token}`,
-      },
-    });
+    };
+
+    await apiFetch(payload);
+    return session;
+  } catch {
+    await supabase.auth.signOut();
+    return null;
   }
 };

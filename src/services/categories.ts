@@ -1,5 +1,5 @@
-import { Category } from '../types';
-import { apiFetch, ApiFetchType } from './fetch';
+import { ApiFetchType, Category } from '../types';
+import { apiFetch } from './supabase';
 
 export async function getCategories(): Promise<Category[]> {
   const payload: ApiFetchType = { endpoint: 'categories' };

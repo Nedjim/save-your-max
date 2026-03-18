@@ -1,17 +1,13 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Stack } from 'expo-router';
-import { ReactNode } from 'react';
 import 'react-native-gesture-handler';
 import { MD3LightTheme, PaperProvider } from 'react-native-paper';
 import { fr, registerTranslation } from 'react-native-paper-dates';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import BackButton from '../components/BackButton';
-import HeaderTitle from '../components/HeaderTitle';
-import UserInfo from '../components/UserInfo';
 import { TURQUOISE } from '../constants/colors';
+import RootNavigator from '../containers/routes';
 import SupabaseOnAuthStateChange from '../containers/supabase/SupabaseOnAuthStateChange';
-import { Device } from '../types';
-import { getDevice } from '../utils';
+import { SessionProvider } from '../context/AuthContext';
+import { SplashScreenController } from '../splash';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -32,42 +28,17 @@ const theme = {
 
 registerTranslation('fr', fr);
 
-// Type any because NativeStackNavigationOptions type is deprecated in Expo Router
-const SCREEN_OPTIONS: Record<Device, any> = {
-  ios: {
-    headerStyle: {
-      backgroundColor: 'black',
-    },
-    headerTitle: () => <HeaderTitle />,
-    headerRight: () => <UserInfo />,
-  },
-  android: {
-    headerStyle: {
-      backgroundColor: 'black',
-    },
-    headerTitle: () => <HeaderTitle />,
-    headerRight: () => <UserInfo />,
-  },
-  web: {
-    headerTransparent: true,
-    headerTitleAlign: 'center',
-    headerTitle: () => <HeaderTitle />,
-    headerLeft: () => <BackButton />,
-    headerRight: () => <UserInfo />,
-  },
-};
-
-function RootLayout({ children }: { children: ReactNode }) {
-  const device = getDevice();
-  const screenOptionsByDevice = SCREEN_OPTIONS[device];
-
+function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider>
         <SafeAreaView style={{ flex: 1 }}>
           <PaperProvider theme={theme}>
             <SupabaseOnAuthStateChange>
-              <Stack screenOptions={screenOptionsByDevice}>{children}</Stack>
+              <SessionProvider>
+                <SplashScreenController />
+                <RootNavigator />
+              </SessionProvider>
             </SupabaseOnAuthStateChange>
           </PaperProvider>
         </SafeAreaView>

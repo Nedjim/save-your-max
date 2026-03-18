@@ -1,5 +1,10 @@
-import { CreateItemParams, Item, UpdateItemParams } from '../types';
-import { apiFetch, ApiFetchType } from './fetch';
+import {
+  ApiFetchType,
+  CreateItemParams,
+  Item,
+  UpdateItemParams,
+} from '../types';
+import { apiFetch } from './supabase';
 
 export async function getItems(categoryId: string): Promise<Item[]> {
   const payload: ApiFetchType = { endpoint: `categories/${categoryId}/items` };

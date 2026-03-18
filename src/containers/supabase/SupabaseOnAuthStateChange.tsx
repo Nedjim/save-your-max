@@ -6,10 +6,8 @@ function SupabaseOnAuthStateChange({ children }: { children: ReactNode }) {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    const { data } = supabase.auth.onAuthStateChange((event) => {
-      if (event === 'INITIAL_SESSION') return;
-
-      queryClient.invalidateQueries({ queryKey: ['session'] });
+    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+      queryClient.setQueryData(['session'], session);
     });
 
     return () => {

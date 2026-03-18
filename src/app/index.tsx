@@ -1,8 +1,7 @@
-import React from 'react';
-import HomePage from '../pages/HomePage';
+import { Redirect } from 'expo-router';
 
-const Index = () => {
-  return <HomePage />;
-};
+function Index() {
+  return <Redirect href="/login" />;
+}
 
 export default Index;

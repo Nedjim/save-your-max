@@ -1,9 +1,12 @@
+'use no memo';
+
+import { AuthResponse, AuthTokenResponsePassword } from '@supabase/supabase-js';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
+  createUser,
   getUserSession,
   signInUser,
   signOutUser,
-  signupUser,
 } from '../services/supabase';
 import { UserPayload } from '../types';
 
@@ -22,21 +25,21 @@ export function useSignInUser() {
 
   const query = useMutation({
     mutationFn: (payload: UserPayload) => signInUser(payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['session'] });
+    onSuccess: (res: AuthTokenResponsePassword) => {
+      queryClient.setQueryData(['session'], res.data.session);
     },
   });
 
   return query;
 }
 
-export function useSignUpUser() {
+export function useCreateUser() {
   const queryClient = useQueryClient();
 
   const query = useMutation({
-    mutationFn: (payload: UserPayload) => signupUser(payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['session'] });
+    mutationFn: (payload: UserPayload) => createUser(payload),
+    onSuccess: (res: AuthResponse | null) => {
+      res && queryClient.setQueryData(['session'], res.data.session);
     },
   });
 
@@ -49,7 +52,7 @@ export function useSignOutUser() {
   const query = useMutation({
     mutationFn: () => signOutUser(),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['session'] });
+      queryClient.setQueryData(['session'], null);
     },
   });
 

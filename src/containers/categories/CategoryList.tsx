@@ -54,7 +54,7 @@ export default function CategoryList(props: CategoryListProps) {
               onDelete={handleDelete}
               onPress={() => {
                 router.push({
-                  pathname: '/category/[id]',
+                  pathname: '/exercises/[id]',
                   params: { id, name },
                 });
               }}
