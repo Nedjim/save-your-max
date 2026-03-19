@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsDate, IsInt, IsNotEmpty, IsOptional, Min } from 'class-validator';
 
-export class CreateItemDto {
+export class CreatePerformanceDto {
   @IsNotEmpty()
   @IsInt()
   @Min(0)

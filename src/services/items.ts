@@ -6,18 +6,20 @@ import {
 } from '../types';
 import { apiFetch } from './supabase';
 
-export async function getItems(categoryId: string): Promise<Item[]> {
-  const payload: ApiFetchType = { endpoint: `categories/${categoryId}/items` };
+export async function getPerformances(exerciseId: string): Promise<Item[]> {
+  const payload: ApiFetchType = {
+    endpoint: `exercises/${exerciseId}/performances`,
+  };
 
   return await apiFetch(payload);
 }
 
-export async function createItem(
-  categoryId: string,
+export async function createPerformance(
+  exerciseId: string,
   params: CreateItemParams,
 ): Promise<Item> {
   const payload: ApiFetchType = {
-    endpoint: `categories/${categoryId}/items`,
+    endpoint: `exercises/${exerciseId}/performances`,
     method: 'POST',
     body: { ...params },
   };
@@ -25,11 +27,11 @@ export async function createItem(
   return await apiFetch(payload);
 }
 
-export async function updateItem(params: UpdateItemParams) {
+export async function updatePerformance(params: UpdateItemParams) {
   const { id, ...rest } = params;
 
   const payload: ApiFetchType = {
-    endpoint: `items/${id}`,
+    endpoint: `performances/${id}`,
     method: 'PATCH',
     body: {
       ...rest,
@@ -39,8 +41,11 @@ export async function updateItem(params: UpdateItemParams) {
   return await apiFetch(payload);
 }
 
-export async function deleteItem(id: string) {
-  const payload: ApiFetchType = { endpoint: `items/${id}`, method: 'DELETE' };
+export async function deletePerformance(id: string) {
+  const payload: ApiFetchType = {
+    endpoint: `performances/${id}`,
+    method: 'DELETE',
+  };
 
   return await apiFetch(payload);
 }

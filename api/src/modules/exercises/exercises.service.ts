@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateCategoryDto } from './dto/create-category.dto';
+import { CreateExercisesDto } from './dto/create-exercise.dto';
 
 @Injectable()
-export class CategoriesService {
+export class ExercisesService {
   constructor(private prisma: PrismaService) {}
 
-  async create(profileId: string, dto: CreateCategoryDto) {
-    return await this.prisma.category.create({
+  async create(profileId: string, dto: CreateExercisesDto) {
+    return await this.prisma.exercise.create({
       data: {
         ...dto,
         profileId,
@@ -16,12 +16,12 @@ export class CategoriesService {
   }
 
   async delete(profileId: string, id: string) {
-    return await this.prisma.category.deleteMany({ where: { id, profileId } });
+    return await this.prisma.exercise.deleteMany({ where: { id, profileId } });
   }
 
   async findAll(profileId: string) {
-    return await this.prisma.category.findMany({
-      where: {profileId},
+    return await this.prisma.exercise.findMany({
+      where: { profileId },
       orderBy: { title: 'asc' },
     });
   }

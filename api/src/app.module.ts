@@ -4,18 +4,18 @@ import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
-import { CategoriesModule } from './modules/categories/categories.module';
-import { ItemsModule } from './modules/items/items.module';
-import { PrismaModule } from './prisma/prisma.module';
+import { ExercisesModule } from './modules/exercises/exercises.module';
+import { PerformancesModule } from './modules/performances/performances.module';
 import { ProfilesModule } from './modules/profiles/profiles.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
     AuthModule,
-    CategoriesModule,
-    ItemsModule,
+    ExercisesModule,
+    PerformancesModule,
     ProfilesModule,
   ],
   controllers: [AppController],

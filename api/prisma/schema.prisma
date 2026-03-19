@@ -7,31 +7,31 @@ datasource db {
 }
 
 model Profile {
-    id         String     @id @db.Uuid
-    createdAt  DateTime   @default(now())
-    categories Category[]
+    id        String     @id @db.Uuid
+    createdAt DateTime   @default(now())
+    Exercise  Exercise[]
 }
 
-model Category {
-    id        String   @id @default(uuid())
-    title     String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    items     Item[]
-    profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
-    profileId String   @db.Uuid
+model Exercise {
+    id           String        @id @default(uuid())
+    title        String
+    createdAt    DateTime      @default(now())
+    updatedAt    DateTime      @updatedAt
+    performances Performance[]
+    profile      Profile       @relation(fields: [profileId], references: [id], onDelete: Cascade)
+    profileId    String        @db.Uuid
 
     @@unique([title, profileId])
 }
 
-model Item {
+model Performance {
     id         String   @id @default(uuid())
     date       DateTime @default(now())
     charge     Int      @default(0)
     reps       Int      @default(0)
     createdAt  DateTime @default(now())
     updatedAt  DateTime @updatedAt
-    categoryId String
+    exerciseId String
 
-    category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+    exercise Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
 }
