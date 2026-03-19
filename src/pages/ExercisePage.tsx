@@ -1,16 +1,16 @@
 import { StyleSheet, Text } from 'react-native';
 import { LIGHT_GREY } from '../constants/colors';
-import Items from '../containers/items';
 import PageWrapper from '../containers/page/PageWrapper';
-import { useCategoryNameParams } from '../hooks/categories';
+import Performances from '../containers/performances';
+import { useExerciseNameParams } from '../hooks/exercises';
 
-export default function CategoryPage() {
-  const categoryName = useCategoryNameParams();
+export default function ExercisePage() {
+  const name = useExerciseNameParams();
 
   return (
     <PageWrapper>
-      <Text style={styles.title}>{categoryName}</Text>
-      <Items />
+      <Text style={styles.title}>{name}</Text>
+      <Performances />
     </PageWrapper>
   );
 }

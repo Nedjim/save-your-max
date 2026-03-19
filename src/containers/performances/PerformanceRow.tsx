@@ -1,29 +1,33 @@
 import dayjs from 'dayjs';
 import { StyleSheet, Text, View } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import ActionButton from '../../components/ActionButton';
 import {
   DEFAULT_CONTAINER_BACKGROUND,
   GREY,
   TURQUOISE,
 } from '@/src/constants/colors';
-import { Item } from '@/src/types';
-import ActionButton from './ActionButton';
+import { Performance } from '@/src/types';
 
-type ItemRowProps = {
-  item: Item;
-  onUpdate: (item: Item) => void;
-  onDelete: (item: Item) => void;
+type PerformanceRowProps = {
+  performance: Performance;
+  onUpdate: (performance: Performance) => void;
+  onDelete: (performance: Performance) => void;
 };
 
-const ItemRow = (props: ItemRowProps) => {
-  const { item, onUpdate, onDelete } = props;
-  const { charge, reps } = item;
+const PerformanceRow = (props: PerformanceRowProps) => {
+  const { performance, onUpdate, onDelete } = props;
+  const { charge, reps } = performance;
 
-  const date = dayjs(item.date).format('DD/MM/YYYY');
+  const date = dayjs(performance.date).format('DD/MM/YYYY');
   const chargeLabel = 'Charge';
 
   return (
-    <Animated.View entering={FadeIn} exiting={FadeOut} style={styles.itemRow}>
+    <Animated.View
+      entering={FadeIn}
+      exiting={FadeOut}
+      style={styles.performanceRow}
+    >
       <View style={styles.details}>
         <Text style={[styles.text, styles.date]}> {date}</Text>
         <View style={styles.charge}>
@@ -36,15 +40,15 @@ const ItemRow = (props: ItemRowProps) => {
         <Text style={[styles.text, styles.defaultTextColor]}>{reps} reps</Text>
       </View>
       <View style={styles.actions}>
-        <ActionButton name="pencil" onPress={() => onUpdate(item)} />
-        <ActionButton name="trash" onPress={() => onDelete(item)} />
+        <ActionButton name="pencil" onPress={() => onUpdate(performance)} />
+        <ActionButton name="trash" onPress={() => onDelete(performance)} />
       </View>
     </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
-  itemRow: {
+  performanceRow: {
     backgroundColor: DEFAULT_CONTAINER_BACKGROUND,
     display: 'flex',
     flexDirection: 'row',
@@ -86,4 +90,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ItemRow;
+export default PerformanceRow;

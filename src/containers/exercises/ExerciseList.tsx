@@ -2,19 +2,19 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Button, FlatList, StyleSheet, View } from 'react-native';
 import { TURQUOISE } from '@/src/constants/colors';
-import { useDeleteCategory } from '@/src/hooks/categories';
-import { Category } from '@/src/types';
-import CategoryModal from './CategoryModal';
-import CategoryRow from './CategoryRow';
+import { useDeleteExercises } from '@/src/hooks/exercises';
+import { Exercise } from '@/src/types';
+import ExerciseModal from './ExerciseModal';
+import ExerciseRow from './ExerciseRow';
 
-type CategoryListProps = {
-  categories: Category[];
+type ExerciseListProps = {
+  exercises: Exercise[];
 };
 
-export default function CategoryList(props: CategoryListProps) {
-  const { categories } = props;
-  const { categoryId } = useLocalSearchParams();
-  const { mutate: deleteCategoryMutation } = useDeleteCategory();
+function ExerciseList(props: ExerciseListProps) {
+  const { exercises } = props;
+  const { exerciseId } = useLocalSearchParams();
+  const { mutate: deleteExerciseMutation } = useDeleteExercises();
   const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
 
@@ -27,28 +27,28 @@ export default function CategoryList(props: CategoryListProps) {
   };
 
   const handleDelete = (id: string) => {
-    deleteCategoryMutation(id);
+    deleteExerciseMutation(id);
   };
 
   return (
     <View style={styles.list}>
       <View style={styles.actions}>
         <Button
-          title="New category"
+          title="New exercise"
           onPress={openModal}
           color={TURQUOISE}
-          accessibilityLabel="New category"
+          accessibilityLabel="New exercise"
         />
       </View>
       <FlatList
-        data={categories}
-        keyExtractor={(category) => category.id}
-        renderItem={({ item: category }) => {
-          const { id, title } = category;
+        data={exercises}
+        keyExtractor={(exercise) => exercise.id}
+        renderItem={({ item: exercise }) => {
+          const { id, title } = exercise;
           const name = encodeURIComponent(title.replace(/\s+/g, '_'));
 
           return (
-            <CategoryRow
+            <ExerciseRow
               title={title}
               id={id}
               onDelete={handleDelete}
@@ -61,9 +61,9 @@ export default function CategoryList(props: CategoryListProps) {
             />
           );
         }}
-        extraData={categoryId}
+        extraData={exerciseId}
       />
-      <CategoryModal visible={modalVisible} closeModal={closeModal} />
+      <ExerciseModal visible={modalVisible} closeModal={closeModal} />
     </View>
   );
 }
@@ -80,3 +80,5 @@ const styles = StyleSheet.create({
     paddingTop: 32,
   },
 });
+
+export default ExerciseList;

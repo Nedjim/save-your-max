@@ -1,7 +1,7 @@
-import CategoryPage from '@/src/pages/CategoryPage';
+import ExercisePage from '@/src/pages/ExercisePage';
 
-const Category = () => {
-  return <CategoryPage />;
+const Exercise = () => {
+  return <ExercisePage />;
 };
 
-export default Category;
+export default Exercise;

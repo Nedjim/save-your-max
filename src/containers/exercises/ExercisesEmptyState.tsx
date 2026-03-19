@@ -2,25 +2,25 @@ import { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import EmptyState from '@/src/components/EmptyState';
-import CategoryModal from './CategoryModal';
+import ExerciseModal from './ExerciseModal';
 
-export default function CategoriesEmptyState() {
+function ExercisesEmptyState() {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <Animated.View
       entering={FadeIn}
       exiting={FadeOut}
-      style={styles.emptyCategories}
+      style={styles.emptyExercises}
     >
       <EmptyState
-        description="You don’t have any categories yet. Create your first one to get started."
-        buttonTitle="New category"
+        description="You don’t have any exercises yet. Create your first one to get started."
+        buttonTitle="New exercise"
         onPressButton={() => {
           setModalVisible(true);
         }}
       />
-      <CategoryModal
+      <ExerciseModal
         visible={modalVisible}
         closeModal={() => setModalVisible(false)}
       />
@@ -29,9 +29,11 @@ export default function CategoriesEmptyState() {
 }
 
 const styles = StyleSheet.create({
-  emptyCategories: {
+  emptyExercises: {
     flex: 1,
     display: 'flex',
     justifyContent: 'center',
   },
 });
+
+export default ExercisesEmptyState;

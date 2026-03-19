@@ -2,13 +2,18 @@ import { useLocalSearchParams } from 'expo-router';
 import { ActivityIndicator } from 'react-native';
 import Error from '@/src/components/Error';
 import { WHITE } from '@/src/constants/colors';
-import { useItems } from '@/src/hooks/items';
-import ItemList from './ItemList';
-import EmptyState from './ItemsEmptyState';
+import { usePerformances } from '@/src/hooks/performances';
+import PerformanceList from './PerformanceList';
+import EmptyState from './PerformancesEmptyState';
 
-export default function Items() {
+function Performances() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { data: items = [], isLoading, isError, error } = useItems(id);
+  const {
+    data: performances = [],
+    isLoading,
+    isError,
+    error,
+  } = usePerformances(id);
 
   let content = null;
 
@@ -20,9 +25,11 @@ export default function Items() {
     content = <Error message={error.message} />;
   }
 
-  if (!isLoading && !isError && !items.length) {
+  if (!isLoading && !isError && !performances.length) {
     content = <EmptyState />;
   }
 
-  return content ? content : <ItemList items={items} />;
+  return content ? content : <PerformanceList performances={performances} />;
 }
+
+export default Performances;

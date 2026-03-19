@@ -1,47 +1,48 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useLocalSearchParams } from 'expo-router';
-import {
-  createExercise,
-  deleteExercise,
-  getExercises,
-} from '../services/categories';
+import { createExercise, deleteExercise, getExercises } from '../services/exercises';
 
-export function useCategories() {
+
+
+
+
+
+export function useExercises() {
   const query = useQuery({
-    queryKey: ['categories'],
+    queryKey: ['exercises'],
     queryFn: getExercises,
   });
 
   return query;
 }
 
-export function useCreateCategory() {
+export function useCreateExercise() {
   const queryClient = useQueryClient();
 
   const query = useMutation({
     mutationFn: (title: string) => createExercise(title),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['categories'] });
+      queryClient.invalidateQueries({ queryKey: ['exercises'] });
     },
   });
 
   return query;
 }
 
-export function useDeleteCategory() {
+export function useDeleteExercises() {
   const queryClient = useQueryClient();
 
   const query = useMutation({
     mutationFn: (id: string) => deleteExercise(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['categories'] });
+      queryClient.invalidateQueries({ queryKey: ['exercises'] });
     },
   });
 
   return query;
 }
 
-export function useCategoryNameParams() {
+export function useExerciseNameParams() {
   const { name } = useLocalSearchParams<{ name: string }>();
 
   return name?.replace(/_+/g, ' ');

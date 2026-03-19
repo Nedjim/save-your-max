@@ -1,13 +1,13 @@
-import { ApiFetchType, Category } from '../types';
+import { ApiFetchType, Exercise } from '../types';
 import { apiFetch } from './supabase';
 
-export async function getExercises(): Promise<Category[]> {
+export async function getExercises(): Promise<Exercise[]> {
   const payload: ApiFetchType = { endpoint: 'exercises' };
 
   return await apiFetch(payload);
 }
 
-export async function createExercise(title: string): Promise<Category> {
+export async function createExercise(title: string): Promise<Exercise> {
   const payload: ApiFetchType = {
     endpoint: 'exercises',
     method: 'POST',
@@ -16,7 +16,7 @@ export async function createExercise(title: string): Promise<Category> {
   return await apiFetch(payload);
 }
 
-export async function deleteExercise(id: string): Promise<Category> {
+export async function deleteExercise(id: string): Promise<Exercise> {
   const payload: ApiFetchType = {
     endpoint: `exercises/${id}`,
     method: 'DELETE',

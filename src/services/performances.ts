@@ -1,12 +1,14 @@
 import {
   ApiFetchType,
-  CreateItemParams,
-  Item,
-  UpdateItemParams,
+  CreatePerformanceParams,
+  Performance,
+  UpdatePerformanceParams,
 } from '../types';
 import { apiFetch } from './supabase';
 
-export async function getPerformances(exerciseId: string): Promise<Item[]> {
+export async function getPerformances(
+  exerciseId: string,
+): Promise<Performance[]> {
   const payload: ApiFetchType = {
     endpoint: `exercises/${exerciseId}/performances`,
   };
@@ -16,8 +18,8 @@ export async function getPerformances(exerciseId: string): Promise<Item[]> {
 
 export async function createPerformance(
   exerciseId: string,
-  params: CreateItemParams,
-): Promise<Item> {
+  params: CreatePerformanceParams,
+): Promise<Performance> {
   const payload: ApiFetchType = {
     endpoint: `exercises/${exerciseId}/performances`,
     method: 'POST',
@@ -27,7 +29,7 @@ export async function createPerformance(
   return await apiFetch(payload);
 }
 
-export async function updatePerformance(params: UpdateItemParams) {
+export async function updatePerformance(params: UpdatePerformanceParams) {
   const { id, ...rest } = params;
 
   const payload: ApiFetchType = {

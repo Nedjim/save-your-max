@@ -1,7 +1,7 @@
-import PerformancesPage from '@/src/pages/PerformancesPage';
+import ExercisesPage from '@/src/pages/ExercicesPage';
 
-const Performances = () => {
-  return <PerformancesPage />;
+const Exercices = () => {
+  return <ExercisesPage />;
 };
 
-export default Performances;
+export default Exercices;

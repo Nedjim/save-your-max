@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { Modal } from 'react-native';
 import Input from '../../components/Input';
-import { useCreateCategory } from '../../hooks/categories';
 import ModalContent from '@/src/containers/modal/ModalContent';
+import { useCreateExercise } from '@/src/hooks/exercises';
 
-type CategoryModalProps = {
+type ExerciseModalProps = {
   visible: boolean;
   closeModal: () => void;
 };
 
-export default function CategoryModal(props: CategoryModalProps) {
+export default function ExerciseModal(props: ExerciseModalProps) {
   const { visible, closeModal } = props;
-  const { mutate } = useCreateCategory();
+  const { mutate: createExerciseMutation } = useCreateExercise();
   const [title, setTitle] = useState('');
 
   const handleClose = () => {
@@ -19,10 +19,10 @@ export default function CategoryModal(props: CategoryModalProps) {
     setTitle('');
   };
 
-  const handleCreateCategory = () => {
+  const handleCreateExercise = () => {
     if (!title.trim()) return;
 
-    mutate(title, {
+    createExerciseMutation(title, {
       onSuccess: () => {
         // WIP: push toast
       },
@@ -43,15 +43,15 @@ export default function CategoryModal(props: CategoryModalProps) {
     >
       <ModalContent
         onClose={handleClose}
-        onSubmit={title.length ? handleCreateCategory : undefined}
+        onSubmit={title.length ? handleCreateExercise : undefined}
         submitButtonLabel="Create"
-        title="New category"
+        title="New exercise"
       >
         <Input
           value={title}
           onChange={setTitle}
           maxLength={20}
-          id="category-label"
+          id="exercise-label"
           placeholder="ex: Bench press"
         />
       </ModalContent>

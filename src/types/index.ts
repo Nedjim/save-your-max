@@ -14,29 +14,29 @@ export type UserPayload = {
   password: string;
 };
 
-export type Category = {
+export type Exercise = {
   id: string;
   title: string;
   createdAt: Date;
   updatedAt: Date;
 };
 
-export type Item = {
+export type Performance = {
   id: string;
   date: Date;
   charge: number;
   reps: number;
   createdAt: Date;
   updatedAt: Date;
-  categoryId: string;
+  exerciceId: string;
 };
 
-export type ItemModalMode = 'CREATE' | 'UPDATE' | 'DELETE';
-
-export type CreateItemParams = {
+export type CreatePerformanceParams = {
   charge: number;
   reps: number;
   date: CalendarDate;
 };
 
-export type UpdateItemParams = Partial<CreateItemParams> & { id: string };
+export type UpdatePerformanceParams = Partial<CreatePerformanceParams> & {
+  id: string;
+};

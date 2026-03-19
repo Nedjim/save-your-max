@@ -14,14 +14,14 @@ import {
 } from '../../constants/colors';
 import Alert from '@/src/components/Alert';
 
-type CategoryRowProps = {
+type ExerciseRowProps = {
   title: string;
   id: string;
   onDelete: (id: string) => void;
   onPress?: () => void;
 };
 
-export default function CategoryRow(props: CategoryRowProps) {
+function ExerciseRow(props: ExerciseRowProps) {
   const { title, id, onPress, onDelete } = props;
   const [showAlert, setShowAlert] = useState(false);
 
@@ -32,7 +32,7 @@ export default function CategoryRow(props: CategoryRowProps) {
 
   return (
     <Animated.View entering={FadeIn} exiting={FadeOut}>
-      <TouchableOpacity onPress={onPress} style={styles.categoryRow}>
+      <TouchableOpacity onPress={onPress} style={styles.exerciseRow}>
         <Ionicons name="chevron-forward" color={LIGHT_GREY} />
         <Text style={styles.title}>{title}</Text>
         <View style={styles.options}>
@@ -50,7 +50,7 @@ export default function CategoryRow(props: CategoryRowProps) {
       {showAlert && (
         <Alert
           onClose={() => setShowAlert(false)}
-          description={`The category ${title} is about to be deleted.`}
+          description={`The exercise ${title} is about to be deleted.`}
           onSubmit={handleDelete}
         />
       )}
@@ -59,7 +59,7 @@ export default function CategoryRow(props: CategoryRowProps) {
 }
 
 const styles = StyleSheet.create({
-  categoryRow: {
+  exerciseRow: {
     padding: 16,
     marginVertical: 8,
     borderRadius: 4,
@@ -80,3 +80,5 @@ const styles = StyleSheet.create({
     gap: 24,
   },
 });
+
+export default ExerciseRow;
