@@ -6,21 +6,34 @@ import { CreateExercisesDto } from './dto/create-exercise.dto';
 export class ExercisesService {
   constructor(private prisma: PrismaService) {}
 
-  async create(profileId: string, dto: CreateExercisesDto) {
+  async create(profileId: number, dto: CreateExercisesDto) {
     return await this.prisma.exercise.create({
       data: {
         ...dto,
-        profileId,
+        profile: {
+          connect: { id: profileId },
+        },
       },
     });
   }
 
-  async delete(profileId: string, id: string) {
-    return await this.prisma.exercise.deleteMany({ where: { id, profileId } });
+  async delete(profileId: number, exerciceId: string) {
+    const deleted = await this.prisma.exercise.deleteMany({
+      where: {
+        profileId,
+        id: exerciceId,
+      },
+    });
+
+    if (deleted.count === 0) {
+      throw new Error('Exercise not found or not authorized');
+    }
+
+    return deleted;
   }
 
-  async findAll(profileId: string) {
-    return await this.prisma.exercise.findMany({
+  async findAll(profileId: number) {
+    return this.prisma.exercise.findMany({
       where: { profileId },
       orderBy: { title: 'asc' },
     });

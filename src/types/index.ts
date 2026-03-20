@@ -9,7 +9,13 @@ export type ApiFetchType = {
 
 export type Device = 'web' | 'ios' | 'android';
 
-export type UserPayload = {
+export type Profile = {
+  createdAt: Date;
+  id: number;
+  userId: string;
+};
+
+export type SupabasePayload = {
   email: string;
   password: string;
 };

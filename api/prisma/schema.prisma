@@ -7,7 +7,8 @@ datasource db {
 }
 
 model Profile {
-    id        String     @id @db.Uuid
+    id        Int        @id @default(autoincrement())
+    userId    String     @unique @db.Uuid
     createdAt DateTime   @default(now())
     Exercise  Exercise[]
 }
@@ -19,7 +20,7 @@ model Exercise {
     updatedAt    DateTime      @updatedAt
     performances Performance[]
     profile      Profile       @relation(fields: [profileId], references: [id], onDelete: Cascade)
-    profileId    String        @db.Uuid
+    profileId    Int
 
     @@unique([title, profileId])
 }

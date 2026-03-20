@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Param, Patch } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Param,
+  Patch,
+  UseGuards,
+} from '@nestjs/common';
+import { SupabaseAuthGuard } from '../auth/jwt-auth.guard';
+import { ProfileGuard } from '../auth/profile.guard';
 import { UpdatePerformanceDto } from './dto/update-performance.dto';
 import { PerformancesService } from './performances.service';
 
@@ -6,6 +15,7 @@ import { PerformancesService } from './performances.service';
 export class PerformancesController {
   constructor(private readonly performancesService: PerformancesService) {}
 
+  @UseGuards(SupabaseAuthGuard, ProfileGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() data: UpdatePerformanceDto) {
     return this.performancesService.update(id, {
@@ -13,6 +23,7 @@ export class PerformancesController {
     });
   }
 
+  @UseGuards(SupabaseAuthGuard, ProfileGuard)
   @Delete(':id')
   delete(@Param('id') id: string) {
     return this.performancesService.delete(id);

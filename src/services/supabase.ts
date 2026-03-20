@@ -2,7 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
 import { Platform } from 'react-native';
 import 'expo-sqlite/localStorage/install';
-import { ApiFetchType, UserPayload } from '../types';
+import { ApiFetchType, SupabasePayload } from '../types';
+import { getProfile } from './profiles';
 
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL!;
 const supabasePublishableKey =
@@ -67,8 +68,21 @@ export const getToken = async () => {
   return session.data.session?.access_token;
 };
 
-export const signInUser = async (payload: UserPayload) => {
-  return await supabase.auth.signInWithPassword(payload);
+export const signInUser = async (supabasePayload: SupabasePayload) => {
+  const session = await supabase.auth.signInWithPassword(supabasePayload);
+  const { error } = session;
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  try {
+    await getProfile();
+    return session;
+  } catch {
+    await supabase.auth.signOut();
+    throw new Error('No profile found');
+  }
 };
 
 export const signOutUser = async () => {
@@ -91,17 +105,16 @@ export const getUserSession = async () => {
   }
 };
 
-export const createUser = async (user: UserPayload) => {
+export const createUser = async (user: SupabasePayload) => {
   try {
-    const session = await supabase.auth.signUp(user);
+    await supabase.auth.signUp(user);
 
     const payload: ApiFetchType = {
       endpoint: 'profiles',
       method: 'POST',
     };
 
-    await apiFetch(payload);
-    return session;
+    return await apiFetch(payload);
   } catch {
     await supabase.auth.signOut();
     return null;

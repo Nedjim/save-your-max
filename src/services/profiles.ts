@@ -1,12 +1,10 @@
-import { Session } from '@supabase/supabase-js';
+import { ApiFetchType } from '../types';
+import { apiFetch } from './supabase';
 
-export const getProfile = async (session: Session) => {
-  const { access_token: token } = session;
+export const getProfile = async () => {
+  const payload: ApiFetchType = {
+    endpoint: 'profiles',
+  };
 
-  return await fetch(`${process.env.EXPO_PUBLIC_API_BASE_URL}/profiles`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  return await apiFetch(payload);
 };

@@ -7,17 +7,17 @@ export class ProfilesService {
 
   async create(userId: string) {
     return this.prisma.profile.upsert({
-      where: { id: userId },
+      where: { userId },
       update: {},
       create: {
-        id: userId,
+        userId,
       },
     });
   }
 
-  async findOne(userId: string) {
+  async findOne(profileId: number) {
     return this.prisma.profile.findUnique({
-      where: { id: userId },
+      where: { id: profileId },
     });
   }
 }

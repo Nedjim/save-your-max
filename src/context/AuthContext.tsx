@@ -7,11 +7,11 @@ import {
   useSignOutUser,
   useSupabaseSession,
 } from '../hooks/auth';
-import { UserPayload } from '../types';
+import { SupabasePayload } from '../types';
 
 type AuthContextType = {
-  createUser: (payload: UserPayload) => void;
-  signInUser: (payload: UserPayload) => void;
+  createUser: (payload: SupabasePayload) => void;
+  signInUser: (payload: SupabasePayload) => void;
   signOutUser: () => void;
   session?: Session | null;
   isLoading: boolean;
@@ -49,7 +49,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
     return null;
   }
 
-  const createUser = (payload: UserPayload) => {
+  const createUser = (payload: SupabasePayload) => {
     createUserMutation(payload, {
       onSuccess: () => {
         router.replace('/');
@@ -57,7 +57,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
     });
   };
 
-  const signInUser = (payload: UserPayload) => {
+  const signInUser = (payload: SupabasePayload) => {
     signInUserMutation(payload, {
       onSuccess: () => {
         router.replace('/exercises');
@@ -72,8 +72,6 @@ export function SessionProvider({ children }: PropsWithChildren) {
       },
     });
   };
-
-  console.log('render provider');
 
   return (
     <AuthContext.Provider

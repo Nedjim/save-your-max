@@ -30,17 +30,25 @@ export class PerformancesService {
     });
   }
 
-  async update(id: string, data: UpdatePerformanceDto) {
-    return await this.prisma.performance.update({
+  async update(performanceId: string, dto: UpdatePerformanceDto) {
+    const updated = await this.prisma.performance.updateMany({
       where: {
-        id,
+        id: performanceId,
       },
-      data,
+      data: dto,
     });
+
+    if (updated.count === 0) {
+      throw new Error('Performance not found or not authorized');
+    }
+
+    return updated;
   }
 
-  async delete(id: string) {
-    return await this.prisma.performance.delete({ where: { id } });
+  async delete(performanceId: string) {
+    return await this.prisma.performance.delete({
+      where: { id: performanceId },
+    });
   }
 
   async findAll(exerciseId: string) {
