@@ -1,6 +1,12 @@
-import { KeyboardTypeOptions, StyleSheet, TextInput, View } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import {
+  KeyboardTypeOptions,
+  Pressable,
+  StyleSheet,
+  TextInput,
+  View,
+} from 'react-native';
 import { WHITE } from '@/src/constants/colors';
-import IconButton from './IconButton';
 
 type InputProps = {
   value?: string;
@@ -32,7 +38,11 @@ const Input = (props: InputProps) => {
         {...rest}
       />
       <View style={[styles.clearInput, !value?.length && styles.hidden]}>
-        <IconButton name="close" onPress={clearValue} size={12} />
+        <View style={styles.clearButton}>
+          <Pressable style={styles.clearButtonIcon} onPress={clearValue}>
+            <AntDesign name="close" size={12} color={WHITE} />
+          </Pressable>
+        </View>
       </View>
     </View>
   );
@@ -58,6 +68,16 @@ const styles = StyleSheet.create({
   },
   hidden: {
     opacity: 0,
+  },
+  clearButton: {
+    display: 'flex',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
+  clearButtonIcon: {
+    padding: 6,
+    borderRadius: 40,
+    elevation: 2,
   },
 });
 

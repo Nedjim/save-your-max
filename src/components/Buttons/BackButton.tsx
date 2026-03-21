@@ -1,8 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { WHITE } from '../constants/colors';
-import DesktopOnly from './DesktopOnly';
+import { WHITE } from '@/src/constants/colors';
+import DesktopOnly from '../DesktopOnly';
 
 export default function BackButton() {
   const router = useRouter();

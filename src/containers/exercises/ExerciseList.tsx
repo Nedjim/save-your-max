@@ -1,7 +1,7 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Button, FlatList, StyleSheet, View } from 'react-native';
-import { TURQUOISE } from '@/src/constants/colors';
+import { FlatList, StyleSheet, View } from 'react-native';
+import AddMoreButton from '@/src/components/Buttons/AddMoreButton';
 import { useDeleteExercises } from '@/src/hooks/exercises';
 import { Exercise } from '@/src/types';
 import ExerciseModal from './ExerciseModal';
@@ -32,14 +32,6 @@ function ExerciseList(props: ExerciseListProps) {
 
   return (
     <View style={styles.list}>
-      <View style={styles.actions}>
-        <Button
-          title="New exercise"
-          onPress={openModal}
-          color={TURQUOISE}
-          accessibilityLabel="New exercise"
-        />
-      </View>
       <FlatList
         data={exercises}
         keyExtractor={(exercise) => exercise.id}
@@ -63,6 +55,9 @@ function ExerciseList(props: ExerciseListProps) {
         }}
         extraData={exerciseId}
       />
+      <View style={styles.actions}>
+        <AddMoreButton onPress={openModal} accessibilityLabel="Add exercise" />
+      </View>
       <ExerciseModal visible={modalVisible} closeModal={closeModal} />
     </View>
   );

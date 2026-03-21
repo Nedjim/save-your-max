@@ -1,8 +1,8 @@
 import { useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
-import { Button, FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import Alert from '@/src/components/Alert';
-import { TURQUOISE } from '@/src/constants/colors';
+import AddMoreButton from '@/src/components/Buttons/AddMoreButton';
 import { useDeletePerformance } from '@/src/hooks/performances';
 import { Performance } from '@/src/types';
 import PerformanceModal from './PerformanceModal';
@@ -39,14 +39,6 @@ const PerformanceList = (props: PerformanceListProps) => {
 
   return (
     <View style={styles.performanceContent}>
-      <View style={styles.actions}>
-        <Button
-          title="New performance"
-          onPress={onCreate}
-          color={TURQUOISE}
-          accessibilityLabel="New performance"
-        />
-      </View>
       <FlatList
         data={performances}
         style={styles.performanceList}
@@ -61,6 +53,12 @@ const PerformanceList = (props: PerformanceListProps) => {
         }}
         keyExtractor={(performance) => performance.id}
       />
+      <View style={styles.actions}>
+        <AddMoreButton
+          onPress={onCreate}
+          accessibilityLabel="Add performance"
+        />
+      </View>
       {showModal && (
         <PerformanceModal
           performance={updatedPerformance}
@@ -103,6 +101,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     paddingBottom: 24,
+    paddingTop: 32,
   },
 });
 

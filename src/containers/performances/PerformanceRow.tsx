@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { StyleSheet, Text, View } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
-import ActionButton from '../../components/ActionButton';
+import EditListButton from '../../components/Buttons/EditListButton';
 import {
   DEFAULT_CONTAINER_BACKGROUND,
   GREY,
@@ -40,8 +40,8 @@ const PerformanceRow = (props: PerformanceRowProps) => {
         <Text style={[styles.text, styles.defaultTextColor]}>{reps} reps</Text>
       </View>
       <View style={styles.actions}>
-        <ActionButton name="pencil" onPress={() => onUpdate(performance)} />
-        <ActionButton name="trash" onPress={() => onDelete(performance)} />
+        <EditListButton name="pencil" onPress={() => onUpdate(performance)} />
+        <EditListButton name="trash" onPress={() => onDelete(performance)} />
       </View>
     </Animated.View>
   );

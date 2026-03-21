@@ -1,4 +1,5 @@
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { Button } from 'react-native-paper';
 import {
   DEFAULT_CONTAINER_BACKGROUND,
   TURQUOISE,
@@ -10,7 +11,8 @@ type EmptyStateType = {
   buttonTitle: string;
   onPressButton: () => void;
 };
-const EmptyState = (props: EmptyStateType) => {
+
+function EmptyState(props: EmptyStateType) {
   const { description, buttonTitle, onPressButton } = props;
 
   return (
@@ -18,15 +20,18 @@ const EmptyState = (props: EmptyStateType) => {
       <Text style={styles.description}>{description}</Text>
       <View style={styles.actions}>
         <Button
-          title={buttonTitle}
           onPress={onPressButton}
-          color={TURQUOISE}
+          buttonColor={TURQUOISE}
           accessibilityLabel={buttonTitle}
-        />
+          uppercase={false}
+          textColor={WHITE}
+        >
+          {buttonTitle}
+        </Button>
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   emptyState: {

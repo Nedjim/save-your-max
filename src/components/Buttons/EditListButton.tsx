@@ -7,11 +7,11 @@ type ActionsButtonProps = {
   onPress?: () => void;
 };
 
-const ActionButton = (props: ActionsButtonProps) => {
+const EditListButton = (props: ActionsButtonProps) => {
   const { name, onPress } = props;
 
   return (
-    <View style={styles.actionButton}>
+    <View style={styles.editListButton}>
       <Pressable onPress={onPress}>
         <Ionicons name={name} color={GREY} />
       </Pressable>
@@ -20,7 +20,7 @@ const ActionButton = (props: ActionsButtonProps) => {
 };
 
 const styles = StyleSheet.create({
-  actionButton: {
+  editListButton: {
     display: 'flex',
     justifyContent: 'center',
     backgroundColor: 'rgba(229, 224, 224, 0.26)',
@@ -35,4 +35,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ActionButton;
+export default EditListButton;
