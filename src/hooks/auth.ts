@@ -28,10 +28,6 @@ export function useSignInUser() {
     onSuccess: (res: AuthTokenResponsePassword) => {
       queryClient.setQueryData(['session'], res.data.session);
     },
-    onError: () => {
-      // Toast error
-      console.log('Error de connexion');
-    },
   });
 
   return query;

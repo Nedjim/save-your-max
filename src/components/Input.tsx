@@ -3,7 +3,7 @@ import { WHITE } from '@/src/constants/colors';
 import IconButton from './IconButton';
 
 type InputProps = {
-  value: string;
+  value?: string;
   onChange: (key: string) => void;
   keyboardType?: KeyboardTypeOptions;
   maxLength?: number;
@@ -31,7 +31,7 @@ const Input = (props: InputProps) => {
         autoCapitalize="none"
         {...rest}
       />
-      <View style={[styles.clearInput, !value.length && styles.hidden]}>
+      <View style={[styles.clearInput, !value?.length && styles.hidden]}>
         <IconButton name="close" onPress={clearValue} size={12} />
       </View>
     </View>
@@ -46,9 +46,11 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     padding: 10,
-    borderWidth: 1,
-    backgroundColor: '#11161C',
+    backgroundColor: 'rgba(20, 30, 40, 0.6)',
     color: WHITE,
+    borderRadius: 8,
+    borderColor: 'rgba(255,255,255,0.1)',
+    borderWidth: 1,
   },
   clearInput: {
     position: 'absolute',

@@ -106,9 +106,13 @@ export const getUserSession = async () => {
 };
 
 export const createUser = async (user: SupabasePayload) => {
-  try {
-    await supabase.auth.signUp(user);
+  const { error } = await supabase.auth.signUp(user);
 
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  try {
     const payload: ApiFetchType = {
       endpoint: 'profiles',
       method: 'POST',
