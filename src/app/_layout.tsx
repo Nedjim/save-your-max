@@ -6,8 +6,6 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { TURQUOISE } from '../constants/colors';
 import RootNavigator from '../containers/routes';
 import SupabaseOnAuthStateChange from '../containers/supabase/SupabaseOnAuthStateChange';
-import { SessionProvider } from '../context/AuthContext';
-import { SplashScreenController } from '../splash';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,10 +33,7 @@ function RootLayout() {
         <SafeAreaView style={{ flex: 1 }}>
           <PaperProvider theme={theme}>
             <SupabaseOnAuthStateChange>
-              <SessionProvider>
-                <SplashScreenController />
-                <RootNavigator />
-              </SessionProvider>
+              <RootNavigator />
             </SupabaseOnAuthStateChange>
           </PaperProvider>
         </SafeAreaView>

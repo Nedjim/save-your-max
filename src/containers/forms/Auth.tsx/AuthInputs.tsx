@@ -27,12 +27,15 @@ function AuthInputs(props: AuthInputsType) {
         placeholder="E-mail"
         value={email || ''}
         onChange={setEmail}
+        textContentType="emailAddress"
       />
       <Input
         id="password"
         placeholder="Password"
         value={password || ''}
         onChange={setPassword}
+        secureTextEntry={true}
+        textContentType="password"
       />
       {setConfirmedPassword && (
         <Input
@@ -40,6 +43,8 @@ function AuthInputs(props: AuthInputsType) {
           placeholder="Confirmed password"
           value={confirmedPassword || ''}
           onChange={setConfirmedPassword}
+          secureTextEntry={true}
+          textContentType="password"
         />
       )}
     </View>

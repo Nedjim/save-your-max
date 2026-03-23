@@ -1,11 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useLocalSearchParams } from 'expo-router';
-import { createExercise, deleteExercise, getExercises } from '../services/exercises';
-
-
-
-
-
+import {
+  createExercise,
+  deleteExercise,
+  getExercises,
+} from '../services/exercises';
 
 export function useExercises() {
   const query = useQuery({

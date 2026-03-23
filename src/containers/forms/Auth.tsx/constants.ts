@@ -7,8 +7,7 @@ export const TEXT_BY_MODE = {
   },
   signup: {
     title: 'Sign Up',
-    subtitle:
-      'Enter your email and password to create your account and receive a confirmation mail.',
+    subtitle: 'Enter your email and password to create your account.',
     submitButtonTitle: 'Create',
     secondaryButtonTitle: 'Log in',
   },

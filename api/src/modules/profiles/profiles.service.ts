@@ -15,6 +15,12 @@ export class ProfilesService {
     });
   }
 
+  async delete(userId: string) {
+    return this.prisma.profile.delete({
+      where: { userId },
+    });
+  }
+
   async findOne(profileId: number) {
     return this.prisma.profile.findUnique({
       where: { id: profileId },

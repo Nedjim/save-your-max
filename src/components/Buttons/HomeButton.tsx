@@ -3,14 +3,14 @@ import { useRouter } from 'expo-router';
 import { Pressable } from 'react-native';
 import { WHITE } from '@/src/constants/colors';
 
-function UserButton() {
+function HomeButton() {
   const router = useRouter();
 
   return (
-    <Pressable onPress={() => router.push('/user')}>
-      <Ionicons name="person" color={WHITE} size={18} />
+    <Pressable onPress={() => router.push('/')}>
+      <Ionicons name="home" color={WHITE} size={18} />
     </Pressable>
   );
 }
 
-export default UserButton;
+export default HomeButton;

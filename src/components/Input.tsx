@@ -1,4 +1,5 @@
 import { AntDesign } from '@expo/vector-icons';
+import { useState } from 'react';
 import {
   KeyboardTypeOptions,
   Pressable,
@@ -11,17 +12,31 @@ import { WHITE } from '@/src/constants/colors';
 type InputProps = {
   value?: string;
   onChange: (key: string) => void;
+  textContentType?: 'password' | 'emailAddress';
   keyboardType?: KeyboardTypeOptions;
+  secureTextEntry?: boolean;
   maxLength?: number;
   placeholder?: string;
   id: string;
 };
 
 const Input = (props: InputProps) => {
-  const { onChange, value, id, ...rest } = props;
+  const {
+    onChange,
+    value,
+    id,
+    secureTextEntry = false,
+    textContentType = 'none',
+    ...rest
+  } = props;
+  const [passewordVisible, setPasswordVisible] = useState(secureTextEntry);
 
   const clearValue = () => {
     onChange('');
+  };
+
+  const handlePasswordVisible = () => {
+    setPasswordVisible(!passewordVisible);
   };
 
   return (
@@ -29,17 +44,30 @@ const Input = (props: InputProps) => {
       <TextInput
         id={id}
         style={styles.input}
-        accessibilityLabel="input"
         accessibilityLabelledBy={id}
         onChangeText={onChange}
         value={value}
+        textContentType={textContentType}
+        secureTextEntry={passewordVisible}
+        autoCorrect={false}
+        accessibilityLabel="input"
         placeholderTextColor="#7A8699"
         autoCapitalize="none"
+        autoComplete="off"
         {...rest}
       />
       <View style={[styles.clearInput, !value?.length && styles.hidden]}>
-        <View style={styles.clearButton}>
-          <Pressable style={styles.clearButtonIcon} onPress={clearValue}>
+        <View style={styles.inputActions}>
+          {textContentType === 'password' && (
+            <Pressable style={styles.inputIcon} onPress={handlePasswordVisible}>
+              <AntDesign
+                name={passewordVisible ? 'eye' : 'eye-invisible'}
+                size={12}
+                color={WHITE}
+              />
+            </Pressable>
+          )}
+          <Pressable style={styles.inputIcon} onPress={clearValue}>
             <AntDesign name="close" size={12} color={WHITE} />
           </Pressable>
         </View>
@@ -69,12 +97,13 @@ const styles = StyleSheet.create({
   hidden: {
     opacity: 0,
   },
-  clearButton: {
+  inputActions: {
     display: 'flex',
     alignItems: 'flex-end',
     justifyContent: 'center',
+    flexDirection: 'row',
   },
-  clearButtonIcon: {
+  inputIcon: {
     padding: 6,
     borderRadius: 40,
     elevation: 2,

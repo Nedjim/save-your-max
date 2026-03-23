@@ -35,8 +35,9 @@ export const supabase = createClient(supabaseUrl, supabasePublishableKey, {
 export const apiFetch = async (payload: ApiFetchType) => {
   const { endpoint, options, method = 'GET' } = payload;
 
-  const { data } = await supabase.auth.getSession();
-  const token = data.session?.access_token;
+  const userSession = await getUserSession();
+
+  const token = userSession?.access_token;
 
   if (!token) {
     throw new Error('No access token available');
@@ -63,9 +64,9 @@ export const apiFetch = async (payload: ApiFetchType) => {
 };
 
 export const getToken = async () => {
-  const session = await supabase.auth.getSession();
+  const userSession = await getUserSession();
 
-  return session.data.session?.access_token;
+  return userSession?.access_token;
 };
 
 export const signInUser = async (supabasePayload: SupabasePayload) => {

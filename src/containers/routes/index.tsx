@@ -1,5 +1,5 @@
 import { Redirect, Stack, useSegments } from 'expo-router';
-import { useSession } from '@/src/context/AuthContext';
+import { useSupabaseSession } from '@/src/hooks/auth';
 import { getDevice } from '@/src/utils';
 import SCREEN_OPTIONS from './screenOptions';
 
@@ -8,7 +8,7 @@ const device = getDevice();
 const screenOptionsByDevice = SCREEN_OPTIONS[device];
 
 function RootNavigator() {
-  const { session, isLoading } = useSession();
+  const { data: session, isLoading } = useSupabaseSession();
   const segments = useSegments();
 
   if (isLoading) {
