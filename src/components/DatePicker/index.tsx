@@ -1,5 +1,6 @@
 import { Platform } from 'react-native';
-import DefaultDatePicker from './DefaultDatePicker';
+import { default as AndroidDatePicker } from './AndroidDatePicker';
+import IOSDatePicker from './IOSDatePicker';
 import WebDatePicker from './WebDatePicker';
 
 export type DatePickerProps = {
@@ -8,9 +9,11 @@ export type DatePickerProps = {
 };
 
 export default function DatePicker(props: DatePickerProps) {
-  if (Platform.OS === 'web') {
-    return <WebDatePicker {...props} />;
+  if (Platform.OS === 'ios') {
+    return <IOSDatePicker {...props} />;
   }
-
-  return <DefaultDatePicker {...props} />;
+  if (Platform.OS === 'android') {
+    return <AndroidDatePicker {...props} />;
+  }
+  return <WebDatePicker {...props} />;
 }

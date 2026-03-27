@@ -9,6 +9,18 @@ export type ApiFetchType = {
 
 export type Device = 'web' | 'ios' | 'android';
 
+export type AuthMode =
+  | 'signin'
+  | 'signup'
+  | 'resetPassword'
+  | 'resetPasswordSubmit';
+
+export type ResetPasswordParams = {
+  access_token?: string;
+  type?: string;
+  refresh_token?: string;
+};
+
 export type Profile = {
   createdAt: Date;
   id: number;

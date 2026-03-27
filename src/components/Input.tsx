@@ -11,12 +11,13 @@ import { WHITE } from '@/src/constants/colors';
 
 type InputProps = {
   value?: string;
-  onChange: (key: string) => void;
+  onChange?: (key: string) => void;
   textContentType?: 'password' | 'emailAddress';
   keyboardType?: KeyboardTypeOptions;
   secureTextEntry?: boolean;
   maxLength?: number;
   placeholder?: string;
+  editable?: boolean;
   id: string;
 };
 
@@ -27,12 +28,13 @@ const Input = (props: InputProps) => {
     id,
     secureTextEntry = false,
     textContentType = 'none',
+    editable = true,
     ...rest
   } = props;
   const [passewordVisible, setPasswordVisible] = useState(secureTextEntry);
 
   const clearValue = () => {
-    onChange('');
+    onChange?.('');
   };
 
   const handlePasswordVisible = () => {
@@ -50,6 +52,7 @@ const Input = (props: InputProps) => {
         textContentType={textContentType}
         secureTextEntry={passewordVisible}
         autoCorrect={false}
+        editable={editable}
         accessibilityLabel="input"
         placeholderTextColor="#7A8699"
         autoCapitalize="none"
@@ -67,9 +70,11 @@ const Input = (props: InputProps) => {
               />
             </Pressable>
           )}
-          <Pressable style={styles.inputIcon} onPress={clearValue}>
-            <AntDesign name="close" size={12} color={WHITE} />
-          </Pressable>
+          {editable && (
+            <Pressable style={styles.inputIcon} onPress={clearValue}>
+              <AntDesign name="close" size={12} color={WHITE} />
+            </Pressable>
+          )}
         </View>
       </View>
     </View>

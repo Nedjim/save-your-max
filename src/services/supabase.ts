@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
+import * as Linking from 'expo-linking';
 import { Platform } from 'react-native';
 import 'expo-sqlite/localStorage/install';
 import { ApiFetchType, SupabasePayload } from '../types';
@@ -124,4 +125,37 @@ export const createUser = async (user: SupabasePayload) => {
     await supabase.auth.signOut();
     return null;
   }
+};
+
+const resetPasswordUrl = Linking.createURL('reset-password');
+
+export const resetPasswordEmail = async (email: string) => {
+  return await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: resetPasswordUrl,
+  });
+};
+
+export const resetPassword = async (
+  token: string,
+  refreshToken: string,
+  password: string,
+) => {
+  const { error: sessionError } = await supabase.auth.setSession({
+    access_token: token,
+    refresh_token: refreshToken,
+  });
+
+  if (sessionError) {
+    throw sessionError;
+  }
+
+  const { error } = await supabase.auth.updateUser({
+    password,
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  await supabase.auth.signOut();
 };

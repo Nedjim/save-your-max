@@ -1,20 +1,21 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useState } from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { DatePickerProps } from '.';
 
-function DefaultDatePicker(props: DatePickerProps) {
+const IOSDatePicker = (props: DatePickerProps) => {
   const { date, onChange } = props;
 
   const [selectedDate, setSelectedDate] = useState(date);
 
   return (
-    <View>
+    <View style={styles.iosDatePicker}>
       <DateTimePicker
-        testID="default-date-picker"
+        testID="ios-date-picker"
         value={selectedDate}
         mode="date"
         is24Hour={true}
+        themeVariant="dark"
         onChange={(_, newDate) => {
           if (newDate) {
             setSelectedDate(newDate);
@@ -24,6 +25,15 @@ function DefaultDatePicker(props: DatePickerProps) {
       />
     </View>
   );
-}
+};
 
-export default DefaultDatePicker;
+const styles = StyleSheet.create({
+  iosDatePicker: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    marginVertical: 16,
+  },
+});
+
+export default IOSDatePicker;

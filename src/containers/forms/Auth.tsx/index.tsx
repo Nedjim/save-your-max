@@ -12,7 +12,9 @@ import {
   WHITE,
 } from '@/src/constants/colors';
 import { useCreateUser, useSignInUser } from '@/src/hooks/auth';
-import AuthInputs from './AuthInputs';
+import { resetPasswordEmail } from '@/src/services/supabase';
+import { AuthMode } from '@/src/types';
+import AuthInputs from '../AuthInputs';
 import { TEXT_BY_MODE } from './constants';
 
 const Auth = () => {
@@ -21,7 +23,7 @@ const Auth = () => {
   const { mutate: signInUserMutation } = useSignInUser();
   const { mutate: createUserMutation } = useCreateUser();
 
-  const [mode, setMode] = useState<'signin' | 'signup'>('signin');
+  const [mode, setMode] = useState<AuthMode>('signin');
   const [email, setEmail] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
   const [confirmedPassword, setConfirmedPassword] = useState<string | null>(
@@ -91,47 +93,91 @@ const Auth = () => {
     }
   };
 
+  const handleResetPassword = async () => {
+    if (!email) {
+      setError('Missing email.');
+      return;
+    }
+
+    try {
+      await resetPasswordEmail(email);
+      setMode('resetPasswordSubmit');
+      clearInputs();
+    } catch {
+      console.log('Reset pasword error.');
+    }
+  };
+
   return (
     <View style={styles.auth}>
       <View style={styles.form}>
         <Text style={styles.title}>{title}</Text>
+        {mode === 'resetPasswordSubmit' && (
+          <View style={styles.icon}>
+            <Ionicons
+              name="checkmark-circle"
+              color={TURQUOISE}
+              size={32}
+              ariaHidden={true}
+              style={styles.checkmarkIcon}
+            />
+          </View>
+        )}
+
         <Text style={styles.subtitle}>{subtitle}</Text>
-        <View style={styles.error}>
-          {error && <Ionicons name="alert-circle" color={ERROR} size={18} />}
-          <Text style={styles.errorMessage}>{error}</Text>
-        </View>
-        <AuthInputs
-          email={email}
-          password={password}
-          setEmail={setEmail}
-          setPassword={setPassword}
-          confirmedPassword={confirmedPassword}
-          setConfirmedPassword={
-            mode === 'signup' ? setConfirmedPassword : undefined
-          }
-        />
+
+        {mode !== 'resetPasswordSubmit' && (
+          <>
+            <View style={styles.error}>
+              {error && (
+                <Ionicons name="alert-circle" color={ERROR} size={18} />
+              )}
+              <Text style={styles.errorMessage}>{error}</Text>
+            </View>
+            <AuthInputs
+              email={email}
+              password={password}
+              setEmail={setEmail}
+              setPassword={mode === 'resetPassword' ? undefined : setPassword}
+              confirmedPassword={confirmedPassword}
+              setConfirmedPassword={
+                mode === 'signup' ? setConfirmedPassword : undefined
+              }
+            />
+          </>
+        )}
 
         {mode === 'signin' && (
-          <Button uppercase={false}>Forgot passeword ?</Button>
+          <Button uppercase={false} onPress={() => setMode('resetPassword')}>
+            Forgot passeword ?
+          </Button>
         )}
 
         <View style={styles.actions}>
-          <Button
-            onPress={handleSubmit}
-            buttonColor={TURQUOISE}
-            uppercase={false}
-            textColor={WHITE}
-          >
-            {submitButtonTitle}
-          </Button>
-          <Divider />
-          <Button
-            buttonColor={LIGHT_GREY}
-            onPress={toggleMode}
-            uppercase={false}
-          >
-            {secondaryButtonTitle}
-          </Button>
+          {submitButtonTitle && (
+            <Button
+              onPress={
+                mode === 'resetPassword' ? handleResetPassword : handleSubmit
+              }
+              buttonColor={TURQUOISE}
+              uppercase={false}
+              textColor={WHITE}
+            >
+              {submitButtonTitle}
+            </Button>
+          )}
+          {secondaryButtonTitle && (
+            <>
+              <Divider />
+              <Button
+                buttonColor={LIGHT_GREY}
+                onPress={toggleMode}
+                uppercase={false}
+              >
+                {secondaryButtonTitle}
+              </Button>
+            </>
+          )}
         </View>
       </View>
     </View>
@@ -155,16 +201,24 @@ const styles = StyleSheet.create({
     color: WHITE,
     fontSize: 18,
     textAlign: 'center',
-    marginBottom: 24,
   },
   subtitle: {
     color: '#ccc',
+    marginTop: 24,
+  },
+  checkmarkIcon: {
+    display: 'flex',
+    justifyContent: 'center',
   },
   actions: {
     display: 'flex',
     gap: 8,
     marginTop: 16,
     justifyContent: 'center',
+  },
+  icon: {
+    display: 'flex',
+    alignItems: 'center',
   },
   error: {
     display: 'flex',
