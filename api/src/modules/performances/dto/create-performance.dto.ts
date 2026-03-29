@@ -5,7 +5,7 @@ export class CreatePerformanceDto {
   @IsNotEmpty()
   @IsInt()
   @Min(0)
-  charge: number;
+  weight: number;
 
   @IsNotEmpty()
   @IsInt()

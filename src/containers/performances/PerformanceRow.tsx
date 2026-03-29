@@ -17,10 +17,10 @@ type PerformanceRowProps = {
 
 const PerformanceRow = (props: PerformanceRowProps) => {
   const { performance, onUpdate, onDelete } = props;
-  const { charge, reps } = performance;
+  const { weight, reps } = performance;
 
   const date = dayjs(performance.date).format('DD/MM/YYYY');
-  const chargeLabel = 'Charge';
+  const weightLabel = 'Weight';
 
   return (
     <Animated.View
@@ -30,12 +30,12 @@ const PerformanceRow = (props: PerformanceRowProps) => {
     >
       <View style={styles.details}>
         <Text style={[styles.text, styles.date]}> {date}</Text>
-        <View style={styles.charge}>
+        <View style={styles.weight}>
           <Text style={styles.text}>
-            <Text style={styles.firstLetter}>{chargeLabel[0]}</Text>
-            <Text style={styles.defaultTextColor}>{chargeLabel.slice(1)}:</Text>
+            <Text style={styles.firstLetter}>{weightLabel[0]}</Text>
+            <Text style={styles.defaultTextColor}>{weightLabel.slice(1)}:</Text>
           </Text>
-          <Text style={styles.value}>{charge} (kg)</Text>
+          <Text style={styles.value}>{weight} (kg)</Text>
         </View>
         <Text style={[styles.text, styles.defaultTextColor]}>{reps} reps</Text>
       </View>
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   date: {
     fontSize: 16,
   },
-  charge: {
+  weight: {
     display: 'flex',
     flexDirection: 'row',
     gap: 8,

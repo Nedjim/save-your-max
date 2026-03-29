@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import * as Linking from 'expo-linking';
 import { Platform } from 'react-native';
 import 'expo-sqlite/localStorage/install';
-import { ApiFetchType, SupabasePayload } from '../types';
+import { ApiFetchPayload, SupabasePayload } from '../types';
 import { getProfile } from './profiles';
 
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL!;
@@ -33,11 +33,11 @@ export const supabase = createClient(supabaseUrl, supabasePublishableKey, {
   },
 });
 
-export const apiFetch = async (payload: ApiFetchType) => {
-  const { endpoint, options, method = 'GET' } = payload;
-
+export async function apiFetch<TResponse, TBody = unknown>(
+  payload: ApiFetchPayload<TBody>,
+): Promise<TResponse> {
+  const { endpoint, method } = payload;
   const userSession = await getUserSession();
-
   const token = userSession?.access_token;
 
   if (!token) {
@@ -47,7 +47,6 @@ export const apiFetch = async (payload: ApiFetchType) => {
   const res = await fetch(
     `${process.env.EXPO_PUBLIC_API_BASE_URL}/${endpoint}`,
     {
-      ...options,
       method,
       body: JSON.stringify(payload.body),
       headers: {
@@ -62,7 +61,7 @@ export const apiFetch = async (payload: ApiFetchType) => {
   }
 
   return res.json();
-};
+}
 
 export const getToken = async () => {
   const userSession = await getUserSession();
@@ -115,12 +114,10 @@ export const createUser = async (user: SupabasePayload) => {
   }
 
   try {
-    const payload: ApiFetchType = {
+    return await apiFetch({
       endpoint: 'profiles',
       method: 'POST',
-    };
-
-    return await apiFetch(payload);
+    });
   } catch {
     await supabase.auth.signOut();
     return null;

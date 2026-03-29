@@ -1,4 +1,5 @@
 import { HeaderTitle } from '@react-navigation/elements';
+import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { View } from 'react-native';
 import BackButton from '@/src/components/Buttons/BackButton';
 import HomeButton from '@/src/components/Buttons/HomeButton';
@@ -8,39 +9,44 @@ import { Device } from '@/src/types';
 
 const MARGIN_RIGHT_IOS = -36;
 
-// Type any because NativeStackNavigationOptions type is deprecated in Expo Router
-const SCREEN_OPTIONS: Record<Device, any> = {
-  ios: {
-    headerStyle: {
-      backgroundColor: BLACK,
-    },
-    headerTitle: () => <HeaderTitle />,
-    headerLeft: () => (
-      <View style={{ marginRight: MARGIN_RIGHT_IOS }}>
-        <HomeButton />
-      </View>
-    ),
-    headerRight: () => (
-      <View style={{ marginRight: MARGIN_RIGHT_IOS }}>
-        <UserButton />
-      </View>
-    ),
+const IOSScreenOptions = {
+  headerStyle: {
+    backgroundColor: BLACK,
   },
-  android: {
-    headerStyle: {
-      backgroundColor: BLACK,
-    },
-    headerTitle: () => <HeaderTitle />,
-    headerLeft: () => <HomeButton />,
-    headerRight: () => <UserButton />,
+  headerTitle: () => <HeaderTitle />,
+  headerLeft: () => (
+    <View style={{ marginRight: MARGIN_RIGHT_IOS }}>
+      <HomeButton />
+    </View>
+  ),
+  headerRight: () => (
+    <View style={{ marginRight: MARGIN_RIGHT_IOS }}>
+      <UserButton />
+    </View>
+  ),
+};
+
+const AndroidScreenOptions = {
+  headerStyle: {
+    backgroundColor: BLACK,
   },
-  web: {
-    headerTransparent: true,
-    headerTitleAlign: 'center',
-    headerTitle: () => <HeaderTitle />,
-    headerLeft: () => <BackButton />,
-    headerRight: () => <UserButton />,
-  },
+  headerTitle: () => <HeaderTitle />,
+  headerLeft: () => <HomeButton />,
+  headerRight: () => <UserButton />,
+};
+
+const WebScreenOptions = {
+  headerTransparent: true,
+  headerTitleAlign: 'center' as const,
+  headerTitle: () => <HeaderTitle />,
+  headerLeft: () => <BackButton />,
+  headerRight: () => <UserButton />,
+};
+
+const SCREEN_OPTIONS: Record<Device, NativeStackNavigationOptions> = {
+  [Device.IOS]: IOSScreenOptions,
+  [Device.Android]: AndroidScreenOptions,
+  [Device.Web]: WebScreenOptions,
 };
 
 export default SCREEN_OPTIONS;

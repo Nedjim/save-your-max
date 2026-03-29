@@ -5,7 +5,7 @@ import {
   getPerformances,
   updatePerformance,
 } from '../services/performances';
-import { CreatePerformanceParams, UpdatePerformanceParams } from '../types';
+import { CreatePerformancePayload, UpdatePerformancePayload } from '../types';
 
 export function usePerformances(exerciseId: string) {
   const query = useQuery({
@@ -20,7 +20,7 @@ export function useCreatePerformance(exerciseId: string) {
   const queryClient = useQueryClient();
 
   const query = useMutation({
-    mutationFn: (params: CreatePerformanceParams) =>
+    mutationFn: (params: CreatePerformancePayload) =>
       createPerformance(exerciseId, params),
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -36,7 +36,7 @@ export function useUpdatePerformance(exerciseId: string) {
   const queryClient = useQueryClient();
 
   const query = useMutation({
-    mutationFn: (params: UpdatePerformanceParams) => updatePerformance(params),
+    mutationFn: (params: UpdatePerformancePayload) => updatePerformance(params),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['exercises', 'performances', exerciseId],

@@ -21,7 +21,7 @@ export class ProfilesService {
     });
   }
 
-  async findOne(profileId: number) {
+  async findOne(profileId: string) {
     return this.prisma.profile.findUnique({
       where: { id: profileId },
     });

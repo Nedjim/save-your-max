@@ -1,26 +1,21 @@
-import { ApiFetchType, Exercise } from '../types';
+import { Exercise } from '../types';
 import { apiFetch } from './supabase';
 
-export async function getExercises(): Promise<Exercise[]> {
-  const payload: ApiFetchType = { endpoint: 'exercises' };
-
-  return await apiFetch(payload);
+export async function getExercises() {
+  return await apiFetch<Exercise[]>({ endpoint: 'exercises', method: 'GET' });
 }
 
-export async function createExercise(title: string): Promise<Exercise> {
-  const payload: ApiFetchType = {
+export async function createExercise(title: string) {
+  return await apiFetch<Exercise, { title: string }>({
     endpoint: 'exercises',
     method: 'POST',
     body: { title },
-  };
-  return await apiFetch(payload);
+  });
 }
 
-export async function deleteExercise(id: string): Promise<Exercise> {
-  const payload: ApiFetchType = {
+export async function deleteExercise(id: string) {
+  return await apiFetch<Exercise>({
     endpoint: `exercises/${id}`,
     method: 'DELETE',
-  };
-
-  return await apiFetch(payload);
+  });
 }

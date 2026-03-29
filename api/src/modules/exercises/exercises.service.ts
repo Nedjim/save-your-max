@@ -6,7 +6,7 @@ import { CreateExercisesDto } from './dto/create-exercise.dto';
 export class ExercisesService {
   constructor(private prisma: PrismaService) {}
 
-  async create(profileId: number, dto: CreateExercisesDto) {
+  async create(profileId: string, dto: CreateExercisesDto) {
     return await this.prisma.exercise.create({
       data: {
         ...dto,
@@ -17,11 +17,11 @@ export class ExercisesService {
     });
   }
 
-  async delete(profileId: number, exerciceId: string) {
+  async delete(profileId: string, exerciseId: string) {
     const deleted = await this.prisma.exercise.deleteMany({
       where: {
         profileId,
-        id: exerciceId,
+        id: exerciseId,
       },
     });
 
@@ -32,7 +32,7 @@ export class ExercisesService {
     return deleted;
   }
 
-  async findAll(profileId: number) {
+  async findAll(profileId: string) {
     return this.prisma.exercise.findMany({
       where: { profileId },
       orderBy: { title: 'asc' },

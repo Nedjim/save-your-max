@@ -1,19 +1,16 @@
-import { ApiFetchType, Profile } from '../types';
+import { Profile } from '../types';
 import { apiFetch } from './supabase';
 
-export async function getProfile(): Promise<Profile> {
-  const payload: ApiFetchType = {
+export async function getProfile() {
+  return await apiFetch<Profile>({
     endpoint: 'profiles',
-  };
-
-  return await apiFetch(payload);
+    method: 'GET',
+  });
 }
 
-export async function deleteProfile(): Promise<{ sucess: boolean }> {
-  const payload: ApiFetchType = {
+export async function deleteProfile() {
+  return await apiFetch<{ success: boolean }>({
     endpoint: 'profiles',
     method: 'DELETE',
-  };
-
-  return await apiFetch(payload);
+  });
 }

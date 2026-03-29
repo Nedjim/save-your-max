@@ -9,7 +9,7 @@ import {
   signInUser,
   signOutUser,
 } from '../services/supabase';
-import { ResetPasswordParams, SupabasePayload } from '../types';
+import { ResetPasswordURLParams, SupabasePayload } from '../types';
 
 const RESET_PASSWORD_URL_PARAMS = ['access_token', 'refresh_token', 'type'];
 
@@ -57,7 +57,7 @@ export function useSignOutUser() {
   return query;
 }
 
-export function useResetPasswordParams(): ResetPasswordParams {
+export function useResetPasswordParams(): ResetPasswordURLParams {
   const params = useGlobalSearchParams<Record<string, string>>();
 
   if (params['#']) {

@@ -1,53 +1,40 @@
-import {
-  ApiFetchType,
-  CreatePerformanceParams,
-  Performance,
-  UpdatePerformanceParams,
-} from '../types';
+import { Performance } from '@/src/types';
+import { CreatePerformancePayload, UpdatePerformancePayload } from '../types';
 import { apiFetch } from './supabase';
 
-export async function getPerformances(
-  exerciseId: string,
-): Promise<Performance[]> {
-  const payload: ApiFetchType = {
+export async function getPerformances(exerciseId: string) {
+  return await apiFetch<Performance[]>({
     endpoint: `exercises/${exerciseId}/performances`,
-  };
-
-  return await apiFetch(payload);
+    method: 'GET',
+  });
 }
 
 export async function createPerformance(
   exerciseId: string,
-  params: CreatePerformanceParams,
-): Promise<Performance> {
-  const payload: ApiFetchType = {
+  payload: CreatePerformancePayload,
+) {
+  return await apiFetch<Performance, CreatePerformancePayload>({
     endpoint: `exercises/${exerciseId}/performances`,
     method: 'POST',
-    body: { ...params },
-  };
-
-  return await apiFetch(payload);
+    body: { ...payload },
+  });
 }
 
-export async function updatePerformance(params: UpdatePerformanceParams) {
-  const { id, ...rest } = params;
+export async function updatePerformance(payload: UpdatePerformancePayload) {
+  const { id, ...rest } = payload;
 
-  const payload: ApiFetchType = {
+  return await apiFetch<Performance>({
     endpoint: `performances/${id}`,
     method: 'PATCH',
     body: {
       ...rest,
     },
-  };
-
-  return await apiFetch(payload);
+  });
 }
 
 export async function deletePerformance(id: string) {
-  const payload: ApiFetchType = {
+  return await apiFetch<Performance>({
     endpoint: `performances/${id}`,
     method: 'DELETE',
-  };
-
-  return await apiFetch(payload);
+  });
 }

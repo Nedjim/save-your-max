@@ -31,7 +31,7 @@ function PerformanceModal(props: PerformanceModalProps) {
   const [date, setDate] = useState<Date>(
     performance ? new Date(performance.date) : nowDay,
   );
-  const [charge, setCharge] = useState(performance?.charge || '0');
+  const [weight, setWeight] = useState(performance?.weight || '0');
   const [reps, setReps] = useState(performance?.reps || '0');
 
   const handleChangeDate = (date: Date) => {
@@ -39,7 +39,7 @@ function PerformanceModal(props: PerformanceModalProps) {
   };
 
   const handleClose = () => {
-    setCharge('');
+    setWeight('');
     setReps('');
     setDate(nowDay);
     onClose();
@@ -47,7 +47,11 @@ function PerformanceModal(props: PerformanceModalProps) {
 
   const createPerformance = () => {
     createPerformanceMutation(
-      { charge: Number(charge), reps: Number(reps), date },
+      {
+        weight: Number(weight),
+        reps: Number(reps),
+        date: date.toISOString(),
+      },
       {
         onSuccess: () => {
           handleClose();
@@ -60,7 +64,12 @@ function PerformanceModal(props: PerformanceModalProps) {
     if (!performance) return;
 
     updatePerformanceMutation(
-      { charge: Number(charge), reps: Number(reps), date, id: performance.id },
+      {
+        weight: Number(weight),
+        reps: Number(reps),
+        date: date.toISOString(),
+        id: performance.id,
+      },
       {
         onSuccess: () => {
           handleClose();
@@ -87,11 +96,11 @@ function PerformanceModal(props: PerformanceModalProps) {
       >
         <View style={styles.spacing}>
           <View>
-            <Label label="Charge (kg)" nativeId="performance-charge" />
+            <Label label="Weight (kg)" nativeId="performance-weight" />
             <Input
-              value={String(charge)}
-              onChange={setCharge}
-              id="performance-charge"
+              value={String(weight)}
+              onChange={setWeight}
+              id="performance-weight"
             />
           </View>
           <View>

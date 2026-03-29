@@ -8,7 +8,7 @@ export class PerformancesService {
   constructor(private prisma: PrismaService) {}
 
   async create(exerciseId: string, data: CreatePerformanceDto) {
-    const { date, charge, reps } = data;
+    const { date, weight, reps } = data;
 
     const exercise = await this.prisma.exercise.findUnique({
       where: { id: exerciseId },
@@ -21,7 +21,7 @@ export class PerformancesService {
     return await this.prisma.performance.create({
       data: {
         date,
-        charge,
+        weight,
         reps,
         exercise: {
           connect: { id: exerciseId },
