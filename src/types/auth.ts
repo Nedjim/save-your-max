@@ -3,10 +3,12 @@
  *
  * * Each value corresponds to a specific step in the authentication process:
  *
- * 1. **signin** - User sign-in form
- * 2. **signup** - User registration form
- * 3. **resetPassword** - Password reset request form
- * 4. **resetPasswordSubmit** - Confirmation message after reset email is sent
+ * 1. **signin** - User is entering their credentials to sign in
+ * 2. **signup** - User is creating a new account
+ * 3. **resetPasswordRequest** - User submits their email to receive a password reset link
+ * 4. **resetPasswordEmailSent** - A password reset email has been successfully sent
+ * 5. **resetPasswordConfirm** - User is entering a new password using the reset link
+ * 6. **resetPasswordDone** - Password has been successfully updated
  *
  * @example
  * const mode: AuthMode = 'signin';
@@ -14,8 +16,10 @@
 export type AuthMode =
   | 'signin'
   | 'signup'
-  | 'resetPassword'
-  | 'resetPasswordSubmit';
+  | 'resetPasswordRequest'
+  | 'resetPasswordEmailSent'
+  | 'resetPasswordConfirm'
+  | 'resetPasswordDone';
 
 /**
  * Represents the query parameters returned by Supabase during the password recovery flow.
@@ -57,12 +61,12 @@ export type Profile = {
 
 /**
  * Represents the credentials required by Supabase to authenticate a user.
- * 
+ *
  * This payload is typically used for authentication requests such as sign-in or sign-up.
- * 
+ *
  * 1. **email** - User's email address
  * 2. **password** - User's password (sensitive data)
- * 
+ *
  * @example
  * const payload: SupabasePayload = {
  *   email: 'test@hotmail.fr',

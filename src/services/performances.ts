@@ -1,5 +1,8 @@
-import { Performance } from '@/src/types';
-import { CreatePerformancePayload, UpdatePerformancePayload } from '../types';
+import {
+  CreatePerformancePayload,
+  Performance,
+  UpdatePerformancePayload,
+} from '@/src/types';
 import { apiFetch } from './supabase';
 
 export async function getPerformances(exerciseId: string) {
