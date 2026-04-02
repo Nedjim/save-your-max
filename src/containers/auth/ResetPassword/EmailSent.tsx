@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import Divider from '@/src/components/Divider';
 import { LIGHT_GREY, TURQUOISE } from '@/src/constants/colors';
 import { AuthMode } from '@/src/types';
@@ -13,7 +14,7 @@ type EmailSentType = {
 function EmailSent(props: EmailSentType) {
   const { setMode } = props;
   return (
-    <>
+    <Animated.View entering={FadeIn} exiting={FadeOut}>
       <Text style={styles.title}>Email successfuly sent!</Text>
 
       <View style={styles.icon}>
@@ -38,7 +39,7 @@ function EmailSent(props: EmailSentType) {
       >
         Cancel
       </Button>
-    </>
+    </Animated.View>
   );
 }
 

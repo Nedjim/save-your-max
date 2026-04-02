@@ -1,110 +1,150 @@
-import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { Controller, Path, useForm } from 'react-hook-form';
 import { Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import * as z from 'zod';
 import Divider from '@/src/components/Divider';
-import { ERROR, LIGHT_GREY, TURQUOISE, WHITE } from '@/src/constants/colors';
+import FormErrors from '@/src/components/Form/FormErrors';
+import Input, { TextContentType } from '@/src/components/Input';
+import { LIGHT_GREY, TURQUOISE, WHITE } from '@/src/constants/colors';
 import { useCreateUser } from '@/src/hooks/auth';
+import { signupSchema } from '@/src/schemas/auth/signup.schema';
 import { AuthMode } from '@/src/types';
-import AuthInputs from './AuthInputs';
+import { zodResolver } from '@hookform/resolvers/zod';
 import styles from './styles';
 
-type SignupFormType = {
+type SignupFormProps = {
   setMode: (mode: AuthMode) => void;
 };
 
-function SignupForm(props: SignupFormType) {
+type SignupFormValues = z.infer<typeof signupSchema>;
+
+type SignupFormFieldType = {
+  name: Path<SignupFormValues>;
+  placeholder: string;
+  textContentType: TextContentType;
+  secureTextEntry: boolean;
+};
+
+const SIGNUP_FIELDS: SignupFormFieldType[] = [
+  {
+    name: 'email',
+    placeholder: 'E-mail',
+    textContentType: 'emailAddress',
+    secureTextEntry: false,
+  },
+  {
+    name: 'password',
+    placeholder: 'Password',
+    textContentType: 'password',
+    secureTextEntry: true,
+  },
+  {
+    name: 'confirmedPassword',
+    placeholder: 'Confirm password',
+    textContentType: 'password',
+    secureTextEntry: true,
+  },
+];
+
+function SignupForm(props: SignupFormProps) {
   const { setMode } = props;
-
   const router = useRouter();
+  const { mutate: createUserMutation, isPending } = useCreateUser();
 
-  const { mutate: createUserMutation } = useCreateUser();
+  const {
+    control,
+    handleSubmit,
+    setError,
+    reset,
+    formState: { errors },
+  } = useForm<SignupFormValues>({
+    resolver: zodResolver(signupSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+      confirmedPassword: '',
+    },
+  });
 
-  const [email, setEmail] = useState<string | null>(null);
-  const [password, setPassword] = useState<string | null>(null);
-  const [confirmedPassword, setConfirmedPassword] = useState<string | null>(
-    null,
-  );
-  const [error, setError] = useState<string | null>(null);
+  const onSubmit = (data: SignupFormValues) => {
+    const { email, password } = data;
+    const payload = { email, password };
 
-  const handleSubmit = () => {
-    if (!email && !password) {
-      setError('Missing email and password.');
-      return;
-    }
-
-    if (!email && password) {
-      setError('Missing e-mail.');
-      return;
-    }
-
-    if (email && !password) {
-      setError('Missing password.');
-      return;
-    }
-
-    if (password !== confirmedPassword) {
-      setError('Passwords are differents.');
-      return;
-    }
-
-    if (email && password) {
-      const payload = { email, password };
-
-      createUserMutation(payload, {
-        onSuccess: () => {
-          router.replace('/');
-        },
-        onError: (error) => {
-          setError(error.message);
-        },
-      });
-    }
+    createUserMutation(payload, {
+      onSuccess: () => {
+        reset();
+        router.replace('/');
+      },
+      onError: (error) => {
+        setError('root', {
+          type: 'server',
+          message: error.message,
+        });
+      },
+    });
   };
 
+  const displayedErrors = Object.values(errors)
+    .map((err) => err?.message)
+    .filter((e) => e !== undefined);
+
   return (
-    <>
+    <Animated.View entering={FadeIn} exiting={FadeOut}>
       <Text style={styles.title}>Sign Up</Text>
       <Text style={styles.subtitle}>
         Enter your email and password to create your account.
       </Text>
 
-      <View style={styles.error}>
-        {error && <Ionicons name="alert-circle" color={ERROR} size={18} />}
-        <Text style={styles.errorMessage}>{error}</Text>
-      </View>
+      {!!displayedErrors.length && <FormErrors errors={displayedErrors} />}
 
-      <AuthInputs
-        email={email}
-        password={password}
-        setEmail={setEmail}
-        setPassword={setPassword}
-        confirmedPassword={confirmedPassword}
-        setConfirmedPassword={setConfirmedPassword}
-      />
+      <View style={styles.fields}>
+        {SIGNUP_FIELDS.map((field) => {
+          const { name, placeholder, textContentType, secureTextEntry } = field;
+
+          return (
+            <Controller
+              key={name}
+              control={control}
+              name={name}
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  id={name}
+                  placeholder={placeholder}
+                  secureTextEntry={secureTextEntry}
+                  value={value}
+                  onChange={onChange}
+                  textContentType={textContentType}
+                />
+              )}
+            />
+          );
+        })}
+      </View>
 
       <View style={styles.actions}>
         <Button
-          onPress={handleSubmit}
-          buttonColor={TURQUOISE}
+          mode="contained"
+          onPress={handleSubmit(onSubmit)}
+          style={{ backgroundColor: TURQUOISE }}
+          labelStyle={{ color: WHITE }}
           uppercase={false}
-          textColor={WHITE}
+          loading={isPending}
+          disabled={isPending}
         >
           Create
         </Button>
-        <>
-          <Divider />
-          <Button
-            buttonColor={LIGHT_GREY}
-            onPress={() => setMode('signin')}
-            uppercase={false}
-          >
-            Sign in
-          </Button>
-        </>
+        <Divider />
+        <Button
+          onPress={() => setMode('signin')}
+          uppercase={false}
+          buttonColor={LIGHT_GREY}
+        >
+          Sign in
+        </Button>
       </View>
-    </>
+    </Animated.View>
   );
 }
 

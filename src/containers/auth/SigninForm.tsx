@@ -1,81 +1,118 @@
-import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { Controller, Path, useForm } from 'react-hook-form';
 import { Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import * as z from 'zod';
 import Divider from '@/src/components/Divider';
-import { ERROR, LIGHT_GREY, TURQUOISE, WHITE } from '@/src/constants/colors';
+import { default as FormErrors } from '@/src/components/Form/FormErrors';
+import Input, { TextContentType } from '@/src/components/Input';
+import { LIGHT_GREY, TURQUOISE, WHITE } from '@/src/constants/colors';
 import { useSignInUser } from '@/src/hooks/auth';
+import { signinSchema } from '@/src/schemas/auth/signin.schema';
 import { AuthMode } from '@/src/types';
-import AuthInputs from './AuthInputs';
+import { zodResolver } from '@hookform/resolvers/zod';
 import styles from './styles';
 
-type SigninFormType = {
+type SigninFormProps = {
   setMode: (mode: AuthMode) => void;
 };
 
-const SigninForm = (props: SigninFormType) => {
+type SigninFormValues = z.infer<typeof signinSchema>;
+
+type SigninFormFieldType = {
+  name: Path<SigninFormValues>;
+  placeholder: string;
+  textContentType: TextContentType;
+  secureTextEntry: boolean;
+};
+
+const SIGNIN_FIELDS: SigninFormFieldType[] = [
+  {
+    name: 'email',
+    placeholder: 'E-mail',
+    textContentType: 'emailAddress',
+    secureTextEntry: false,
+  },
+  {
+    name: 'password',
+    placeholder: 'Password',
+    textContentType: 'password',
+    secureTextEntry: true,
+  },
+];
+
+const SigninForm = (props: SigninFormProps) => {
   const { setMode } = props;
 
   const router = useRouter();
-  const { mutate: signInUserMutation } = useSignInUser();
-  const [email, setEmail] = useState<string | null>(null);
-  const [password, setPassword] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const { mutate: signInUserMutation, isPending } = useSignInUser();
+  const {
+    control,
+    handleSubmit,
+    setError,
+    reset,
+    formState: { errors },
+  } = useForm<SigninFormValues>({
+    resolver: zodResolver(signinSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
 
-  const clearInputs = () => {
-    setEmail(null);
-    setPassword(null);
-    setError(null);
+  const onSubmit = (data: SigninFormValues) => {
+    const { email, password } = data;
+    const payload = { email, password };
+
+    signInUserMutation(payload, {
+      onSuccess: () => {
+        reset();
+        router.replace('/exercises');
+      },
+      onError: (error) => {
+        setError('root', {
+          type: 'server',
+          message: error.message,
+        });
+      },
+    });
   };
 
-  const handleSubmit = () => {
-    if (!email && !password) {
-      setError('Missing email and password.');
-      return;
-    }
-
-    if (!email && password) {
-      setError('Missing e-mail.');
-      return;
-    }
-
-    if (email && !password) {
-      setError('Missing password.');
-      return;
-    }
-
-    if (email && password) {
-      const payload = { email, password };
-
-      signInUserMutation(payload, {
-        onSuccess: () => {
-          router.replace('/exercises');
-          clearInputs();
-        },
-        onError: (error) => {
-          setError(error.message);
-        },
-      });
-    }
-  };
+  const displayedErrors = Object.values(errors)
+    .map((err) => err.message)
+    .filter((e) => e !== undefined);
 
   return (
-    <>
+    <Animated.View entering={FadeIn} exiting={FadeOut}>
       <Text style={styles.title}>Sign In</Text>
       <Text style={styles.subtitle}>Enter your email and password.</Text>
 
-      <View style={styles.error}>
-        {error && <Ionicons name="alert-circle" color={ERROR} size={18} />}
-        <Text style={styles.errorMessage}>{error}</Text>
-      </View>
+      {!!displayedErrors.length && <FormErrors errors={displayedErrors} />}
 
-      <AuthInputs
-        email={email}
-        password={password}
-        setEmail={setEmail}
-        setPassword={setPassword}
-      />
+      <View style={styles.fields}>
+        {SIGNIN_FIELDS.map((field) => {
+          const { name, placeholder, textContentType, secureTextEntry } = field;
+
+          return (
+            <Controller
+              key={name}
+              control={control}
+              name={name}
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  id={name}
+                  placeholder={placeholder}
+                  value={value}
+                  onChange={onChange}
+                  secureTextEntry={secureTextEntry}
+                  textContentType={textContentType}
+                />
+              )}
+            />
+          );
+        })}
+      </View>
 
       <Button uppercase={false} onPress={() => setMode('resetPasswordRequest')}>
         Forgot passeword ?
@@ -83,10 +120,12 @@ const SigninForm = (props: SigninFormType) => {
 
       <View style={styles.actions}>
         <Button
-          onPress={handleSubmit}
-          buttonColor={TURQUOISE}
+          onPress={handleSubmit(onSubmit)}
+          style={{ backgroundColor: TURQUOISE }}
+          labelStyle={{ color: WHITE }}
           uppercase={false}
-          textColor={WHITE}
+          loading={isPending}
+          disabled={isPending}
         >
           Sign in
         </Button>
@@ -99,7 +138,7 @@ const SigninForm = (props: SigninFormType) => {
           Create an account
         </Button>
       </View>
-    </>
+    </Animated.View>
   );
 };
 

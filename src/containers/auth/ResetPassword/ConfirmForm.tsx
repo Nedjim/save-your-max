@@ -1,19 +1,44 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useState } from 'react';
+import { Controller, Path, useForm } from 'react-hook-form';
 import { Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
-import { ERROR, TURQUOISE, WHITE } from '@/src/constants/colors';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import * as z from 'zod';
+import FormErrors from '@/src/components/Form/FormErrors';
+import Input, { TextContentType } from '@/src/components/Input';
+import { TURQUOISE, WHITE } from '@/src/constants/colors';
 import { useResetPasswordParams } from '@/src/hooks/auth';
+import { confirmSchema } from '@/src/schemas/auth/confirm.schema';
 import { resetPassword } from '@/src/services/supabase';
 import { AuthMode } from '@/src/types';
-import AuthInputs from '../AuthInputs';
+import { zodResolver } from '@hookform/resolvers/zod';
 import styles from '../styles';
 
-type ConfirmFormType = {
+type ConfirmFormProps = {
   setMode: (mode: AuthMode) => void;
 };
 
-function ConfirmForm(props: ConfirmFormType) {
+type ConfirmFormValues = z.infer<typeof confirmSchema>;
+
+type ConfirmFormFieldType = {
+  name: Path<ConfirmFormValues>;
+  placeholder: string;
+  textContentType: TextContentType;
+};
+
+const CONFIRM_FIELDS: ConfirmFormFieldType[] = [
+  {
+    name: 'password',
+    placeholder: 'Password',
+    textContentType: 'password',
+  },
+  {
+    name: 'confirmedPassword',
+    placeholder: 'Confirm password',
+    textContentType: 'password',
+  },
+];
+
+function ConfirmForm(props: ConfirmFormProps) {
   const { setMode } = props;
   const {
     access_token: token,
@@ -21,72 +46,88 @@ function ConfirmForm(props: ConfirmFormType) {
     refresh_token: refreshToken,
   } = useResetPasswordParams();
 
-  const [password, setPassword] = useState<string | null>(null);
-  const [confirmedPassword, setConfirmedPassword] = useState<string | null>(
-    null,
-  );
-  const [error, setError] = useState<string | null>(null);
+  const {
+    control,
+    handleSubmit,
+    setError,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<ConfirmFormValues>({
+    resolver: zodResolver(confirmSchema),
+    defaultValues: {
+      password: '',
+      confirmedPassword: '',
+    },
+  });
 
-  const handleSubmit = async () => {
+  const onSubmit = async (data: ConfirmFormValues) => {
     if (!token || type !== 'recovery' || !refreshToken) {
-      setError('Invalid URL.');
-      return;
-    }
+      setError('root', {
+        type: 'server',
+        message: 'Invalid URL.',
+      });
 
-    if (!password) {
-      setError('Missing password.');
       return;
     }
-
-    if (!confirmedPassword) {
-      setError('Please confirm your new password.');
-      return;
-    }
-
-    if (password !== confirmedPassword) {
-      setError('Passwords are differents.');
-      return;
-    }
+    const { password } = data;
 
     try {
       await resetPassword(token, refreshToken, password);
-      clearInputs();
+      reset();
       setMode('resetPasswordDone');
     } catch (error: any) {
-      setError(error.message);
+      setError('root', {
+        type: 'server',
+        message: error.message,
+      });
     }
   };
 
-  const clearInputs = () => {
-    setPassword(null);
-    setConfirmedPassword(null);
-    setError(null);
-  };
+  const displayedErrors = Object.values(errors)
+    .map((err) => err.message)
+    .filter((e) => e !== undefined);
 
   return (
-    <>
+    <Animated.View entering={FadeIn} exiting={FadeOut}>
       <Text style={styles.title}>Reset password</Text>
-      <View style={styles.error}>
-        {error && <Ionicons name="alert-circle" color={ERROR} size={18} />}
-        <Text style={styles.errorMessage}>{error}</Text>
+      {!!displayedErrors.length && <FormErrors errors={displayedErrors} />}
+
+      <View style={styles.fields}>
+        {CONFIRM_FIELDS.map((field) => {
+          const { name, placeholder, textContentType } = field;
+
+          return (
+            <Controller
+              key={name}
+              control={control}
+              name={name}
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  id={name}
+                  placeholder={placeholder}
+                  secureTextEntry
+                  value={value}
+                  onChange={onChange}
+                  textContentType={textContentType}
+                />
+              )}
+            />
+          );
+        })}
       </View>
-      <AuthInputs
-        password={password}
-        confirmedPassword={confirmedPassword}
-        setPassword={setPassword}
-        setConfirmedPassword={setConfirmedPassword}
-      />
       <View style={styles.actions}>
         <Button
-          onPress={handleSubmit}
-          buttonColor={TURQUOISE}
+          onPress={handleSubmit(onSubmit)}
+          style={{ backgroundColor: TURQUOISE }}
+          labelStyle={{ color: WHITE }}
           uppercase={false}
-          textColor={WHITE}
+          loading={isSubmitting}
+          disabled={isSubmitting}
         >
           Update
         </Button>
       </View>
-    </>
+    </Animated.View>
   );
 }
 

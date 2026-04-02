@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { ERROR, WHITE } from '@/src/constants/colors';
+import { WHITE } from '@/src/constants/colors';
 
 const styles = StyleSheet.create({
   title: {
@@ -9,22 +9,17 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     color: '#ccc',
-    marginTop: 24,
+    marginVertical: 16,
+  },
+  fields: {
+    gap: 16,
+    marginVertical: 16,
   },
   actions: {
     display: 'flex',
     gap: 8,
     marginTop: 16,
     justifyContent: 'center',
-  },
-  error: {
-    display: 'flex',
-    flexDirection: 'row',
-    gap: 6,
-    alignItems: 'center',
-  },
-  errorMessage: {
-    color: ERROR,
   },
   icon: {
     display: 'flex',

@@ -9,10 +9,12 @@ import {
 } from 'react-native';
 import { WHITE } from '@/src/constants/colors';
 
+export type TextContentType = 'password' | 'emailAddress';
+
 type InputProps = {
   value?: string;
   onChange?: (key: string) => void;
-  textContentType?: 'password' | 'emailAddress';
+  textContentType?: TextContentType;
   keyboardType?: KeyboardTypeOptions;
   secureTextEntry?: boolean;
   maxLength?: number;

@@ -1,5 +1,5 @@
 import { useSegments } from 'expo-router';
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { MODAL_OPACITY } from '../constants/colors';
 import ConfirmForm from '../containers/auth/ResetPassword/ConfirmForm';
@@ -14,33 +14,22 @@ import { AuthMode } from '../types';
 function AuthPage() {
   const segments = useSegments();
   const isResetPasswordConfirm = segments.some((s) => s === 'reset-password');
-  const [mode, setMode] = useState<AuthMode>();
+  const [mode, setMode] = useState<AuthMode>('signin');
 
-  let content = null;
+  const SCREENS: Record<AuthMode, ReactNode> = {
+    signin: <SigninForm setMode={setMode} />,
+    signup: <SignupForm setMode={setMode} />,
+    resetPasswordRequest: <RequestForm setMode={setMode} />,
+    resetPasswordEmailSent: <EmailSent setMode={setMode} />,
+    resetPasswordConfirm: <ConfirmForm setMode={setMode} />,
+    resetPasswordDone: <Done />,
+  };
 
-  if (mode === 'signin') {
-    content = <SigninForm setMode={setMode} />;
-  }
-
-  if (mode === 'signup') {
-    content = <SignupForm setMode={setMode} />;
-  }
-
-  if (mode === 'resetPasswordRequest') {
-    content = <RequestForm setMode={setMode} />;
-  }
-
-  if (mode === 'resetPasswordEmailSent') {
-    content = <EmailSent setMode={setMode} />;
-  }
-
-  if (isResetPasswordConfirm) {
-    content = <ConfirmForm setMode={setMode} />;
-  }
-
-  if (mode === 'resetPasswordDone') {
-    content = <Done />;
-  }
+  const content = isResetPasswordConfirm ? (
+    <ConfirmForm setMode={setMode} />
+  ) : (
+    SCREENS[mode]
+  );
 
   return (
     <PageWrapper>

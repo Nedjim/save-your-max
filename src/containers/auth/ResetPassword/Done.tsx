@@ -2,16 +2,25 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { TURQUOISE, WHITE } from '@/src/constants/colors';
 import { useSignOutUser } from '@/src/hooks/auth';
 import styles from '../styles';
 
 function Done() {
   const router = useRouter();
-  const { mutate: signoutUserMutation } = useSignOutUser();
+  const { mutate: signoutUserMutation, isPending } = useSignOutUser();
+
+  const handlePress = () => {
+    signoutUserMutation(undefined, {
+      onSuccess: () => {
+        router.replace('/');
+      },
+    });
+  };
 
   return (
-    <>
+    <Animated.View entering={FadeIn} exiting={FadeOut}>
       <View style={styles.icon}>
         <Ionicons
           name="checkmark-circle"
@@ -26,20 +35,16 @@ function Done() {
         new password.
       </Text>
       <Button
-        onPress={() => {
-          signoutUserMutation(undefined, {
-            onSuccess: () => {
-              router.replace('/');
-            },
-          });
-        }}
-        buttonColor={TURQUOISE}
+        onPress={handlePress}
         uppercase={false}
-        textColor={WHITE}
+        style={{ backgroundColor: TURQUOISE }}
+        labelStyle={{ color: WHITE }}
+        loading={isPending}
+        disabled={isPending}
       >
         Sign in
       </Button>
-    </>
+    </Animated.View>
   );
 }
 
