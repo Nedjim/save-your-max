@@ -5,9 +5,15 @@ import { Button } from 'react-native-paper';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { TURQUOISE, WHITE } from '@/src/constants/colors';
 import { useSignOutUser } from '@/src/hooks/auth';
-import styles from '../styles';
+import styles from './styles';
 
-function Done() {
+type DoneProps = {
+  subtitle: string;
+};
+
+function Done(props: DoneProps) {
+  const { subtitle } = props;
+
   const router = useRouter();
   const { mutate: signoutUserMutation, isPending } = useSignOutUser();
 
@@ -30,10 +36,7 @@ function Done() {
           style={styles.checkmarkIcon}
         />
       </View>
-      <Text style={styles.subtitle}>
-        Your password has been updated successfully. Please sign in with your
-        new password.
-      </Text>
+      <Text style={styles.subtitle}>{subtitle}</Text>
       <Button
         onPress={handlePress}
         uppercase={false}

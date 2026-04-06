@@ -3,19 +3,23 @@
  *
  * * Each value corresponds to a specific step in the authentication process:
  *
- * 1. **signin** - User is entering their credentials to sign in
- * 2. **signup** - User is creating a new account
- * 3. **resetPasswordRequest** - User submits their email to receive a password reset link
- * 4. **resetPasswordEmailSent** - A password reset email has been successfully sent
- * 5. **resetPasswordConfirm** - User is entering a new password using the reset link
- * 6. **resetPasswordDone** - Password has been successfully updated
+ * 1. **signinRequest** - User is entering their credentials to sign in
+ * 2. **signupRequest** - User is creating a new account
+ * 3. **signupEmailSent** - A confirmation email has been successfully sent
+ * 4. **signupConfirm** - User account is validated in Supabase, and the profile is created in the database
+ * 5. **resetPasswordRequest** - User submits their email to receive a password reset link
+ * 6. **resetPasswordEmailSent** - A password reset email has been successfully sent
+ * 7. **resetPasswordConfirm** - User is entering a new password using the reset link
+ * 8. **resetPasswordDone** - Password has been successfully updated
  *
  * @example
- * const mode: AuthMode = 'signin';
+ * const mode: AuthMode = 'signinRequest';
  */
 export type AuthMode =
-  | 'signin'
-  | 'signup'
+  | 'signinRequest'
+  | 'signupRequest'
+  | 'signupEmailSent'
+  | 'signupConfirm'
   | 'resetPasswordRequest'
   | 'resetPasswordEmailSent'
   | 'resetPasswordConfirm'
@@ -27,13 +31,13 @@ export type AuthMode =
  * from the password reset email to the application.
  *
  * 1. **access_token** - Temporary access token used to authenticate the user during the recovery session
- * 2. **type** - Indicates the authentication flow type in Supabase (`recovery` for password reset)
+ * 2. **type** - Indicates the authentication flow type in Supabase (`recovery` for password reset, `signup` for new user account)
  * 3. **refresh_token** - Life duration of the access_token
  *
  */
-export type ResetPasswordURLParams = {
+export type AuthSearchParams = {
   access_token?: string;
-  type?: 'recovery';
+  type?: 'recovery' | 'signup';
   refresh_token?: string;
 };
 

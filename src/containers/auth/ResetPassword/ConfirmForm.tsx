@@ -6,7 +6,7 @@ import * as z from 'zod';
 import FormErrors from '@/src/components/Form/FormErrors';
 import Input, { TextContentType } from '@/src/components/Input';
 import { TURQUOISE, WHITE } from '@/src/constants/colors';
-import { useResetPasswordParams } from '@/src/hooks/auth';
+import { useAuthSearchParams } from '@/src/hooks/auth';
 import { confirmSchema } from '@/src/schemas/auth/confirm.schema';
 import { resetPassword } from '@/src/services/supabase';
 import { AuthMode } from '@/src/types';
@@ -38,13 +38,13 @@ const CONFIRM_FIELDS: ConfirmFormFieldType[] = [
   },
 ];
 
-function ConfirmForm(props: ConfirmFormProps) {
+function ResetPasswordConfirmForm(props: ConfirmFormProps) {
   const { setMode } = props;
   const {
     access_token: token,
     type,
     refresh_token: refreshToken,
-  } = useResetPasswordParams();
+  } = useAuthSearchParams();
 
   const {
     control,
@@ -131,4 +131,4 @@ function ConfirmForm(props: ConfirmFormProps) {
   );
 }
 
-export default ConfirmForm;
+export default ResetPasswordConfirmForm;

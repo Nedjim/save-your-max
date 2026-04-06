@@ -2,34 +2,57 @@ import { useSegments } from 'expo-router';
 import React, { ReactNode, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { MODAL_OPACITY } from '../constants/colors';
-import ConfirmForm from '../containers/auth/ResetPassword/ConfirmForm';
-import Done from '../containers/auth/ResetPassword/Done';
-import EmailSent from '../containers/auth/ResetPassword/EmailSent';
-import RequestForm from '../containers/auth/ResetPassword/RequestForm';
-import SigninForm from '../containers/auth/SigninForm';
-import SignupForm from '../containers/auth/SignupForm';
+import Done from '../containers/auth/Done';
+import EmailSent from '../containers/auth/EmailSent';
+import ResetPasswordConfirmForm from '../containers/auth/ResetPassword/ConfirmForm';
+import ResetPasswordRequestForm from '../containers/auth/ResetPassword/RequestForm';
+import SigninForm from '../containers/auth/Signin/RequestForm';
+import SignupConfirmForm from '../containers/auth/Signup/ConfirmForm';
+import SignupRequestForm from '../containers/auth/Signup/RequestForm';
 import PageWrapper from '../containers/page/PageWrapper';
 import { AuthMode } from '../types';
 
 function AuthPage() {
   const segments = useSegments();
+  const [mode, setMode] = useState<AuthMode>('signinRequest');
   const isResetPasswordConfirm = segments.some((s) => s === 'reset-password');
-  const [mode, setMode] = useState<AuthMode>('signin');
+  const isSignupConfirm = segments.some((s) => s === 'signup-confirm');
 
   const SCREENS: Record<AuthMode, ReactNode> = {
-    signin: <SigninForm setMode={setMode} />,
-    signup: <SignupForm setMode={setMode} />,
-    resetPasswordRequest: <RequestForm setMode={setMode} />,
-    resetPasswordEmailSent: <EmailSent setMode={setMode} />,
-    resetPasswordConfirm: <ConfirmForm setMode={setMode} />,
-    resetPasswordDone: <Done />,
+    signinRequest: <SigninForm setMode={setMode} />,
+    signupRequest: <SignupRequestForm setMode={setMode} />,
+    signupEmailSent: (
+      <EmailSent
+        setMode={setMode}
+        subtitle="Please check your email to confirm your account."
+      />
+    ),
+    signupConfirm: <SignupConfirmForm />,
+    resetPasswordRequest: <ResetPasswordRequestForm setMode={setMode} />,
+    resetPasswordEmailSent: (
+      <EmailSent
+        setMode={setMode}
+        subtitle="If an account exists, you’ll receive a password reset link shortly. Please follow the instructions."
+      />
+    ),
+    resetPasswordConfirm: <ResetPasswordConfirmForm setMode={setMode} />,
+    resetPasswordDone: (
+      <Done
+        subtitle="Your password has been updated successfully. Please sign in with your
+        new password."
+      />
+    ),
   };
 
-  const content = isResetPasswordConfirm ? (
-    <ConfirmForm setMode={setMode} />
-  ) : (
-    SCREENS[mode]
-  );
+  let content = null;
+
+  if (isResetPasswordConfirm) {
+    content = SCREENS['resetPasswordConfirm'];
+  } else if (isSignupConfirm) {
+    content = SCREENS['signupConfirm'];
+  } else {
+    content = SCREENS[mode];
+  }
 
   return (
     <PageWrapper>

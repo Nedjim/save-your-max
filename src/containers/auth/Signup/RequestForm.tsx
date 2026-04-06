@@ -1,33 +1,32 @@
-import { useRouter } from 'expo-router';
 import { Controller, Path, useForm } from 'react-hook-form';
 import { Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import * as z from 'zod';
 import Divider from '@/src/components/Divider';
-import { default as FormErrors } from '@/src/components/Form/FormErrors';
+import FormErrors from '@/src/components/Form/FormErrors';
 import Input, { TextContentType } from '@/src/components/Input';
 import { LIGHT_GREY, TURQUOISE, WHITE } from '@/src/constants/colors';
-import { useSignInUser } from '@/src/hooks/auth';
-import { signinSchema } from '@/src/schemas/auth/signin.schema';
+import { useSignupUser } from '@/src/hooks/auth';
+import { signupSchema } from '@/src/schemas/auth/signup.schema';
 import { AuthMode } from '@/src/types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import styles from './styles';
+import styles from '../styles';
 
-type SigninFormProps = {
+type SignupFormProps = {
   setMode: (mode: AuthMode) => void;
 };
 
-type SigninFormValues = z.infer<typeof signinSchema>;
+type SignupFormValues = z.infer<typeof signupSchema>;
 
-type SigninFormFieldType = {
-  name: Path<SigninFormValues>;
+type SignupFormFieldType = {
+  name: Path<SignupFormValues>;
   placeholder: string;
   textContentType: TextContentType;
   secureTextEntry: boolean;
 };
 
-const SIGNIN_FIELDS: SigninFormFieldType[] = [
+const SIGNUP_FIELDS: SignupFormFieldType[] = [
   {
     name: 'email',
     placeholder: 'E-mail',
@@ -40,37 +39,44 @@ const SIGNIN_FIELDS: SigninFormFieldType[] = [
     textContentType: 'password',
     secureTextEntry: true,
   },
+  {
+    name: 'confirmedPassword',
+    placeholder: 'Confirm password',
+    textContentType: 'password',
+    secureTextEntry: true,
+  },
 ];
 
-const SigninForm = (props: SigninFormProps) => {
+function SignupRequestForm(props: SignupFormProps) {
   const { setMode } = props;
+  const { mutate: signupUserMutation, isPending } = useSignupUser();
 
-  const router = useRouter();
-  const { mutate: signInUserMutation, isPending } = useSignInUser();
   const {
     control,
     handleSubmit,
     setError,
     reset,
     formState: { errors },
-  } = useForm<SigninFormValues>({
-    resolver: zodResolver(signinSchema),
+  } = useForm<SignupFormValues>({
+    resolver: zodResolver(signupSchema),
     defaultValues: {
       email: '',
       password: '',
+      confirmedPassword: '',
     },
   });
 
-  const onSubmit = (data: SigninFormValues) => {
+  const onSubmit = (data: SignupFormValues) => {
     const { email, password } = data;
     const payload = { email, password };
 
-    signInUserMutation(payload, {
+    signupUserMutation(payload, {
       onSuccess: () => {
         reset();
-        router.replace('/exercises');
+        setMode('signupEmailSent');
       },
       onError: (error) => {
+        debugger;
         setError('root', {
           type: 'server',
           message: error.message,
@@ -80,18 +86,20 @@ const SigninForm = (props: SigninFormProps) => {
   };
 
   const displayedErrors = Object.values(errors)
-    .map((err) => err.message)
+    .map((err) => err?.message)
     .filter((e) => e !== undefined);
 
   return (
     <Animated.View entering={FadeIn} exiting={FadeOut}>
-      <Text style={styles.title}>Sign In</Text>
-      <Text style={styles.subtitle}>Enter your email and password.</Text>
+      <Text style={styles.title}>Sign Up</Text>
+      <Text style={styles.subtitle}>
+        Enter your email and password to create your account.
+      </Text>
 
       {!!displayedErrors.length && <FormErrors errors={displayedErrors} />}
 
       <View style={styles.fields}>
-        {SIGNIN_FIELDS.map((field) => {
+        {SIGNUP_FIELDS.map((field) => {
           const { name, placeholder, textContentType, secureTextEntry } = field;
 
           return (
@@ -103,9 +111,9 @@ const SigninForm = (props: SigninFormProps) => {
                 <Input
                   id={name}
                   placeholder={placeholder}
+                  secureTextEntry={secureTextEntry}
                   value={value}
                   onChange={onChange}
-                  secureTextEntry={secureTextEntry}
                   textContentType={textContentType}
                 />
               )}
@@ -114,12 +122,9 @@ const SigninForm = (props: SigninFormProps) => {
         })}
       </View>
 
-      <Button uppercase={false} onPress={() => setMode('resetPasswordRequest')}>
-        Forgot passeword ?
-      </Button>
-
       <View style={styles.actions}>
         <Button
+          mode="contained"
           onPress={handleSubmit(onSubmit)}
           style={{ backgroundColor: TURQUOISE }}
           labelStyle={{ color: WHITE }}
@@ -127,19 +132,19 @@ const SigninForm = (props: SigninFormProps) => {
           loading={isPending}
           disabled={isPending}
         >
-          Sign in
+          Create
         </Button>
         <Divider />
         <Button
-          buttonColor={LIGHT_GREY}
-          onPress={() => setMode('signup')}
+          onPress={() => setMode('signinRequest')}
           uppercase={false}
+          buttonColor={LIGHT_GREY}
         >
-          Create an account
+          Sign in
         </Button>
       </View>
     </Animated.View>
   );
-};
+}
 
-export default SigninForm;
+export default SignupRequestForm;

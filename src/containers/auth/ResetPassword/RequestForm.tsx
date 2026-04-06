@@ -33,7 +33,7 @@ const REQUEST_FIELDS: RequestFormFieldType[] = [
   },
 ];
 
-function RequestForm(props: RequestFormProps) {
+function ResetPasswordRequestForm(props: RequestFormProps) {
   const { setMode } = props;
 
   const {
@@ -114,7 +114,7 @@ function RequestForm(props: RequestFormProps) {
         <Divider />
         <Button
           buttonColor={LIGHT_GREY}
-          onPress={() => setMode('signin')}
+          onPress={() => setMode('signinRequest')}
           uppercase={false}
         >
           Cancel
@@ -124,4 +124,4 @@ function RequestForm(props: RequestFormProps) {
   );
 }
 
-export default RequestForm;
+export default ResetPasswordRequestForm;

@@ -5,14 +5,15 @@ import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import Divider from '@/src/components/Divider';
 import { LIGHT_GREY, TURQUOISE } from '@/src/constants/colors';
 import { AuthMode } from '@/src/types';
-import styles from '../styles';
+import styles from './styles';
 
 type EmailSentType = {
   setMode: (mode: AuthMode) => void;
+  subtitle: string;
 };
 
 function EmailSent(props: EmailSentType) {
-  const { setMode } = props;
+  const { setMode, subtitle } = props;
   return (
     <Animated.View entering={FadeIn} exiting={FadeOut}>
       <Text style={styles.title}>Email successfuly sent!</Text>
@@ -27,14 +28,11 @@ function EmailSent(props: EmailSentType) {
         />
       </View>
 
-      <Text style={styles.subtitle}>
-        If an account exists, you’ll receive a password reset link shortly.
-        Please follow the instructions.
-      </Text>
+      <Text style={styles.subtitle}>{subtitle}</Text>
       <Divider />
       <Button
         buttonColor={LIGHT_GREY}
-        onPress={() => setMode('signin')}
+        onPress={() => setMode('signinRequest')}
         uppercase={false}
       >
         Cancel

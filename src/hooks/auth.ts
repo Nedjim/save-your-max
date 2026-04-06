@@ -4,12 +4,13 @@ import { AuthTokenResponsePassword } from '@supabase/supabase-js';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useGlobalSearchParams } from 'expo-router';
 import {
-  createUser,
   getUserSession,
   signInUser,
   signOutUser,
+  signupConfirmUser,
+  signupUser,
 } from '../services/supabase';
-import { ResetPasswordURLParams, SupabasePayload } from '../types';
+import { AuthSearchParams, SupabasePayload } from '../types';
 
 const RESET_PASSWORD_URL_PARAMS = ['access_token', 'refresh_token', 'type'];
 
@@ -36,9 +37,18 @@ export function useSignInUser() {
   return query;
 }
 
-export function useCreateUser() {
+export function useSignupUser() {
   const query = useMutation({
-    mutationFn: (payload: SupabasePayload) => createUser(payload),
+    mutationFn: (payload: SupabasePayload) => signupUser(payload),
+  });
+
+  return query;
+}
+
+export function useSignupConfirmUser(token: string, refreshToken: string) {
+  const query = useQuery({
+    queryKey: ['signup', 'confirm', token, refreshToken],
+    queryFn: () => signupConfirmUser(token, refreshToken),
   });
 
   return query;
@@ -57,7 +67,7 @@ export function useSignOutUser() {
   return query;
 }
 
-export function useResetPasswordParams(): ResetPasswordURLParams {
+export function useAuthSearchParams(): AuthSearchParams {
   const params = useGlobalSearchParams<Record<string, string>>();
 
   if (params['#']) {

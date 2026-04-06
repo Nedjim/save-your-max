@@ -4,7 +4,7 @@ import * as Linking from 'expo-linking';
 import { Platform } from 'react-native';
 import 'expo-sqlite/localStorage/install';
 import { ApiFetchPayload, SupabasePayload } from '../types';
-import { getProfile } from './profiles';
+import { createProfile, getProfile } from './profiles';
 
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL!;
 const supabasePublishableKey =
@@ -106,22 +106,35 @@ export const getUserSession = async () => {
   }
 };
 
-export const createUser = async (user: SupabasePayload) => {
-  const { error } = await supabase.auth.signUp(user);
+const signupUrl = Linking.createURL('signup-confirm');
 
-  if (error) {
-    throw new Error(error.message);
+export const signupUser = async (user: SupabasePayload) => {
+  const { error: sessionError } = await supabase.auth.signUp({
+    ...user,
+    options: {
+      emailRedirectTo: signupUrl,
+    },
+  });
+
+  if (sessionError) {
+    throw sessionError;
+  }
+};
+
+export const signupConfirmUser = async (
+  token: string,
+  refreshToken: string,
+) => {
+  const { error: sessionError } = await supabase.auth.setSession({
+    access_token: token,
+    refresh_token: refreshToken,
+  });
+
+  if (sessionError) {
+    throw sessionError;
   }
 
-  try {
-    return await apiFetch({
-      endpoint: 'profiles',
-      method: 'POST',
-    });
-  } catch {
-    await supabase.auth.signOut();
-    return null;
-  }
+  return await createProfile();
 };
 
 const resetPasswordUrl = Linking.createURL('reset-password');

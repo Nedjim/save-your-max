@@ -8,6 +8,13 @@ export async function getProfile() {
   });
 }
 
+export async function createProfile() {
+  return await apiFetch<Profile>({
+    endpoint: 'profiles',
+    method: 'POST',
+  });
+}
+
 export async function deleteProfile() {
   return await apiFetch<{ success: boolean }>({
     endpoint: 'profiles',
