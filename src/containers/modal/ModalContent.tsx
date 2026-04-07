@@ -43,19 +43,21 @@ const ModalContent = (props: ModalContentProps) => {
         </View>
         <Text style={styles.title}>{title}</Text>
         <View style={styles.main}>{children}</View>
-        <View style={styles.modalFooter}>
-          <Button
-            mode="contained"
-            onPress={onSubmit}
-            style={{ backgroundColor: TURQUOISE }}
-            labelStyle={{ color: WHITE }}
-            uppercase={false}
-            loading={isPending}
-            disabled={isPending}
-          >
-            {submitButtonLabel}
-          </Button>
-        </View>
+        {onSubmit && (
+          <View style={styles.modalFooter}>
+            <Button
+              mode="contained"
+              onPress={onSubmit}
+              style={{ backgroundColor: TURQUOISE }}
+              labelStyle={{ color: WHITE }}
+              uppercase={false}
+              loading={isPending}
+              disabled={isPending}
+            >
+              {submitButtonLabel}
+            </Button>
+          </View>
+        )}
       </View>
     </Animated.View>
   );

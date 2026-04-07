@@ -1,3 +1,6 @@
+import * as z from 'zod';
+import { updatePasswordSchema } from '../schemas/auth/updatePassword.schema';
+
 /**
  * Represents the different states of the authentication flow.
  *
@@ -110,3 +113,5 @@ export type SupabasePayload = {
 export type UpdateUserPayload = {
   password?: string;
 };
+
+export type RequestFormValues = z.infer<typeof updatePasswordSchema>;

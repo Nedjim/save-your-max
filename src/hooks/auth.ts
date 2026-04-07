@@ -10,7 +10,7 @@ import {
   signupUser,
   updateUser,
 } from '../services/supabase';
-import { AuthSearchParams, SupabasePayload, UpdateUserPayload } from '../types';
+import { AuthSearchParams, SupabasePayload } from '../types';
 
 const RESET_PASSWORD_URL_PARAMS = ['access_token', 'refresh_token', 'type'];
 
@@ -61,11 +61,9 @@ export function useSignOutUser() {
 }
 
 export function useUpdateUser() {
-  const query = useMutation({
-    mutationFn: (payload: UpdateUserPayload) => updateUser(payload),
+  return useMutation({
+    mutationFn: updateUser,
   });
-
-  return query;
 }
 
 export function useAuthSearchParams(): AuthSearchParams {

@@ -46,7 +46,7 @@ const SigninForm = (props: SigninFormProps) => {
   const { setMode } = props;
 
   const router = useRouter();
-  const { mutateAsync, isPending } = useSignInUser();
+  const { mutateAsync: signinUserMutation, isPending } = useSignInUser();
   const {
     control,
     handleSubmit,
@@ -63,7 +63,7 @@ const SigninForm = (props: SigninFormProps) => {
 
   const onSubmit = async (data: SigninFormValues) => {
     try {
-      await mutateAsync(data);
+      await signinUserMutation(data);
       reset();
       router.replace('/exercises');
     } catch (error) {

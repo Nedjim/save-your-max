@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
+import UpdatePasswordModal from './UpdatePassword/Modal';
 import Alert from '@/src/components/Alert';
 import Divider from '@/src/components/Divider';
 import {
@@ -15,7 +16,6 @@ import {
 import { useSignOutUser, useSupabaseSession } from '@/src/hooks/auth';
 import { useDeleteProfile } from '@/src/hooks/profile';
 import { Profile } from '@/src/types';
-import UpdatePasswordModal from './UpdatePasswordModal';
 import UserInput from './UserInput';
 
 type UserAccountType = {
