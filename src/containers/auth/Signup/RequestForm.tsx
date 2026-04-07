@@ -76,7 +76,6 @@ function SignupRequestForm(props: SignupFormProps) {
         setMode('signupEmailSent');
       },
       onError: (error) => {
-        debugger;
         setError('root', {
           type: 'server',
           message: error.message,

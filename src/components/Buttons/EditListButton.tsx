@@ -4,7 +4,7 @@ import { GREY } from '@/src/constants/colors';
 
 type ActionsButtonProps = {
   name: 'trash' | 'pencil';
-  onPress?: () => void;
+  onPress: () => void;
 };
 
 const EditListButton = (props: ActionsButtonProps) => {

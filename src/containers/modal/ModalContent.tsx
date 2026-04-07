@@ -1,7 +1,14 @@
+import { Ionicons } from '@expo/vector-icons';
 import { ReactNode } from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { Button } from 'react-native-paper';
 import Animated, { FadeIn } from 'react-native-reanimated';
-import { MODAL_OPACITY, TURQUOISE, WHITE } from '../../constants/colors';
+import {
+  DARK_GREY,
+  MODAL_OPACITY,
+  TURQUOISE,
+  WHITE,
+} from '../../constants/colors';
 
 type ModalContentProps = {
   children: ReactNode;
@@ -9,6 +16,7 @@ type ModalContentProps = {
   onClose: () => void;
   submitButtonLabel?: string;
   onSubmit?: () => void;
+  isPending?: boolean;
 };
 
 const ModalContent = (props: ModalContentProps) => {
@@ -18,26 +26,35 @@ const ModalContent = (props: ModalContentProps) => {
     onClose,
     onSubmit,
     submitButtonLabel = 'Ok',
+    isPending = false,
   } = props;
 
   return (
     <Animated.View entering={FadeIn} style={styles.modalContainer}>
       <View style={styles.modalContent}>
+        <View style={styles.modalHeader}>
+          <Ionicons
+            name="close"
+            onPress={onClose}
+            color={DARK_GREY}
+            size={16}
+            ariaHidden={true}
+          />
+        </View>
         <Text style={styles.title}>{title}</Text>
         <View style={styles.main}>{children}</View>
         <View style={styles.modalFooter}>
           <Button
-            title="Cancel"
-            color="#2A313B"
-            accessibilityLabel="close modal"
-            onPress={onClose}
-          />
-          <Button
-            title={submitButtonLabel}
-            color={TURQUOISE}
-            accessibilityLabel={submitButtonLabel}
+            mode="contained"
             onPress={onSubmit}
-          />
+            style={{ backgroundColor: TURQUOISE }}
+            labelStyle={{ color: WHITE }}
+            uppercase={false}
+            loading={isPending}
+            disabled={isPending}
+          >
+            {submitButtonLabel}
+          </Button>
         </View>
       </View>
     </Animated.View>
@@ -50,6 +67,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: MODAL_OPACITY,
+  },
+  modalHeader: {
+    display: 'flex',
+    alignItems: 'flex-end',
   },
   modalContent: {
     width: 320,

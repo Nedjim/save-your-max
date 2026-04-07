@@ -81,3 +81,32 @@ export type SupabasePayload = {
   email: string;
   password: string;
 };
+
+/**
+ * Payload used to update a Supabase authenticated user.
+ *
+ * 1. **email** - Updates the user's email address (requires confirmation).
+ * 2. **password** - Updates the user's password.
+ *
+ * Notes:
+ * - Updating the email triggers a confirmation email sent by Supabase.
+ * - When updating the email, you can provide an `emailRedirectTo` option
+ *   to control where the user is redirected after confirmation.
+ * - Updating the password does NOT trigger a confirmation flow or redirection.
+ * - The user must be authenticated to perform this action.
+ *
+ * @example
+ * // Update password
+ * const payload: UpdateUserPayload = {
+ *   password: 'newSecurePassword123!',
+ * };
+ *
+ * @example
+ * // Update email
+ * const payload: UpdateUserPayload = {
+ *   email: 'new@email.com',
+ * };
+ */
+export type UpdateUserPayload = {
+  password?: string;
+};

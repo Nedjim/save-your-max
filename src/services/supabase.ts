@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import * as Linking from 'expo-linking';
 import { Platform } from 'react-native';
 import 'expo-sqlite/localStorage/install';
-import { ApiFetchPayload, SupabasePayload } from '../types';
+import { ApiFetchPayload, SupabasePayload, UpdateUserPayload } from '../types';
 import { createProfile, getProfile } from './profiles';
 
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL!;
@@ -70,16 +70,20 @@ export const getToken = async () => {
 };
 
 export const signInUser = async (supabasePayload: SupabasePayload) => {
-  const session = await supabase.auth.signInWithPassword(supabasePayload);
-  const { error } = session;
+  const { data, error } =
+    await supabase.auth.signInWithPassword(supabasePayload);
 
   if (error) {
     throw new Error(error.message);
   }
 
+  if (!data.session) {
+    throw new Error('No session');
+  }
+
   try {
     await getProfile();
-    return session;
+    return data;
   } catch {
     await supabase.auth.signOut();
     throw new Error('No profile found');
@@ -168,4 +172,13 @@ export const resetPassword = async (
   }
 
   await supabase.auth.signOut();
+};
+
+export const updateUser = async (payload: UpdateUserPayload) => {
+  const { data, error } = await supabase.auth.updateUser(payload);
+
+  if (error) {
+    throw error;
+  }
+  return data;
 };

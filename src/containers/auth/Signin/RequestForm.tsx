@@ -46,7 +46,7 @@ const SigninForm = (props: SigninFormProps) => {
   const { setMode } = props;
 
   const router = useRouter();
-  const { mutate: signInUserMutation, isPending } = useSignInUser();
+  const { mutateAsync, isPending } = useSignInUser();
   const {
     control,
     handleSubmit,
@@ -61,27 +61,26 @@ const SigninForm = (props: SigninFormProps) => {
     },
   });
 
-  const onSubmit = (data: SigninFormValues) => {
-    const { email, password } = data;
-    const payload = { email, password };
-
-    signInUserMutation(payload, {
-      onSuccess: () => {
-        reset();
-        router.replace('/exercises');
-      },
-      onError: (error) => {
+  const onSubmit = async (data: SigninFormValues) => {
+    try {
+      await mutateAsync(data);
+      reset();
+      router.replace('/exercises');
+    } catch (error) {
+      if (error instanceof Error) {
         setError('root', {
           type: 'server',
           message: error.message,
         });
-      },
-    });
+      }
+    }
   };
 
-  const displayedErrors = Object.values(errors)
-    .map((err) => err.message)
-    .filter((e) => e !== undefined);
+  const rootError = errors.root?.message;
+
+  const displayedErrors = Array.from(
+    new Set([...Object.values(errors).map((err) => err.message), rootError]),
+  ).filter((e) => e !== undefined);
 
   return (
     <Animated.View entering={FadeIn} exiting={FadeOut}>

@@ -16,12 +16,12 @@ const UserInput = (props: InputProps) => {
       <TextInput
         id={id}
         style={styles.input}
-        editable={false}
         accessibilityLabel="input"
         accessibilityLabelledBy={id}
         value={value}
         placeholderTextColor="#7A8699"
         autoCapitalize="none"
+        editable={false}
         {...rest}
       />
     </View>
@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
   section: {
     flexDirection: 'row',
     alignItems: 'center',
+    flex: 1,
   },
   input: {
     flex: 1,
