@@ -42,7 +42,7 @@ function ResetPasswordRequestForm(props: RequestFormProps) {
     setError,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<RequestFormValues>({
+  } = useForm({
     resolver: zodResolver(requestSchema),
     defaultValues: {
       email: '',

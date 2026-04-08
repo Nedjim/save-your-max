@@ -52,7 +52,7 @@ function ResetPasswordConfirmForm(props: ConfirmFormProps) {
     setError,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<ConfirmFormValues>({
+  } = useForm({
     resolver: zodResolver(confirmSchema),
     defaultValues: {
       password: '',

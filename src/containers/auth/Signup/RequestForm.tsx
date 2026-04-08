@@ -57,7 +57,7 @@ function SignupRequestForm(props: SignupFormProps) {
     setError,
     reset,
     formState: { errors },
-  } = useForm<SignupFormValues>({
+  } = useForm({
     resolver: zodResolver(signupSchema),
     defaultValues: {
       email: '',

@@ -26,7 +26,7 @@ function UpdatePasswordModal(props: UpdatePasswordModalProps) {
     setError,
     reset,
     formState: { errors },
-  } = useForm<RequestFormValues>({
+  } = useForm({
     resolver: zodResolver(updatePasswordSchema),
     defaultValues: {
       password: '',

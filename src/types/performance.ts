@@ -1,3 +1,6 @@
+import * as z from 'zod';
+import { editPerformanceSchema } from '../schemas/performances/edit.schema';
+
 /**
  * Represents a performance entry for a specific exercise.
  * 
@@ -74,4 +77,26 @@ export type CreatePerformancePayload = {
  */
 export type UpdatePerformancePayload = Partial<CreatePerformancePayload> & {
   id: string;
+};
+
+/**
+ * Type inferred from the Zod schema after transformations.
+ *
+ * After parsing:
+ * 1. **weight** and **reps** are numbers
+ * 2. **date** remains a Date object.
+ */
+export type EditPerformanceZodValues = z.infer<typeof editPerformanceSchema>;
+
+/**
+ * Type inferred from the Zod schema after transformations.
+ *
+ * After parsing:
+ * 1. **weight** and **reps**  are numbers.
+ * 2. **date** remains a Date object.
+ */
+export type EditPerformanceFormValues = {
+  weight: string;
+  reps: string;
+  date: Date;
 };

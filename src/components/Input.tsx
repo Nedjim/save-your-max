@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { WHITE } from '@/src/constants/colors';
 
-export type TextContentType = 'password' | 'emailAddress';
+export type TextContentType = 'password' | 'emailAddress' | 'none';
 
 type InputProps = {
   value?: string;

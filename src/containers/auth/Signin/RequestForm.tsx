@@ -53,7 +53,7 @@ const SigninForm = (props: SigninFormProps) => {
     setError,
     reset,
     formState: { errors },
-  } = useForm<SigninFormValues>({
+  } = useForm({
     resolver: zodResolver(signinSchema),
     defaultValues: {
       email: '',

@@ -1,12 +1,14 @@
 import { useLocalSearchParams } from 'expo-router';
-import { useState } from 'react';
-import { Modal, StyleSheet, View } from 'react-native';
-import Input from '../../../components/Input';
-import Label from '../../../components/Label';
-import DatePicker from '@/src/components/DatePicker';
+import { useForm } from 'react-hook-form';
+import { Modal } from 'react-native';
 import ModalContent from '@/src/containers/modal/ModalContent';
 import { useExerciseNameParams } from '@/src/hooks/exercises';
 import { useCreatePerformance } from '@/src/hooks/performances';
+import { editPerformanceSchema } from '@/src/schemas/performances/edit.schema';
+import { EditPerformanceZodValues } from '@/src/types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import FieldsController from './FieldsController';
+import FieldsErrors from './FieldsErrors';
 
 type CreatePerformanceModalProps = {
   onClose: () => void;
@@ -15,29 +17,32 @@ type CreatePerformanceModalProps = {
 
 function CreatePerformanceModal(props: CreatePerformanceModalProps) {
   const { onClose, refetch } = props;
+
   const { mutateAsync: createPerformanceMutation, isPending } =
     useCreatePerformance();
-  const { id: exerciseId } = useLocalSearchParams<{ id: string }>();
   const exerciseName = useExerciseNameParams();
-
+  const { id: exerciseId } = useLocalSearchParams<{ id: string }>();
   const nowDay = new Date();
 
-  const [date, setDate] = useState<Date>(nowDay);
-  const [weight, setWeight] = useState<string>('0');
-  const [reps, setReps] = useState<string>('0');
+  const {
+    control,
+    handleSubmit,
+    setError,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(editPerformanceSchema),
+    defaultValues: {
+      weight: '0',
+      reps: '0',
+      date: nowDay,
+    },
+  });
 
-  const handleChangeDate = (date: Date) => {
-    setDate(date);
-  };
-
-  const resetValues = () => {
-    setWeight('0');
-    setReps('0');
-    setDate(nowDay);
-  };
-
-  const createPerformance = async () => {
+  const onSubmit = async (data: EditPerformanceZodValues) => {
     try {
+      const { weight, reps, date } = data;
+
       const payload = {
         exerciseId,
         weight: Number(weight),
@@ -47,10 +52,15 @@ function CreatePerformanceModal(props: CreatePerformanceModalProps) {
 
       await createPerformanceMutation(payload);
       refetch();
-      resetValues();
+      reset();
       onClose();
-    } catch {
-      // WIP: error toast
+    } catch (error) {
+      if (error instanceof Error) {
+        setError('root', {
+          type: 'server',
+          message: error.message,
+        });
+      }
     }
   };
 
@@ -59,48 +69,25 @@ function CreatePerformanceModal(props: CreatePerformanceModalProps) {
       animationType="slide"
       transparent={true}
       onRequestClose={() => {
-        resetValues();
+        reset();
         onClose();
       }}
     >
       <ModalContent
         onClose={() => {
-          resetValues();
+          reset();
           onClose();
         }}
-        onSubmit={createPerformance}
+        onSubmit={handleSubmit(onSubmit)}
         submitButtonLabel="create"
         title={exerciseName}
         isPending={isPending}
       >
-        <View style={styles.spacing}>
-          <View>
-            <Label label="Weight (kg)" nativeId="performance-weight" />
-            <Input
-              value={String(weight)}
-              onChange={setWeight}
-              id="performance-weight"
-            />
-          </View>
-          <View>
-            <Label label="Reps" nativeId="performance-reps" />
-            <Input
-              value={String(reps)}
-              onChange={setReps}
-              id="performance-reps"
-            />
-          </View>
-          <DatePicker date={date} onChange={handleChangeDate} />
-        </View>
+        <FieldsController control={control} />
+        <FieldsErrors errors={errors} />
       </ModalContent>
     </Modal>
   );
 }
-
-const styles = StyleSheet.create({
-  spacing: {
-    gap: 16,
-  },
-});
 
 export default CreatePerformanceModal;
