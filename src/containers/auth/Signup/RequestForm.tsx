@@ -49,7 +49,7 @@ const SIGNUP_FIELDS: SignupFormFieldType[] = [
 
 function SignupRequestForm(props: SignupFormProps) {
   const { setMode } = props;
-  const { mutate: signupUserMutation, isPending } = useSignupUser();
+  const { mutateAsync: signupUserMutation, isPending } = useSignupUser();
 
   const {
     control,
@@ -66,22 +66,22 @@ function SignupRequestForm(props: SignupFormProps) {
     },
   });
 
-  const onSubmit = (data: SignupFormValues) => {
+  const onSubmit = async (data: SignupFormValues) => {
     const { email, password } = data;
     const payload = { email, password };
 
-    signupUserMutation(payload, {
-      onSuccess: () => {
-        reset();
-        setMode('signupEmailSent');
-      },
-      onError: (error) => {
+    try {
+      await signupUserMutation(payload);
+      reset();
+      setMode('signupEmailSent');
+    } catch (error) {
+      if (error instanceof Error) {
         setError('root', {
           type: 'server',
           message: error.message,
         });
-      },
-    });
+      }
+    }
   };
 
   const displayedErrors = Object.values(errors)

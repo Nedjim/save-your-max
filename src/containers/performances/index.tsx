@@ -8,7 +8,7 @@ import EmptyState from './PerformancesEmptyState';
 
 function Performances() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { data = [], isLoading, isError, error } = usePerformances(id);
+  const { data = [], isLoading, isError, error, refetch } = usePerformances(id);
 
   let content = null;
 
@@ -21,10 +21,14 @@ function Performances() {
   }
 
   if (!isLoading && !isError && !data.length) {
-    content = <EmptyState />;
+    content = <EmptyState refetch={refetch} />;
   }
 
-  return content ? content : <PerformanceList performances={data} />;
+  return content ? (
+    content
+  ) : (
+    <PerformanceList performances={data} refetch={refetch} />
+  );
 }
 
 export default Performances;

@@ -13,9 +13,9 @@ export async function createExercise(title: string) {
   });
 }
 
-export async function deleteExercise(id: string) {
+export const deleteExercise = async (id: string) => {
   return await apiFetch<Exercise>({
     endpoint: `exercises/${id}`,
     method: 'DELETE',
   });
-}
+};

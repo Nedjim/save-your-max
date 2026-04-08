@@ -60,6 +60,11 @@ export async function apiFetch<TResponse, TBody = unknown>(
     await supabase.auth.signOut();
   }
 
+  if (!res.ok) {
+    const errorBody = await res.text();
+    throw new Error(errorBody || 'API Error');
+  }
+
   return res.json();
 }
 
@@ -113,7 +118,7 @@ export const getUserSession = async () => {
 const signupUrl = Linking.createURL('signup-confirm');
 
 export const signupUser = async (user: SupabasePayload) => {
-  const { error: sessionError } = await supabase.auth.signUp({
+  const { data, error: sessionError } = await supabase.auth.signUp({
     ...user,
     options: {
       emailRedirectTo: signupUrl,
@@ -123,6 +128,8 @@ export const signupUser = async (user: SupabasePayload) => {
   if (sessionError) {
     throw sessionError;
   }
+
+  return data;
 };
 
 export const signupConfirmUser = async (

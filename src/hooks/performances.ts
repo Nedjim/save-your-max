@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   createPerformance,
   deletePerformance,
@@ -16,48 +16,22 @@ export function usePerformances(exerciseId: string) {
   return query;
 }
 
-export function useCreatePerformance(exerciseId: string) {
-  const queryClient = useQueryClient();
-
-  const query = useMutation({
-    mutationFn: (params: CreatePerformancePayload) =>
-      createPerformance(exerciseId, params),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['exercises', 'performances', exerciseId],
-      });
-    },
+export function useCreatePerformance() {
+  return useMutation({
+    mutationFn: (payload: CreatePerformancePayload & { exerciseId: string }) =>
+      createPerformance(payload),
   });
-
-  return query;
 }
 
-export function useUpdatePerformance(exerciseId: string) {
-  const queryClient = useQueryClient();
-
-  const query = useMutation({
-    mutationFn: (params: UpdatePerformancePayload) => updatePerformance(params),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['exercises', 'performances', exerciseId],
-      });
-    },
+export function useUpdatePerformance() {
+  return useMutation({
+    mutationFn: (payload: UpdatePerformancePayload) =>
+      updatePerformance(payload),
   });
-
-  return query;
 }
 
-export function useDeletePerformance(exerciseId: string) {
-  const queryClient = useQueryClient();
-
-  const query = useMutation({
+export function useDeletePerformance() {
+  return useMutation({
     mutationFn: (performanceId: string) => deletePerformance(performanceId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['exercises', 'performances', exerciseId],
-      });
-    },
   });
-
-  return query;
 }

@@ -23,3 +23,7 @@ export type Exercise = {
   updatedAt: string;
   profileId: string;
 };
+
+export type CreateExercisePayload = {
+  title: string;
+};

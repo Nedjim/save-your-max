@@ -73,7 +73,13 @@ const Input = (props: InputProps) => {
             </Pressable>
           )}
           {editable && (
-            <Pressable style={styles.inputIcon} onPress={clearValue}>
+            <Pressable
+              style={[
+                styles.inputIcon,
+                (!editable || !value?.length) && styles.hidden,
+              ]}
+              onPress={clearValue}
+            >
               <AntDesign name="close" size={12} color={WHITE} />
             </Pressable>
           )}

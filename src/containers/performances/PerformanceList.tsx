@@ -1,40 +1,36 @@
-import { useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import Alert from '@/src/components/Alert';
+import CreatePerformanceModal from './Modals/CreateModal';
+import DeletePerformanceModal from './Modals/DeleteModal';
+import UpdatePerformanceModal from './Modals/UpdateModal';
 import AddMoreButton from '@/src/components/Buttons/AddMoreButton';
-import { useDeletePerformance } from '@/src/hooks/performances';
 import { Performance } from '@/src/types';
-import PerformanceModal from './PerformanceModal';
 import PerformanceRow from './PerformanceRow';
 
 type PerformanceListProps = {
   performances: Performance[];
+  refetch: () => void;
 };
 
 const PerformanceList = (props: PerformanceListProps) => {
-  const { performances } = props;
-  const { id: exerciseId } = useLocalSearchParams<{ id: string }>();
-  const { mutate: deletePerformanceMutation } =
-    useDeletePerformance(exerciseId);
-
-  const [showModal, setShowModal] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
-  const [updatedPerformance, setUpdatedPerformance] =
+  const { performances, refetch } = props;
+  const [createPerformance, setCreatePerformance] = useState(false);
+  const [deletePerformanceId, setDeletePerformanceId] = useState<string | null>(
+    null,
+  );
+  const [updatedPerformance, setUpdatePerformance] =
     useState<Performance | null>(null);
 
   const onCreate = () => {
-    setShowModal(true);
+    setCreatePerformance(true);
   };
 
   const onUpdate = (performance: Performance) => {
-    setUpdatedPerformance(performance);
-    setShowModal(true);
+    setUpdatePerformance(performance);
   };
 
-  const onDelete = (performance: Performance) => {
-    setUpdatedPerformance(performance);
-    setShowAlert(true);
+  const onDelete = (id: string) => {
+    setDeletePerformanceId(id);
   };
 
   return (
@@ -59,29 +55,31 @@ const PerformanceList = (props: PerformanceListProps) => {
           accessibilityLabel="Add performance"
         />
       </View>
-      {showModal && (
-        <PerformanceModal
+
+      {updatedPerformance && (
+        <UpdatePerformanceModal
           performance={updatedPerformance}
           onClose={() => {
-            setShowModal(false);
-            updatedPerformance && setUpdatedPerformance(null);
+            setUpdatePerformance(null);
+          }}
+          refetch={refetch}
+        />
+      )}
+
+      {createPerformance && (
+        <CreatePerformanceModal
+          refetch={refetch}
+          onClose={() => {
+            setCreatePerformance(false);
           }}
         />
       )}
-      {showAlert && (
-        <Alert
-          onClose={() => {
-            setShowAlert(false);
-            updatedPerformance && setUpdatedPerformance(null);
-          }}
-          description="This performance is about to be deleted."
-          onSubmit={() => {
-            updatedPerformance &&
-              deletePerformanceMutation(updatedPerformance.id, {
-                onSuccess: () => {
-                  setShowAlert(false);
-                },
-              });
+      {deletePerformanceId && (
+        <DeletePerformanceModal
+          id={deletePerformanceId}
+          refetch={refetch}
+          closeModal={() => {
+            setDeletePerformanceId(null);
           }}
         />
       )}

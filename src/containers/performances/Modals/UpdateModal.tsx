@@ -1,36 +1,28 @@
-import { useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { Modal, StyleSheet, View } from 'react-native';
-import Input from '../../components/Input';
-import Label from '../../components/Label';
+import Input from '../../../components/Input';
+import Label from '../../../components/Label';
 import DatePicker from '@/src/components/DatePicker';
 import ModalContent from '@/src/containers/modal/ModalContent';
 import { useExerciseNameParams } from '@/src/hooks/exercises';
-import {
-  useCreatePerformance,
-  useUpdatePerformance,
-} from '@/src/hooks/performances';
+import { useUpdatePerformance } from '@/src/hooks/performances';
 import { Performance } from '@/src/types';
 
-type PerformanceModalProps = {
+type UpdatePerformanceModalProps = {
   onClose: () => void;
-  performance?: Performance | null;
+  performance: Performance;
+  refetch: () => void;
 };
 
-function PerformanceModal(props: PerformanceModalProps) {
-  const { performance, onClose } = props;
-  const { id: exerciseId } = useLocalSearchParams<{ id: string }>();
-  const { mutate: createPerformanceMutation } =
-    useCreatePerformance(exerciseId);
-  const { mutate: updatePerformanceMutation } =
-    useUpdatePerformance(exerciseId);
+function UpdatePerformanceModal(props: UpdatePerformanceModalProps) {
+  const { performance, refetch, onClose } = props;
+  const { mutateAsync: updatePerformanceMutation, isPending } =
+    useUpdatePerformance();
   const exerciseName = useExerciseNameParams();
 
   const nowDay = new Date();
 
-  const [date, setDate] = useState<Date>(
-    performance ? new Date(performance.date) : nowDay,
-  );
+  const [date, setDate] = useState<Date>(new Date(performance.date));
   const [weight, setWeight] = useState(performance?.weight || '0');
   const [reps, setReps] = useState(performance?.reps || '0');
 
@@ -45,37 +37,21 @@ function PerformanceModal(props: PerformanceModalProps) {
     onClose();
   };
 
-  const createPerformance = () => {
-    createPerformanceMutation(
-      {
-        weight: Number(weight),
-        reps: Number(reps),
-        date: date.toISOString(),
-      },
-      {
-        onSuccess: () => {
-          handleClose();
-        },
-      },
-    );
-  };
-
-  const updatePerformance = () => {
-    if (!performance) return;
-
-    updatePerformanceMutation(
-      {
+  const handleUpdate = async () => {
+    try {
+      const payload = {
         weight: Number(weight),
         reps: Number(reps),
         date: date.toISOString(),
         id: performance.id,
-      },
-      {
-        onSuccess: () => {
-          handleClose();
-        },
-      },
-    );
+      };
+
+      await updatePerformanceMutation(payload);
+      refetch();
+      handleClose();
+    } catch {
+      // WIP: error toast
+    }
   };
 
   return (
@@ -88,18 +64,17 @@ function PerformanceModal(props: PerformanceModalProps) {
     >
       <ModalContent
         onClose={handleClose}
-        onSubmit={() =>
-          performance ? updatePerformance() : createPerformance()
-        }
-        submitButtonLabel={performance ? 'update' : 'create'}
+        onSubmit={handleUpdate}
+        submitButtonLabel="update"
         title={exerciseName}
+        isPending={isPending}
       >
         <View style={styles.spacing}>
           <View>
             <Label label="Weight (kg)" nativeId="performance-weight" />
             <Input
               value={String(weight)}
-              onChange={setWeight}
+              onChange={(value: string) => setWeight(value)}
               id="performance-weight"
             />
           </View>
@@ -124,4 +99,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PerformanceModal;
+export default UpdatePerformanceModal;

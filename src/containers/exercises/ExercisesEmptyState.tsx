@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import CreateExerciseModal from './Modals/CreateModal';
 import EmptyState from '@/src/components/EmptyState';
-import ExerciseModal from './ExerciseModal';
+import { useExercises } from '@/src/hooks/exercises';
 
 function ExercisesEmptyState() {
-  const [modalVisible, setModalVisible] = useState(false);
+  const { refetch } = useExercises();
+  const [createExercise, setCreateExercise] = useState(false);
 
   return (
     <Animated.View
@@ -17,13 +19,15 @@ function ExercisesEmptyState() {
         description="You don’t have any exercises yet. Create your first one to get started."
         buttonTitle="New exercise"
         onPressButton={() => {
-          setModalVisible(true);
+          setCreateExercise(true);
         }}
       />
-      <ExerciseModal
-        visible={modalVisible}
-        closeModal={() => setModalVisible(false)}
-      />
+      {createExercise && (
+        <CreateExerciseModal
+          refetch={refetch}
+          closeModal={() => setCreateExercise(false)}
+        />
+      )}
     </Animated.View>
   );
 }

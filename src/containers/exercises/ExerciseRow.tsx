@@ -1,5 +1,4 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useState } from 'react';
 import {
   Pressable,
   StyleSheet,
@@ -12,23 +11,16 @@ import {
   DEFAULT_CONTAINER_BACKGROUND,
   LIGHT_GREY,
 } from '../../constants/colors';
-import Alert from '@/src/components/Alert';
 
 type ExerciseRowProps = {
   title: string;
   id: string;
-  onDelete: (id: string) => void;
+  onDelete: () => void;
   onPress?: () => void;
 };
 
 function ExerciseRow(props: ExerciseRowProps) {
-  const { title, id, onPress, onDelete } = props;
-  const [showAlert, setShowAlert] = useState(false);
-
-  const handleDelete = () => {
-    onDelete(id);
-    setShowAlert(false);
-  };
+  const { title, onPress, onDelete } = props;
 
   return (
     <Animated.View entering={FadeIn} exiting={FadeOut}>
@@ -39,21 +31,13 @@ function ExerciseRow(props: ExerciseRowProps) {
           <Pressable
             onPress={(e) => {
               e.preventDefault();
-              setShowAlert(true);
+              onDelete();
             }}
           >
             <Ionicons name="close" color={LIGHT_GREY} />
           </Pressable>
         </View>
       </TouchableOpacity>
-
-      {showAlert && (
-        <Alert
-          onClose={() => setShowAlert(false)}
-          description={`The exercise ${title} is about to be deleted.`}
-          onSubmit={handleDelete}
-        />
-      )}
     </Animated.View>
   );
 }

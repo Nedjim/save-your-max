@@ -1,10 +1,15 @@
 import { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import PerformanceModal from './Modals/CreateModal';
 import EmptyState from '@/src/components/EmptyState';
-import PerformanceModal from './PerformanceModal';
 
-function PerformancesEmptyState() {
+type PerformancesEmptyStateProps = {
+  refetch: () => void;
+};
+
+function PerformancesEmptyState(props: PerformancesEmptyStateProps) {
+  const { refetch } = props;
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -20,7 +25,12 @@ function PerformancesEmptyState() {
           setShowModal(true);
         }}
       />
-      {showModal && <PerformanceModal onClose={() => setShowModal(false)} />}
+      {showModal && (
+        <PerformanceModal
+          onClose={() => setShowModal(false)}
+          refetch={refetch}
+        />
+      )}
     </Animated.View>
   );
 }

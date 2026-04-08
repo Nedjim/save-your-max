@@ -1,17 +1,19 @@
 import { useState } from 'react';
 import { Modal } from 'react-native';
-import Input from '../../components/Input';
+import Input from '../../../components/Input';
 import ModalContent from '@/src/containers/modal/ModalContent';
 import { useCreateExercise } from '@/src/hooks/exercises';
 
-type ExerciseModalProps = {
-  visible: boolean;
+type CreateExerciseModalProps = {
+  refetch: () => void;
   closeModal: () => void;
 };
 
-export default function ExerciseModal(props: ExerciseModalProps) {
-  const { visible, closeModal } = props;
-  const { mutate: createExerciseMutation } = useCreateExercise();
+function CreateExerciseModal(props: CreateExerciseModalProps) {
+  const { refetch, closeModal } = props;
+  const { mutateAsync: createExerciseMutation, isPending } =
+    useCreateExercise();
+
   const [title, setTitle] = useState('');
 
   const handleClose = () => {
@@ -19,21 +21,21 @@ export default function ExerciseModal(props: ExerciseModalProps) {
     setTitle('');
   };
 
-  const handleCreateExercise = () => {
+  const handleCreateExercise = async () => {
     if (!title.trim()) return;
 
-    createExerciseMutation(title, {
-      onSuccess: () => {
-        // WIP: push toast
-      },
-    });
+    try {
+      await createExerciseMutation(title);
+      refetch();
+    } catch {
+      // WIP: error toast
+    }
 
     handleClose();
   };
 
   return (
     <Modal
-      visible={visible}
       animationType="slide"
       transparent={true}
       onRequestClose={() => {
@@ -43,9 +45,10 @@ export default function ExerciseModal(props: ExerciseModalProps) {
     >
       <ModalContent
         onClose={handleClose}
-        onSubmit={title.length ? handleCreateExercise : undefined}
+        onSubmit={handleCreateExercise}
         submitButtonLabel="Create"
         title="New exercise"
+        isPending={isPending}
       >
         <Input
           value={title}
@@ -58,3 +61,5 @@ export default function ExerciseModal(props: ExerciseModalProps) {
     </Modal>
   );
 }
+
+export default CreateExerciseModal;

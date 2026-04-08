@@ -1,10 +1,11 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
+import CreateExerciseModal from './Modals/CreateModal';
+import DeleteExerciseModal from './Modals/DeleteModal';
 import AddMoreButton from '@/src/components/Buttons/AddMoreButton';
-import { useDeleteExercises } from '@/src/hooks/exercises';
+import { useExercises } from '@/src/hooks/exercises';
 import { Exercise } from '@/src/types';
-import ExerciseModal from './ExerciseModal';
 import ExerciseRow from './ExerciseRow';
 
 type ExerciseListProps = {
@@ -13,22 +14,12 @@ type ExerciseListProps = {
 
 function ExerciseList(props: ExerciseListProps) {
   const { exercises } = props;
-  const { exerciseId } = useLocalSearchParams();
-  const { mutate: deleteExerciseMutation } = useDeleteExercises();
-  const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
+  const { refetch } = useExercises();
+  const { exerciseId } = useLocalSearchParams();
 
-  const openModal = () => {
-    setModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-  };
-
-  const handleDelete = (id: string) => {
-    deleteExerciseMutation(id);
-  };
+  const [createExercise, setCreateExercise] = useState(false);
+  const [deletedId, setDeletedId] = useState<string | null>(null);
 
   return (
     <View style={styles.list}>
@@ -43,7 +34,7 @@ function ExerciseList(props: ExerciseListProps) {
             <ExerciseRow
               title={title}
               id={id}
-              onDelete={handleDelete}
+              onDelete={() => setDeletedId(id)}
               onPress={() => {
                 router.push({
                   pathname: '/exercises/[id]',
@@ -56,9 +47,24 @@ function ExerciseList(props: ExerciseListProps) {
         extraData={exerciseId}
       />
       <View style={styles.actions}>
-        <AddMoreButton onPress={openModal} accessibilityLabel="Add exercise" />
+        <AddMoreButton
+          onPress={() => setCreateExercise(true)}
+          accessibilityLabel="Add exercise"
+        />
       </View>
-      <ExerciseModal visible={modalVisible} closeModal={closeModal} />
+      {createExercise && (
+        <CreateExerciseModal
+          refetch={refetch}
+          closeModal={() => setCreateExercise(false)}
+        />
+      )}
+      {deletedId && (
+        <DeleteExerciseModal
+          id={deletedId}
+          refetch={refetch}
+          closeModal={() => setDeletedId(null)}
+        />
+      )}
     </View>
   );
 }

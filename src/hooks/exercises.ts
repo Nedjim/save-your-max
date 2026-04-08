@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useLocalSearchParams } from 'expo-router';
 import {
   createExercise,
@@ -16,29 +16,15 @@ export function useExercises() {
 }
 
 export function useCreateExercise() {
-  const queryClient = useQueryClient();
-
-  const query = useMutation({
+  return useMutation({
     mutationFn: (title: string) => createExercise(title),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['exercises'] });
-    },
   });
-
-  return query;
 }
 
 export function useDeleteExercises() {
-  const queryClient = useQueryClient();
-
-  const query = useMutation({
+  return useMutation({
     mutationFn: (id: string) => deleteExercise(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['exercises'] });
-    },
   });
-
-  return query;
 }
 
 export function useExerciseNameParams() {

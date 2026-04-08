@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { deleteProfile, getProfile } from '../services/profiles';
 
 export function useProfile() {
@@ -11,14 +11,7 @@ export function useProfile() {
 }
 
 export function useDeleteProfile() {
-  const queryClient = useQueryClient();
-
-  const query = useMutation({
+  return useMutation({
     mutationFn: () => deleteProfile(),
-    onSuccess: () => {
-      queryClient.setQueryData(['session'], null);
-    },
   });
-
-  return query;
 }

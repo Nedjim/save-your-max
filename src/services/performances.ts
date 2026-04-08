@@ -13,13 +13,14 @@ export async function getPerformances(exerciseId: string) {
 }
 
 export async function createPerformance(
-  exerciseId: string,
-  payload: CreatePerformancePayload,
+  payload: CreatePerformancePayload & { exerciseId: string },
 ) {
+  const { exerciseId, ...rest } = payload;
+
   return await apiFetch<Performance, CreatePerformancePayload>({
     endpoint: `exercises/${exerciseId}/performances`,
     method: 'POST',
-    body: { ...payload },
+    body: { ...rest },
   });
 }
 

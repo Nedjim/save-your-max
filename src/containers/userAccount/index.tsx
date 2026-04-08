@@ -3,8 +3,8 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
-import UpdatePasswordModal from './UpdatePassword/Modal';
-import Alert from '@/src/components/Alert';
+import DeleteProfileModal from './Modals/DeleteModal';
+import UpdatePasswordModal from './Modals/UpdatePassword/Modal';
 import Divider from '@/src/components/Divider';
 import {
   DARK_GREY,
@@ -13,9 +13,9 @@ import {
   TURQUOISE,
   WHITE,
 } from '@/src/constants/colors';
-import { useSignOutUser, useSupabaseSession } from '@/src/hooks/auth';
-import { useDeleteProfile } from '@/src/hooks/profile';
+import { useSupabaseSession } from '@/src/hooks/auth';
 import { Profile } from '@/src/types';
+import SignoutButton from './SignoutButton';
 import UserInput from './UserInput';
 
 type UserAccountType = {
@@ -25,30 +25,14 @@ type UserAccountType = {
 const UserAccount = (props: UserAccountType) => {
   const { profile } = props;
   const router = useRouter();
-  const { mutate: deleteUserMutation } = useDeleteProfile();
-  const { mutate: signoutUserMutation } = useSignOutUser();
-  const { data: session } = useSupabaseSession();
-  const [showAlert, setShowAlert] = useState(false);
+  const { data: session, refetch } = useSupabaseSession();
+
   const [updatePassword, setUpdatePassword] = useState(false);
+  const [deleteProfile, setDeleteProfile] = useState(false);
 
   const email = session?.user.user_metadata.email;
 
   console.log({ profile });
-  const handleDelete = async () => {
-    deleteUserMutation(undefined, {
-      onSuccess: async () => {
-        router.replace('/login');
-      },
-    });
-  };
-
-  const handleSignout = () => {
-    signoutUserMutation(undefined, {
-      onSuccess: () => {
-        router.replace('/login');
-      },
-    });
-  };
 
   return (
     <View style={styles.userAccount}>
@@ -93,20 +77,13 @@ const UserAccount = (props: UserAccountType) => {
 
       <Divider />
       <View style={styles.actions}>
-        <Button
-          style={{ backgroundColor: DARK_GREY }}
-          labelStyle={{ color: WHITE }}
-          accessibilityLabel="Log out"
-          onPress={handleSignout}
-        >
-          Log out
-        </Button>
+        <SignoutButton refetch={refetch} />
         <Button
           style={{ backgroundColor: ERROR }}
           labelStyle={{ color: WHITE }}
           accessibilityLabel="Delete account"
           onPress={() => {
-            setShowAlert(true);
+            setDeleteProfile(true);
           }}
         >
           Delete account
@@ -118,13 +95,12 @@ const UserAccount = (props: UserAccountType) => {
           closeModal={() => setUpdatePassword(false)}
         />
       )}
-      {showAlert && (
-        <Alert
-          description="Your account is about to be deleted."
-          onClose={() => {
-            setShowAlert(false);
+      {deleteProfile && (
+        <DeleteProfileModal
+          closeModal={() => {
+            setDeleteProfile(false);
           }}
-          onSubmit={handleDelete}
+          refetch={refetch}
         />
       )}
     </View>

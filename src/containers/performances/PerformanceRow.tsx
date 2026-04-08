@@ -12,7 +12,7 @@ import { Performance } from '@/src/types';
 type PerformanceRowProps = {
   performance: Performance;
   onUpdate: (performance: Performance) => void;
-  onDelete: (performance: Performance) => void;
+  onDelete: (id: string) => void;
 };
 
 const PerformanceRow = (props: PerformanceRowProps) => {
@@ -41,7 +41,7 @@ const PerformanceRow = (props: PerformanceRowProps) => {
       </View>
       <View style={styles.actions}>
         <EditListButton name="pencil" onPress={() => onUpdate(performance)} />
-        <EditListButton name="trash" onPress={() => onDelete(performance)} />
+        <EditListButton name="trash" onPress={() => onDelete(performance.id)} />
       </View>
     </Animated.View>
   );
