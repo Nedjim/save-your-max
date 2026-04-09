@@ -181,11 +181,16 @@ export const resetPassword = async (
   await supabase.auth.signOut();
 };
 
+const resetEmailURL = Linking.createURL('reset-email');
+
 export const updateUser = async (payload: UpdateUserPayload) => {
-  const { data, error } = await supabase.auth.updateUser(payload);
+  const { data, error } = await supabase.auth.updateUser(payload, {
+    emailRedirectTo: resetEmailURL,
+  });
 
   if (error) {
     throw error;
   }
+
   return data;
 };

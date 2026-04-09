@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { Modal } from 'react-native';
+import FormErrors from '../../../components/Form/Errors';
 import ModalContent from '@/src/containers/modal/ModalContent';
 import { useExerciseNameParams } from '@/src/hooks/exercises';
 import { useUpdatePerformance } from '@/src/hooks/performances';
@@ -7,7 +8,6 @@ import { editPerformanceSchema } from '@/src/schemas/performances/edit.schema';
 import { EditPerformanceZodValues, Performance } from '@/src/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import FieldsController from './FieldsController';
-import FieldsErrors from './FieldsErrors';
 
 type UpdatePerformanceModalProps = {
   onClose: () => void;
@@ -21,13 +21,7 @@ function UpdatePerformanceModal(props: UpdatePerformanceModalProps) {
     useUpdatePerformance();
   const exerciseName = useExerciseNameParams();
 
-  const {
-    control,
-    handleSubmit,
-    setError,
-    reset,
-    formState: { errors },
-  } = useForm({
+  const { control, handleSubmit, setError, reset } = useForm({
     resolver: zodResolver(editPerformanceSchema),
     defaultValues: {
       weight: String(performance.weight),
@@ -80,7 +74,7 @@ function UpdatePerformanceModal(props: UpdatePerformanceModalProps) {
         isPending={isPending}
       >
         <FieldsController control={control} />
-        <FieldsErrors errors={errors} />
+        <FormErrors control={control} />
       </ModalContent>
     </Modal>
   );

@@ -1,4 +1,5 @@
 import * as z from 'zod';
+import { updateEmailSchema } from '../schemas/auth/updateEmail.schema';
 import { updatePasswordSchema } from '../schemas/auth/updatePassword.schema';
 
 /**
@@ -14,6 +15,7 @@ import { updatePasswordSchema } from '../schemas/auth/updatePassword.schema';
  * 6. **resetPasswordEmailSent** - A password reset email has been successfully sent
  * 7. **resetPasswordConfirm** - User is entering a new password using the reset link
  * 8. **resetPasswordDone** - Password has been successfully updated
+ * 9. **resetEmailDone** - Email has been successfully updated
  *
  * @example
  * const mode: AuthMode = 'signinRequest';
@@ -26,7 +28,8 @@ export type AuthMode =
   | 'resetPasswordRequest'
   | 'resetPasswordEmailSent'
   | 'resetPasswordConfirm'
-  | 'resetPasswordDone';
+  | 'resetPasswordDone'
+  | 'resetEmailDone';
 
 /**
  * Represents the query parameters returned by Supabase during the password recovery flow.
@@ -40,7 +43,7 @@ export type AuthMode =
  */
 export type AuthSearchParams = {
   access_token?: string;
-  type?: 'recovery' | 'signup';
+  type?: 'recovery' | 'signup' | 'email_change';
   refresh_token?: string;
 };
 
@@ -112,6 +115,8 @@ export type SupabasePayload = {
  */
 export type UpdateUserPayload = {
   password?: string;
+  email?: string;
 };
 
 export type RequestFormValues = z.infer<typeof updatePasswordSchema>;
+export type UpdatedEmailFormValues = z.infer<typeof updateEmailSchema>;

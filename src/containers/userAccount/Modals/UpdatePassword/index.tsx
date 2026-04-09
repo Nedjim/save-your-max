@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Modal } from 'react-native';
-import FormErrors from '@/src/components/Form/FormErrors';
+import FormErrors from '@/src/components/Form/Errors';
 import ModalContent from '@/src/containers/modal/ModalContent';
 import { useUpdateUser } from '@/src/hooks/auth';
 import { updatePasswordSchema } from '@/src/schemas/auth/updatePassword.schema';
@@ -11,22 +11,15 @@ import UpdatePasswordFields from './Fields';
 import UpdatePasswordSuccess from './Success';
 
 type UpdatePasswordModalProps = {
-  visible: boolean;
   closeModal: () => void;
 };
 
 function UpdatePasswordModal(props: UpdatePasswordModalProps) {
-  const { visible, closeModal } = props;
+  const { closeModal } = props;
   const { mutateAsync: updateUserMutation, isPending } = useUpdateUser();
   const [success, setSuccess] = useState(false);
 
-  const {
-    control,
-    handleSubmit,
-    setError,
-    reset,
-    formState: { errors },
-  } = useForm({
+  const { control, handleSubmit, setError, reset } = useForm({
     resolver: zodResolver(updatePasswordSchema),
     defaultValues: {
       password: '',
@@ -52,15 +45,8 @@ function UpdatePasswordModal(props: UpdatePasswordModalProps) {
     }
   };
 
-  const displayedErrors = Object.values(errors)
-    .map((err) => err.message)
-    .filter((e) => e !== undefined);
-
-  const shouldDisplayErrors = !!displayedErrors.length;
-
   return (
     <Modal
-      visible={visible}
       animationType="slide"
       transparent={true}
       onRequestClose={() => {
@@ -74,12 +60,12 @@ function UpdatePasswordModal(props: UpdatePasswordModalProps) {
         submitButtonLabel="Update"
         title={!success ? 'Change password' : ''}
       >
-        {shouldDisplayErrors && <FormErrors errors={displayedErrors} />}
-        {!shouldDisplayErrors && success ? (
+        {success ? (
           <UpdatePasswordSuccess />
         ) : (
           <UpdatePasswordFields control={control} />
         )}
+        <FormErrors control={control} />
       </ModalContent>
     </Modal>
   );

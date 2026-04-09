@@ -7,6 +7,7 @@ import { AuthSearchParams } from '@/src/types';
 const REFRESH_TYPES_EXCEPTION: AuthSearchParams['type'][] = [
   'signup',
   'recovery',
+  'email_change'
 ];
 
 function SupabaseOnAuthStateChange({ children }: { children: ReactNode }) {

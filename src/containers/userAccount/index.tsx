@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import DeleteProfileModal from './Modals/DeleteModal';
-import UpdatePasswordModal from './Modals/UpdatePassword/Modal';
+import UpdatePasswordModal from './Modals/UpdatePassword';
 import Divider from '@/src/components/Divider';
 import {
   DARK_GREY,
@@ -17,6 +17,7 @@ import { useSupabaseSession } from '@/src/hooks/auth';
 import { Profile } from '@/src/types';
 import SignoutButton from './SignoutButton';
 import UserInput from './UserInput';
+import UpdateEmailModal from './Modals/UpdateEmail';
 
 type UserAccountType = {
   profile: Profile;
@@ -27,6 +28,7 @@ const UserAccount = (props: UserAccountType) => {
   const router = useRouter();
   const { data: session, refetch } = useSupabaseSession();
 
+  const [updateEmail, setUpdateEmail] = useState(false);
   const [updatePassword, setUpdatePassword] = useState(false);
   const [deleteProfile, setDeleteProfile] = useState(false);
 
@@ -58,7 +60,7 @@ const UserAccount = (props: UserAccountType) => {
       <View style={styles.actions}>
         <UserAccountRow value={email} id="email" />
         <Button
-          onPress={() => {}}
+          onPress={() => setUpdateEmail(true)}
           style={{ backgroundColor: TURQUOISE }}
           labelStyle={{ color: WHITE }}
           uppercase={false}
@@ -89,11 +91,11 @@ const UserAccount = (props: UserAccountType) => {
           Delete account
         </Button>
       </View>
+      {updateEmail && (
+        <UpdateEmailModal closeModal={() => setUpdateEmail(false)} />
+      )}
       {updatePassword && (
-        <UpdatePasswordModal
-          visible={updatePassword}
-          closeModal={() => setUpdatePassword(false)}
-        />
+        <UpdatePasswordModal closeModal={() => setUpdatePassword(false)} />
       )}
       {deleteProfile && (
         <DeleteProfileModal

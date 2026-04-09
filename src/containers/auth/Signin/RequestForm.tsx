@@ -5,7 +5,7 @@ import { Button } from 'react-native-paper';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import * as z from 'zod';
 import Divider from '@/src/components/Divider';
-import { default as FormErrors } from '@/src/components/Form/FormErrors';
+import FormErrors from '@/src/components/Form/Errors';
 import Input, { TextContentType } from '@/src/components/Input';
 import { LIGHT_GREY, TURQUOISE, WHITE } from '@/src/constants/colors';
 import { useSignInUser } from '@/src/hooks/auth';
@@ -47,13 +47,7 @@ const SigninForm = (props: SigninFormProps) => {
 
   const router = useRouter();
   const { mutateAsync: signinUserMutation, isPending } = useSignInUser();
-  const {
-    control,
-    handleSubmit,
-    setError,
-    reset,
-    formState: { errors },
-  } = useForm({
+  const { control, handleSubmit, setError, reset } = useForm({
     resolver: zodResolver(signinSchema),
     defaultValues: {
       email: '',
@@ -76,18 +70,12 @@ const SigninForm = (props: SigninFormProps) => {
     }
   };
 
-  const rootError = errors.root?.message;
-
-  const displayedErrors = Array.from(
-    new Set([...Object.values(errors).map((err) => err.message), rootError]),
-  ).filter((e) => e !== undefined);
-
   return (
     <Animated.View entering={FadeIn} exiting={FadeOut}>
       <Text style={styles.title}>Sign In</Text>
       <Text style={styles.subtitle}>Enter your email and password.</Text>
 
-      {!!displayedErrors.length && <FormErrors errors={displayedErrors} />}
+      <FormErrors control={control} />
 
       <View style={styles.fields}>
         {SIGNIN_FIELDS.map((field) => {

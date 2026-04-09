@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import * as z from 'zod';
-import FormErrors from '@/src/components/Form/FormErrors';
+import FormErrors from '@/src/components/Form/Errors';
 import Input, { TextContentType } from '@/src/components/Input';
 import { TURQUOISE, WHITE } from '@/src/constants/colors';
 import { useAuthSearchParams } from '@/src/hooks/auth';
@@ -51,7 +51,7 @@ function ResetPasswordConfirmForm(props: ConfirmFormProps) {
     handleSubmit,
     setError,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
   } = useForm({
     resolver: zodResolver(confirmSchema),
     defaultValues: {
@@ -83,14 +83,10 @@ function ResetPasswordConfirmForm(props: ConfirmFormProps) {
     }
   };
 
-  const displayedErrors = Object.values(errors)
-    .map((err) => err.message)
-    .filter((e) => e !== undefined);
-
   return (
     <Animated.View entering={FadeIn} exiting={FadeOut}>
       <Text style={styles.title}>Reset password</Text>
-      {!!displayedErrors.length && <FormErrors errors={displayedErrors} />}
+      <FormErrors control={control} />
 
       <View style={styles.fields}>
         {CONFIRM_FIELDS.map((field) => {

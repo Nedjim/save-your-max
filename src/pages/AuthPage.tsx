@@ -16,6 +16,7 @@ function AuthPage() {
   const segments = useSegments();
   const [mode, setMode] = useState<AuthMode>('signinRequest');
   const isResetPasswordConfirm = segments.some((s) => s === 'reset-password');
+  const isResetEmailConfirm = segments.some((s) => s === 'reset-email');
   const isSignupConfirm = segments.some((s) => s === 'signup-confirm');
 
   const SCREENS: Record<AuthMode, ReactNode> = {
@@ -42,6 +43,9 @@ function AuthPage() {
         new password."
       />
     ),
+    resetEmailDone: (
+      <Done subtitle="Your password has been updated successfully. Please sign in with you new Email." />
+    ),
   };
 
   let content = null;
@@ -50,6 +54,8 @@ function AuthPage() {
     content = SCREENS['resetPasswordConfirm'];
   } else if (isSignupConfirm) {
     content = SCREENS['signupConfirm'];
+  } else if (isResetEmailConfirm) {
+    content = SCREENS['resetEmailDone'];
   } else {
     content = SCREENS[mode];
   }

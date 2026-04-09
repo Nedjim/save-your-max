@@ -1,6 +1,7 @@
 import { useLocalSearchParams } from 'expo-router';
 import { useForm } from 'react-hook-form';
 import { Modal } from 'react-native';
+import FormErrors from '../../../components/Form/Errors';
 import ModalContent from '@/src/containers/modal/ModalContent';
 import { useExerciseNameParams } from '@/src/hooks/exercises';
 import { useCreatePerformance } from '@/src/hooks/performances';
@@ -8,7 +9,6 @@ import { editPerformanceSchema } from '@/src/schemas/performances/edit.schema';
 import { EditPerformanceZodValues } from '@/src/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import FieldsController from './FieldsController';
-import FieldsErrors from './FieldsErrors';
 
 type CreatePerformanceModalProps = {
   onClose: () => void;
@@ -24,13 +24,7 @@ function CreatePerformanceModal(props: CreatePerformanceModalProps) {
   const { id: exerciseId } = useLocalSearchParams<{ id: string }>();
   const nowDay = new Date();
 
-  const {
-    control,
-    handleSubmit,
-    setError,
-    reset,
-    formState: { errors },
-  } = useForm({
+  const { control, handleSubmit, setError, reset } = useForm({
     resolver: zodResolver(editPerformanceSchema),
     defaultValues: {
       weight: '0',
@@ -84,7 +78,7 @@ function CreatePerformanceModal(props: CreatePerformanceModalProps) {
         isPending={isPending}
       >
         <FieldsController control={control} />
-        <FieldsErrors errors={errors} />
+        <FormErrors control={control} />
       </ModalContent>
     </Modal>
   );

@@ -2,7 +2,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { Modal, StyleSheet, View } from 'react-native';
 import * as z from 'zod';
 import Input from '../../../components/Input';
-import FormErrors from '@/src/components/Form/FormErrors';
+import FormErrors from '@/src/components/Form/Errors';
 import ModalContent from '@/src/containers/modal/ModalContent';
 import { useCreateExercise } from '@/src/hooks/exercises';
 import { createExerciseSchema } from '@/src/schemas/exercises/create.schema';
@@ -20,13 +20,7 @@ function CreateExerciseModal(props: CreateExerciseModalProps) {
   const { mutateAsync: createExerciseMutation, isPending } =
     useCreateExercise();
 
-  const {
-    control,
-    handleSubmit,
-    setError,
-    reset,
-    formState: { errors },
-  } = useForm({
+  const { control, handleSubmit, setError, reset } = useForm({
     resolver: zodResolver(createExerciseSchema),
     defaultValues: {
       name: '',
@@ -52,10 +46,6 @@ function CreateExerciseModal(props: CreateExerciseModalProps) {
       }
     }
   };
-
-  const displayedErrors = Object.values(errors)
-    .map((err) => err?.message)
-    .filter((e) => e !== undefined);
 
   return (
     <Modal
@@ -88,7 +78,7 @@ function CreateExerciseModal(props: CreateExerciseModalProps) {
           )}
         />
         <View style={styles.errors}>
-          {!!displayedErrors.length && <FormErrors errors={displayedErrors} />}
+          <FormErrors control={control} />
         </View>
       </ModalContent>
     </Modal>

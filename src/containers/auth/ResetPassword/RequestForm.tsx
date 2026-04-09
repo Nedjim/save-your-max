@@ -4,7 +4,7 @@ import { Button } from 'react-native-paper';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import * as z from 'zod';
 import Divider from '@/src/components/Divider';
-import FormErrors from '@/src/components/Form/FormErrors';
+import FormErrors from '@/src/components/Form/Errors';
 import Input, { TextContentType } from '@/src/components/Input';
 import { LIGHT_GREY, TURQUOISE, WHITE } from '@/src/constants/colors';
 import { requestSchema } from '@/src/schemas/auth/request.schema';
@@ -41,7 +41,7 @@ function ResetPasswordRequestForm(props: RequestFormProps) {
     handleSubmit,
     setError,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
   } = useForm({
     resolver: zodResolver(requestSchema),
     defaultValues: {
@@ -64,10 +64,6 @@ function ResetPasswordRequestForm(props: RequestFormProps) {
     }
   };
 
-  const displayedErrors = Object.values(errors)
-    .map((err) => err.message)
-    .filter((e) => e !== undefined);
-
   return (
     <Animated.View entering={FadeIn} exiting={FadeOut}>
       <Text style={styles.title}>Reset password</Text>
@@ -75,7 +71,7 @@ function ResetPasswordRequestForm(props: RequestFormProps) {
         Enter your email to receive a link to change your password.
       </Text>
 
-      {!!displayedErrors.length && <FormErrors errors={displayedErrors} />}
+      <FormErrors control={control} />
 
       <View style={styles.fields}>
         {REQUEST_FIELDS.map((field) => {
