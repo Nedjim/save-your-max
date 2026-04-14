@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { deleteProfile, getProfile } from '../services/profiles';
+import { deleteProfile, getProfile, updateProfile } from '../services/profiles';
+import { UpdateProfileFormValues } from '../types';
 
 export function useProfile() {
   const query = useQuery({
@@ -13,5 +14,11 @@ export function useProfile() {
 export function useDeleteProfile() {
   return useMutation({
     mutationFn: () => deleteProfile(),
+  });
+}
+
+export function useUpdateProfile() {
+  return useMutation({
+    mutationFn: (payload: UpdateProfileFormValues) => updateProfile(payload),
   });
 }

@@ -1,6 +1,6 @@
 'use no memo';
 
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useGlobalSearchParams } from 'expo-router';
 import {
   getUserSession,
@@ -8,6 +8,7 @@ import {
   signOutUser,
   signupConfirmUser,
   signupUser,
+  supabase,
   updateUser,
 } from '../services/supabase';
 import { AuthSearchParams, SupabasePayload, UpdateUserPayload } from '../types';
@@ -15,13 +16,22 @@ import { AuthSearchParams, SupabasePayload, UpdateUserPayload } from '../types';
 const RESET_PASSWORD_URL_PARAMS = ['access_token', 'refresh_token', 'type'];
 
 export const useSupabaseSession = () => {
+  const queryClient = useQueryClient();
+
   const query = useQuery({
     queryKey: ['session'],
     queryFn: getUserSession,
     staleTime: Infinity,
   });
 
-  return query;
+  const resetSession = async () => {
+    await supabase.auth.signOut();
+    queryClient.setQueryData(['session'], null);
+    queryClient.invalidateQueries({ queryKey: ['session'] });
+    queryClient.removeQueries({ queryKey: ['session'] });
+  };
+
+  return { ...query, resetSession };
 };
 
 export function useSignInUser() {

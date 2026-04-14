@@ -3,13 +3,13 @@ import { StyleSheet, View } from 'react-native';
 import Input, { TextContentType } from '@/src/components/Input';
 import { UpdatedEmailFormValues } from '@/src/types';
 
-type UpdateEmailFieldType = {
+type UpdateEmailField = {
   name: Path<UpdatedEmailFormValues>;
   placeholder: string;
   textContentType: TextContentType;
 };
 
-const FIELDS: UpdateEmailFieldType[] = [
+const FIELDS: UpdateEmailField[] = [
   {
     name: 'email',
     placeholder: 'New e-mail',

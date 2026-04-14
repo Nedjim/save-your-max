@@ -11,7 +11,7 @@ import { WHITE } from '@/src/constants/colors';
 
 export type TextContentType = 'password' | 'emailAddress' | 'none';
 
-type InputProps = {
+export type InputProps = {
   value?: string;
   onChange?: (key: string) => void;
   textContentType?: TextContentType;
@@ -72,17 +72,15 @@ const Input = (props: InputProps) => {
               />
             </Pressable>
           )}
-          {editable && (
-            <Pressable
-              style={[
-                styles.inputIcon,
-                (!editable || !value?.length) && styles.hidden,
-              ]}
-              onPress={clearValue}
-            >
-              <AntDesign name="close" size={12} color={WHITE} />
-            </Pressable>
-          )}
+          <Pressable
+            style={[
+              styles.inputIcon,
+              (!editable || !value?.length) && styles.hidden,
+            ]}
+            onPress={clearValue}
+          >
+            <AntDesign name="close" size={12} color={WHITE} />
+          </Pressable>
         </View>
       </View>
     </View>

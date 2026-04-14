@@ -7,14 +7,20 @@ datasource db {
 }
 
 model Profile {
-    id        String     @unique @default(uuid()) @db.Uuid
+    id        String     @id @default(uuid()) @db.Uuid
     userId    String     @unique @db.Uuid
+    name      String?
+    surname   String?
+    pseudo    String?    @unique
+    avatarUrl String?
+    birthday  DateTime?
     createdAt DateTime   @default(now())
-    Exercise  Exercise[]
+    updatedAt DateTime   @updatedAt
+    exercise  Exercise[]
 }
 
 model Exercise {
-    id           String        @id @default(uuid())
+    id           String        @id @default(uuid()) @db.Uuid
     title        String
     createdAt    DateTime      @default(now())
     updatedAt    DateTime      @updatedAt
@@ -23,16 +29,19 @@ model Exercise {
     profileId    String        @db.Uuid
 
     @@unique([title, profileId])
+    @@index([profileId])
 }
 
 model Performance {
-    id         String   @id @default(uuid())
+    id         String   @id @default(uuid()) @db.Uuid
     date       DateTime @default(now())
-    weight     Int      @default(0)
-    reps       Int      @default(0)
+    weight     Int?
+    reps       Int?
     createdAt  DateTime @default(now())
     updatedAt  DateTime @updatedAt
-    exerciseId String
+    exerciseId String   @db.Uuid
 
     exercise Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+
+    @@index([exerciseId])
 }

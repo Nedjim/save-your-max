@@ -194,3 +194,9 @@ export const updateUser = async (payload: UpdateUserPayload) => {
 
   return data;
 };
+
+export const deleteUser = async (userId: string) => {
+  const { data, error } = await supabase.auth.admin.deleteUser(userId);
+  if (error) throw error;
+  return data;
+};

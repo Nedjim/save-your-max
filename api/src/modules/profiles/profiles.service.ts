@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 
 @Injectable()
 export class ProfilesService {
@@ -12,6 +13,17 @@ export class ProfilesService {
       create: {
         userId,
       },
+    });
+  }
+
+  async update(userId: string, dto: UpdateProfileDto) {
+    const filteredDto = Object.fromEntries(
+      Object.entries(dto).filter(([_, value]) => value !== undefined),
+    );
+
+    return this.prisma.profile.update({
+      where: { userId },
+      data: dto,
     });
   }
 

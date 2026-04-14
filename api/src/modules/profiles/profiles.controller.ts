@@ -1,7 +1,17 @@
-import { Controller, Delete, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Patch,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { SupabaseAuthGuard } from '../auth/jwt-auth.guard';
 import { ProfileGuard } from '../auth/profile.guard';
 import { SupabaseService } from '../supabase/supabase.service';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 import { ProfilesService } from './profiles.service';
 
 @Controller('profiles')
@@ -17,6 +27,14 @@ export class ProfilesController {
     const userId = req.user.id;
 
     return this.profilesService.create(userId);
+  }
+
+  @UseGuards(SupabaseAuthGuard, ProfileGuard)
+  @Patch()
+  async update(@Req() req, @Body() data: UpdateProfileDto) {
+    const userId = req.user.id;
+
+    return this.profilesService.update(userId, data);
   }
 
   @Delete()
