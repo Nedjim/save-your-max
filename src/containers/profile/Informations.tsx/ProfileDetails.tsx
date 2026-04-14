@@ -1,7 +1,7 @@
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Button } from 'react-native-paper';
+import { toast } from 'sonner-native';
 import UpdateEmailButton from '../Buttons/UpdateEmailButton';
 import UpdatePasswordButton from '../Buttons/UpdatePasswordButton';
 import Divider from '@/src/components/Divider';
@@ -25,7 +25,6 @@ function ProfileDetails(props: ProfileDetailsProps) {
   const {
     control,
     handleSubmit,
-    setError,
     reset,
     formState: { isDirty, isSubmitting },
   } = useForm({
@@ -36,7 +35,6 @@ function ProfileDetails(props: ProfileDetailsProps) {
       pseudo: profile.pseudo || '',
     },
   });
-  const [success, setSuccess] = useState(false);
   const isSubmitDisabled = !isDirty || isSubmitting;
 
   const onSubmit = async (data: UpdateProfileFormValues) => {
@@ -44,19 +42,15 @@ function ProfileDetails(props: ProfileDetailsProps) {
       await updateProfileMutation(data);
       refetch();
       reset(data);
-      setSuccess(true);
+      toast.success('Updated successfully!');
     } catch {
-      setError('root', {
-        type: 'server',
-        message: 'Update profile error',
-      });
+      toast.error('Something went wrong');
     }
   };
 
   return (
     <>
       <FormErrors control={control} />
-      {success && <Text>Your information have been sucessfuly updated!</Text>}
       <UserProfileInformationsFields control={control} />
       <View style={styles.action}>
         <Button

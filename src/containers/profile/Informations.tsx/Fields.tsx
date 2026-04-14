@@ -71,13 +71,14 @@ const styles = StyleSheet.create({
     display: 'flex',
   },
   input: {
-    flex: 1,
-    padding: 10,
-    backgroundColor: 'rgba(20, 30, 40, 0.6)',
-    color: WHITE,
-    borderRadius: 8,
-    borderColor: 'rgba(255,255,255,0.1)',
+    height: 48,
+    fontSize: 16,
+    paddingHorizontal: 12,
     borderWidth: 1,
+    borderRadius: 8,
+    backgroundColor: 'rgba(20, 30, 40, 0.6)',
+    borderColor: 'rgba(255,255,255,0.1)',
+    color: WHITE,
   },
 });
 

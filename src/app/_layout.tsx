@@ -1,8 +1,10 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import 'react-native-gesture-handler';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { MD3LightTheme, PaperProvider } from 'react-native-paper';
 import { fr, registerTranslation } from 'react-native-paper-dates';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import ToasterComponent from '../components/Toaster';
 import { TURQUOISE } from '../constants/colors';
 import RootNavigator from '../containers/routes';
 import SupabaseOnAuthStateChange from '../containers/supabase/SupabaseOnAuthStateChange';
@@ -33,7 +35,10 @@ function RootLayout() {
         <SafeAreaView style={{ flex: 1 }}>
           <PaperProvider theme={theme}>
             <SupabaseOnAuthStateChange>
-              <RootNavigator />
+              <GestureHandlerRootView>
+                <RootNavigator />
+                <ToasterComponent />
+              </GestureHandlerRootView>
             </SupabaseOnAuthStateChange>
           </PaperProvider>
         </SafeAreaView>
