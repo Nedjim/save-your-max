@@ -1,11 +1,13 @@
 import { Controller, useForm } from 'react-hook-form';
 import { Modal, StyleSheet, View } from 'react-native';
+import { toast } from 'sonner-native';
 import * as z from 'zod';
 import Input from '../../../components/Input';
 import FormErrors from '@/src/components/Form/Errors';
 import ModalContent from '@/src/containers/modal/ModalContent';
 import { useCreateExercise } from '@/src/hooks/exercises';
 import { createExerciseSchema } from '@/src/schemas/exercises/create.schema';
+import { ApiError } from '@/src/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 type CreateExerciseModalProps = {
@@ -36,14 +38,15 @@ function CreateExerciseModal(props: CreateExerciseModalProps) {
     try {
       await createExerciseMutation(data.name);
       refetch();
+      toast.success(`Exercise "${data.name}" was created successfully 🎉`);
+
       handleClose();
     } catch (error) {
-      if (error instanceof Error) {
-        setError('root', {
-          type: 'server',
-          message: error.message,
-        });
-      }
+      const errorData = error as ApiError;
+      setError('root', {
+        type: 'server',
+        message: errorData.message,
+      });
     }
   };
 

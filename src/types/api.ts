@@ -8,7 +8,7 @@
 type Id = string;
 
 /**
-  * Represents all valid endpoint paths for the API.
+ * Represents all valid endpoint paths for the API.
  * Supports dynamic IDs for exercises and performances.
  *
  * @example
@@ -56,3 +56,13 @@ export type ApiFetchPayload<TBody = unknown> =
       method: 'POST' | 'PATCH';
       body?: TBody;
     };
+
+/**
+ * Standard API error shape used across the application.
+ * Returned when a request fails in apiFetch().
+ */
+export type ApiError = {
+  message: string;
+  statusCode: number;
+  code?: string;
+};

@@ -3,7 +3,12 @@ import { createClient } from '@supabase/supabase-js';
 import * as Linking from 'expo-linking';
 import { Platform } from 'react-native';
 import 'expo-sqlite/localStorage/install';
-import { ApiFetchPayload, SupabasePayload, UpdateUserPayload } from '../types';
+import {
+  ApiError,
+  ApiFetchPayload,
+  SupabasePayload,
+  UpdateUserPayload,
+} from '../types';
 import { createProfile, getProfile } from './profiles';
 
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL!;
@@ -61,8 +66,15 @@ export async function apiFetch<TResponse, TBody = unknown>(
   }
 
   if (!res.ok) {
-    const errorBody = await res.text();
-    throw new Error(errorBody || 'API Error');
+    const errorData = await res.json();
+
+    const error: ApiError = {
+      message: errorData?.message || 'Something went wrong!',
+      statusCode: errorData?.statusCode || res.status,
+      code: errorData?.code,
+    };
+
+    throw error;
   }
 
   return res.json();
