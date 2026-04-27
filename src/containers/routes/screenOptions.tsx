@@ -1,17 +1,19 @@
 import { HeaderTitle } from '@react-navigation/elements';
 import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import BackButton from '@/src/components/Buttons/BackButton';
 import HomeButton from '@/src/components/Buttons/HomeButton';
 import UserButton from '@/src/components/Buttons/UserButton';
-import { BLACK } from '@/src/constants/colors';
 import { Device } from '@/src/types';
 
 const MARGIN_RIGHT_IOS = -36;
 
 const IOSScreenOptions = {
   headerStyle: {
-    backgroundColor: BLACK,
+    backgroundColor: 'transparent',
+  },
+  contentStyle: {
+    backgroundColor: 'transparent',
   },
   headerTitle: () => <HeaderTitle />,
   headerLeft: () => (
@@ -28,7 +30,10 @@ const IOSScreenOptions = {
 
 const AndroidScreenOptions = {
   headerStyle: {
-    backgroundColor: BLACK,
+    backgroundColor: 'transparent',
+  },
+  contentStyle: {
+    backgroundColor: 'transparent',
   },
   headerTitle: () => <HeaderTitle />,
   headerLeft: () => <HomeButton />,
@@ -49,4 +54,15 @@ const SCREEN_OPTIONS: Record<Device, NativeStackNavigationOptions> = {
   [Device.Web]: WebScreenOptions,
 };
 
-export default SCREEN_OPTIONS;
+const getDevice = () => {
+  switch (Platform.OS) {
+    case 'ios':
+      return Device.IOS;
+    case 'android':
+      return Device.Android;
+    default:
+      return Device.Web;
+  }
+};
+
+export const screenOptions = SCREEN_OPTIONS[getDevice()];

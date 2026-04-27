@@ -1,21 +1,7 @@
 import { Redirect, Stack, useSegments } from 'expo-router';
-import { Platform } from 'react-native';
+import PageWrapper from '../page/PageWrapper';
 import { useSupabaseSession } from '@/src/hooks/auth';
-import { Device } from '@/src/types';
-import SCREEN_OPTIONS from './screenOptions';
-
-export const getDevice = () => {
-  switch (Platform.OS) {
-    case 'ios':
-      return Device.IOS;
-    case 'android':
-      return Device.Android;
-    default:
-      return Device.Web;
-  }
-};
-
-const screenOptionsByDevice = SCREEN_OPTIONS[getDevice()];
+import { screenOptions } from './screenOptions';
 
 function RootNavigator() {
   const { data: session, isLoading } = useSupabaseSession();
@@ -35,14 +21,16 @@ function RootNavigator() {
   }
 
   return (
-    <Stack screenOptions={screenOptionsByDevice}>
-      <Stack.Protected guard={!!session}>
-        <Stack.Screen name="(app)" />
-      </Stack.Protected>
-      <Stack.Protected guard={!session}>
-        <Stack.Screen name="(auth)" />
-      </Stack.Protected>
-    </Stack>
+    <PageWrapper>
+      <Stack screenOptions={screenOptions}>
+        <Stack.Protected guard={!!session}>
+          <Stack.Screen name="(app)" />
+        </Stack.Protected>
+        <Stack.Protected guard={!session}>
+          <Stack.Screen name="(auth)" />
+        </Stack.Protected>
+      </Stack>
+    </PageWrapper>
   );
 }
 

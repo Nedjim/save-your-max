@@ -9,7 +9,6 @@ import ResetPasswordRequestForm from '../containers/auth/ResetPassword/RequestFo
 import SigninForm from '../containers/auth/Signin/RequestForm';
 import SignupConfirmForm from '../containers/auth/Signup/ConfirmForm';
 import SignupRequestForm from '../containers/auth/Signup/RequestForm';
-import PageWrapper from '../containers/page/PageWrapper';
 import { AuthMode } from '../types';
 
 function AuthPage() {
@@ -61,11 +60,9 @@ function AuthPage() {
   }
 
   return (
-    <PageWrapper>
-      <View style={styles.auth}>
-        <View style={styles.form}>{content}</View>
-      </View>
-    </PageWrapper>
+    <View style={styles.auth}>
+      <View style={styles.form}>{content}</View>
+    </View>
   );
 }
 

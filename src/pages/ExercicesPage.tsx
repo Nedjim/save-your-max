@@ -1,12 +1,7 @@
 import Exercises from '../containers/exercises';
-import PageWrapper from '../containers/page/PageWrapper';
 
 const ExercisesPage = () => {
-  return (
-    <PageWrapper>
-      <Exercises />
-    </PageWrapper>
-  );
+  return <Exercises />;
 };
 
 export default ExercisesPage;

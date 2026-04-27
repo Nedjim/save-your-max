@@ -1,12 +1,7 @@
-import PageWrapper from '../containers/page/PageWrapper';
 import UserProfile from '../containers/profile';
 
 const UserPage = () => {
-  return (
-    <PageWrapper>
-      <UserProfile />
-    </PageWrapper>
-  );
+  return <UserProfile />;
 };
 
 export default UserPage;
