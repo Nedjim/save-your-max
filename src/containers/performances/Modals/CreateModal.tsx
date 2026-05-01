@@ -73,7 +73,7 @@ function CreatePerformanceModal(props: CreatePerformanceModalProps) {
           onClose();
         }}
         onSubmit={handleSubmit(onSubmit)}
-        submitButtonLabel="create"
+        submitButtonLabel="Add"
         title={exerciseName}
         isPending={isPending}
       >

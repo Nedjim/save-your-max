@@ -1,17 +1,21 @@
 import { useForm } from 'react-hook-form';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { Button } from 'react-native-paper';
 import { toast } from 'sonner-native';
 import UpdateEmailButton from '../Buttons/UpdateEmailButton';
 import UpdatePasswordButton from '../Buttons/UpdatePasswordButton';
 import Divider from '@/src/components/Divider';
-import FormErrors from '@/src/components/Form/Errors';
 import { DARK_GREY, TURQUOISE, WHITE } from '@/src/constants/colors';
 import { useUpdateProfile } from '@/src/hooks/profile';
 import { updateProfileSchema } from '@/src/schemas/profile/editProfile.schema';
-import { Profile, UpdateProfileFormValues } from '@/src/types';
+import {
+  Profile,
+  UpdateProfileFormErrors,
+  UpdateProfileFormValues,
+} from '@/src/types';
+import { toastFormFieldError } from '@/src/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import UserProfileInformationsFields from './Fields';
+import UserProfileFieldsController from './FieldsController';
 
 type ProfileDetailsProps = {
   profile: Profile;
@@ -30,11 +34,13 @@ function ProfileDetails(props: ProfileDetailsProps) {
   } = useForm({
     resolver: zodResolver(updateProfileSchema),
     defaultValues: {
-      name: profile.name || '',
-      surname: profile.surname || '',
-      pseudo: profile.pseudo || '',
+      name: profile.name,
+      surname: profile.surname,
+      pseudo: profile.pseudo,
+      birthday: profile.birthday,
     },
   });
+
   const isSubmitDisabled = !isDirty || isSubmitting;
 
   const onSubmit = async (data: UpdateProfileFormValues) => {
@@ -48,13 +54,19 @@ function ProfileDetails(props: ProfileDetailsProps) {
     }
   };
 
+  const onError = (errors: UpdateProfileFormErrors) => {
+    const firstError = Object.entries(errors)[0];
+
+    toastFormFieldError(firstError);
+    reset();
+  };
+
   return (
     <>
-      <FormErrors control={control} />
-      <UserProfileInformationsFields control={control} />
-      <View style={styles.action}>
+      <UserProfileFieldsController control={control} />
+      <View>
         <Button
-          onPress={handleSubmit(onSubmit)}
+          onPress={handleSubmit(onSubmit, onError)}
           style={{
             backgroundColor: isSubmitDisabled ? DARK_GREY : TURQUOISE,
           }}
@@ -71,11 +83,5 @@ function ProfileDetails(props: ProfileDetailsProps) {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  action: {
-    marginTop: 12,
-  },
-});
 
 export default ProfileDetails;

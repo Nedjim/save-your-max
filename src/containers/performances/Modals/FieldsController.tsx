@@ -51,20 +51,23 @@ function FieldsController(props: FieldsControllerProps) {
           )}
         />
       </View>
-      <Controller
-        control={control}
-        name="date"
-        render={({ field: { value, onChange } }) => (
-          <DatePicker
-            date={value}
-            onChange={(newDate) => {
-              if (newDate instanceof Date && !isNaN(newDate.getTime())) {
-                onChange(newDate);
-              }
-            }}
-          />
-        )}
-      />
+      <View style={styles.datePicker}>
+        <Label label="Date" nativeId="performance-date" />
+        <Controller
+          control={control}
+          name="date"
+          render={({ field: { value, onChange } }) => (
+            <DatePicker
+              date={value}
+              onChange={(newDate) => {
+                if (newDate instanceof Date && !isNaN(newDate.getTime())) {
+                  onChange(newDate);
+                }
+              }}
+            />
+          )}
+        />
+      </View>
     </View>
   );
 }
@@ -72,6 +75,11 @@ function FieldsController(props: FieldsControllerProps) {
 const styles = StyleSheet.create({
   fields: {
     gap: 16,
+  },
+  datePicker: {
+    // display: 'flex',
+    // alignItems: 'center',
+    marginBottom: 24,
   },
 });
 

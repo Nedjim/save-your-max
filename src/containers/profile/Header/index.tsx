@@ -29,7 +29,7 @@ function UserProfileHeader() {
 const styles = StyleSheet.create({
   userProfileHeader: {
     display: 'flex',
-    paddingVertical: 8,
+    paddingBottom: 8,
   },
   icon: {
     textAlign: 'right',

@@ -23,7 +23,7 @@ export class ProfilesService {
 
     return this.prisma.profile.update({
       where: { userId },
-      data: dto,
+      data: filteredDto,
     });
   }
 

@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import { DatePickerProps } from '.';
 
 const IOSDatePicker = (props: DatePickerProps) => {
-  const { date, onChange } = props;
+  const { date, onChange, ...rest } = props;
 
   const [selectedDate, setSelectedDate] = useState(date);
 
@@ -22,6 +22,7 @@ const IOSDatePicker = (props: DatePickerProps) => {
             onChange(newDate);
           }
         }}
+        {...rest}
       />
     </View>
   );
@@ -29,10 +30,8 @@ const IOSDatePicker = (props: DatePickerProps) => {
 
 const styles = StyleSheet.create({
   iosDatePicker: {
-    alignItems: 'center',
-    justifyContent: 'center',
     flex: 1,
-    marginVertical: 16,
+    marginBottom: 8,
   },
 });
 

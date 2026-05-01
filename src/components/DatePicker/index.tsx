@@ -5,6 +5,8 @@ import WebDatePicker from './WebDatePicker';
 
 export type DatePickerProps = {
   date: Date;
+  maximumDate?: Date;
+  minimumDate?: Date;
   onChange: (date: Date) => void;
 };
 

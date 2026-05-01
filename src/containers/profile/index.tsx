@@ -21,7 +21,7 @@ const UserProfile = () => {
 const styles = StyleSheet.create({
   userProfile: {
     backgroundColor: DEFAULT_CONTAINER_BACKGROUND,
-    padding: 16,
+    padding: 8,
     borderRadius: 8,
   },
   actions: {

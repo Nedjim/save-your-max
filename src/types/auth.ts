@@ -2,6 +2,7 @@ import * as z from 'zod';
 import { updateEmailSchema } from '../schemas/auth/updateEmail.schema';
 import { updatePasswordSchema } from '../schemas/auth/updatePassword.schema';
 import { updateProfileSchema } from '../schemas/profile/editProfile.schema';
+import { FormError } from './ui';
 
 /**
  * Represents the different states of the authentication flow.
@@ -59,7 +60,7 @@ export type AuthSearchParams = {
  * 4. **surname** - User surname
  * 5. **pseudo** - User pseudonyme
  * 6. **birthday** - User birthday date (ISO 8601 string)
- * 7. **createdAt** - Identifier of the associated Supabase Auth user
+ * 7. **createdAt** - Identifier of the associated Supabase Auth user (ISO 8601 string)
  * 8. **updatedAt** - Last profile update date (ISO 8601 string)
  *
  * @example
@@ -75,9 +76,9 @@ export type Profile = {
   name?: string;
   surname?: string;
   pseudo?: string;
-  birthday?: Date;
-  createdAt: Date;
-  updatedAt: Date;
+  birthday?: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 /**
@@ -131,4 +132,8 @@ export type UpdateUserPayload = {
 
 export type RequestFormValues = z.infer<typeof updatePasswordSchema>;
 export type UpdatedEmailFormValues = z.infer<typeof updateEmailSchema>;
+
 export type UpdateProfileFormValues = z.infer<typeof updateProfileSchema>;
+export type UpdateProfileFormErrors = {
+  [key in keyof UpdateProfileFormValues]: FormError;
+};

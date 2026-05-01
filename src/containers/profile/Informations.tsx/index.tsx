@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   informations: {
     display: 'flex',
     marginVertical: 8,
-    padding: 16,
+    padding: 8,
     gap: 16,
     borderRadius: 8,
     color: WHITE,
