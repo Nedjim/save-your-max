@@ -74,6 +74,7 @@ const PerformanceList = (props: PerformanceListProps) => {
           }}
         />
       )}
+
       {deletePerformanceId && (
         <DeletePerformanceModal
           id={deletePerformanceId}

@@ -7,6 +7,7 @@ import {
   EditPerformanceFormValues,
   EditPerformanceZodValues,
 } from '@/src/types';
+import { today } from '@/src/utils/date';
 
 type FieldsControllerProps = {
   control: Control<
@@ -56,16 +57,18 @@ function FieldsController(props: FieldsControllerProps) {
         <Controller
           control={control}
           name="date"
-          render={({ field: { value, onChange } }) => (
-            <DatePicker
-              date={value}
-              onChange={(newDate) => {
-                if (newDate instanceof Date && !isNaN(newDate.getTime())) {
-                  onChange(newDate);
-                }
-              }}
-            />
-          )}
+          render={({ field: { value, onChange } }) => {
+            const date = value ? new Date(value) : today;
+
+            return (
+              <DatePicker
+                date={date}
+                onChange={(newDate) => {
+                  onChange(newDate.toISOString());
+                }}
+              />
+            );
+          }}
         />
       </View>
     </View>
@@ -77,8 +80,6 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   datePicker: {
-    // display: 'flex',
-    // alignItems: 'center',
     marginBottom: 24,
   },
 });

@@ -1,11 +1,16 @@
 import { useForm } from 'react-hook-form';
 import { Modal } from 'react-native';
-import FormErrors from '../../../components/Form/Errors';
+import { toast } from 'sonner-native';
 import ModalContent from '@/src/containers/modal/ModalContent';
 import { useExerciseNameParams } from '@/src/hooks/exercises';
 import { useUpdatePerformance } from '@/src/hooks/performances';
 import { editPerformanceSchema } from '@/src/schemas/performances/edit.schema';
-import { EditPerformanceZodValues, Performance } from '@/src/types';
+import {
+  EditPerformanceZodValues,
+  Performance,
+  UpdatePerformanceFormErrors,
+} from '@/src/types';
+import { toastFormFieldError } from '@/src/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import FieldsController from './FieldsController';
 
@@ -21,12 +26,12 @@ function UpdatePerformanceModal(props: UpdatePerformanceModalProps) {
     useUpdatePerformance();
   const exerciseName = useExerciseNameParams();
 
-  const { control, handleSubmit, setError, reset } = useForm({
+  const { control, handleSubmit, reset } = useForm({
     resolver: zodResolver(editPerformanceSchema),
     defaultValues: {
       weight: String(performance.weight),
       reps: String(performance.reps),
-      date: new Date(performance.date),
+      date: performance.date,
     },
   });
 
@@ -35,24 +40,26 @@ function UpdatePerformanceModal(props: UpdatePerformanceModalProps) {
       const { weight, reps, date } = data;
 
       const payload = {
+        id: performance.id,
         weight: Number(weight),
         reps: Number(reps),
-        date: date.toISOString(),
-        id: performance.id,
+        date,
       };
 
       await updatePerformanceMutation(payload);
+      toast.success('Nice! Your performance is up to date.');
       refetch();
-      reset();
       onClose();
-    } catch (error) {
-      if (error instanceof Error) {
-        setError('root', {
-          type: 'server',
-          message: error.message,
-        });
-      }
+    } catch {
+      toast.error('Something went wrong');
     }
+  };
+
+  const onError = (errors: UpdatePerformanceFormErrors) => {
+    const firstError = Object.entries(errors)[0];
+
+    toastFormFieldError(firstError);
+    reset();
   };
 
   return (
@@ -68,13 +75,12 @@ function UpdatePerformanceModal(props: UpdatePerformanceModalProps) {
           reset();
           onClose();
         }}
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onSubmit, onError)}
         submitButtonLabel="Update"
         title={exerciseName}
         isPending={isPending}
       >
         <FieldsController control={control} />
-        <FormErrors control={control} />
       </ModalContent>
     </Modal>
   );

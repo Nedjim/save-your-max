@@ -1,4 +1,11 @@
 /**
+ * Represents required entry to create an exercise
+ */
+export type CreateExercisePayload = {
+  title: string;
+};
+
+/**
  * Represents an exercise created by the user
  * 
  * 1. **id** - Unique identifier (UUID) of the exercise (primary key)
@@ -22,8 +29,4 @@ export type Exercise = {
   createdAt: string;
   updatedAt: string;
   profileId: string;
-};
-
-export type CreateExercisePayload = {
-  title: string;
 };

@@ -1,5 +1,6 @@
 import * as z from 'zod';
 import { editPerformanceSchema } from '../schemas/performances/edit.schema';
+import { FormError } from './ui';
 
 /**
  * Represents a performance entry for a specific exercise.
@@ -80,23 +81,29 @@ export type UpdatePerformancePayload = Partial<CreatePerformancePayload> & {
 };
 
 /**
- * Type inferred from the Zod schema after transformations.
+ * Type inferred from the Zod schema
  *
- * After parsing:
- * 1. **weight** and **reps** are numbers
- * 2. **date** remains a Date object.
+ * 1. **weight** - string
+ * 2. **reps** - string
+ * 3. **date** - string (ISO 8601 string)
+ *
  */
 export type EditPerformanceZodValues = z.infer<typeof editPerformanceSchema>;
 
 /**
- * Type inferred from the Zod schema after transformations.
+ * Represents updated performance entry for a specific exercise
  *
- * After parsing:
- * 1. **weight** and **reps**  are numbers.
- * 2. **date** remains a Date object.
+ * 1. **weight** - string
+ * 2. **reps** - string
+ * 3. **date** - string (ISO 8601 string)
+ *
  */
 export type EditPerformanceFormValues = {
   weight: string;
   reps: string;
-  date: Date;
+  date: string;
 };
+
+export type UpdatePerformanceFormErrors = Partial<
+  Record<keyof EditPerformanceFormValues, FormError>
+>;

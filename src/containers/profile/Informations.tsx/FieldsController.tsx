@@ -4,8 +4,8 @@ import DatePicker from '@/src/components/DatePicker';
 import Label from '@/src/components/Label';
 import { WHITE } from '@/src/constants/colors';
 import { UpdateProfileFormValues } from '@/src/types';
+import { today } from '@/src/utils/date';
 
-const today = new Date();
 const MIN_AGE = 13;
 const MAX_AGE = 120;
 

@@ -7,6 +7,7 @@ import { useExerciseNameParams } from '@/src/hooks/exercises';
 import { useCreatePerformance } from '@/src/hooks/performances';
 import { editPerformanceSchema } from '@/src/schemas/performances/edit.schema';
 import { EditPerformanceZodValues } from '@/src/types';
+import { today } from '@/src/utils/date';
 import { zodResolver } from '@hookform/resolvers/zod';
 import FieldsController from './FieldsController';
 
@@ -22,14 +23,13 @@ function CreatePerformanceModal(props: CreatePerformanceModalProps) {
     useCreatePerformance();
   const exerciseName = useExerciseNameParams();
   const { id: exerciseId } = useLocalSearchParams<{ id: string }>();
-  const nowDay = new Date();
 
   const { control, handleSubmit, setError, reset } = useForm({
     resolver: zodResolver(editPerformanceSchema),
     defaultValues: {
       weight: '0',
       reps: '0',
-      date: nowDay,
+      date: today.toISOString(),
     },
   });
 
@@ -41,7 +41,7 @@ function CreatePerformanceModal(props: CreatePerformanceModalProps) {
         exerciseId,
         weight: Number(weight),
         reps: Number(reps),
-        date: date.toISOString(),
+        date,
       };
 
       await createPerformanceMutation(payload);
