@@ -1,6 +1,7 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { deviceLanguage } from '@/src/i18n';
 import { DatePickerProps } from '.';
 
 const IOSDatePicker = (props: DatePickerProps) => {
@@ -12,6 +13,7 @@ const IOSDatePicker = (props: DatePickerProps) => {
     <View style={styles.iosDatePicker}>
       <DateTimePicker
         testID="ios-date-picker"
+        locale={deviceLanguage}
         value={selectedDate}
         mode="date"
         is24Hour={true}

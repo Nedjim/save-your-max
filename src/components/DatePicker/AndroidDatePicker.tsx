@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 import EditListButton from '../Buttons/EditListButton';
 import { WHITE } from '@/src/constants/colors';
+import { deviceLanguage } from '@/src/i18n';
 import { DatePickerProps } from '.';
 
 function AndroidDatePicker(props: DatePickerProps) {
@@ -30,6 +31,7 @@ function AndroidDatePicker(props: DatePickerProps) {
       <EditListButton name="pencil" onPress={() => setVisible(true)} />
       {visible && (
         <DateTimePicker
+          locale={deviceLanguage}
           testID="android-date-picker"
           value={selectedDate}
           mode="date"

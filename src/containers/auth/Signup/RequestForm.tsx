@@ -123,7 +123,7 @@ function SignupRequestForm(props: SignupFormProps) {
           uppercase={false}
           buttonColor={LIGHT_GREY}
         >
-          {t('auth.signin_title')}
+          {t('actions.cancel')}
         </Button>
       </View>
     </Animated.View>
