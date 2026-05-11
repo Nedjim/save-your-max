@@ -1,5 +1,6 @@
 import { useLocalSearchParams } from 'expo-router';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Modal } from 'react-native';
 import FormErrors from '../../../components/Form/Errors';
 import ModalContent from '@/src/containers/modal/ModalContent';
@@ -18,6 +19,7 @@ type CreatePerformanceModalProps = {
 
 function CreatePerformanceModal(props: CreatePerformanceModalProps) {
   const { onClose, refetch } = props;
+  const { t } = useTranslation();
 
   const { mutateAsync: createPerformanceMutation, isPending } =
     useCreatePerformance();
@@ -73,7 +75,7 @@ function CreatePerformanceModal(props: CreatePerformanceModalProps) {
           onClose();
         }}
         onSubmit={handleSubmit(onSubmit)}
-        submitButtonLabel="Add"
+        submitButtonLabel={t('actions.add')}
         title={exerciseName}
         isPending={isPending}
       >

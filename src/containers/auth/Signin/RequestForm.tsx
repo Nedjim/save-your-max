@@ -1,5 +1,6 @@
 import { useRouter } from 'expo-router';
 import { Controller, Path, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
@@ -22,7 +23,6 @@ type SigninFormValues = z.infer<typeof signinSchema>;
 
 type SigninFormFieldType = {
   name: Path<SigninFormValues>;
-  placeholder: string;
   textContentType: TextContentType;
   secureTextEntry: boolean;
 };
@@ -30,13 +30,11 @@ type SigninFormFieldType = {
 const SIGNIN_FIELDS: SigninFormFieldType[] = [
   {
     name: 'email',
-    placeholder: 'E-mail',
     textContentType: 'emailAddress',
     secureTextEntry: false,
   },
   {
     name: 'password',
-    placeholder: 'Password',
     textContentType: 'password',
     secureTextEntry: true,
   },
@@ -46,6 +44,7 @@ const SigninForm = (props: SigninFormProps) => {
   const { setMode } = props;
 
   const router = useRouter();
+  const { t } = useTranslation();
   const { mutateAsync: signinUserMutation, isPending } = useSignInUser();
   const { control, handleSubmit, setError, reset } = useForm({
     resolver: zodResolver(signinSchema),
@@ -72,14 +71,14 @@ const SigninForm = (props: SigninFormProps) => {
 
   return (
     <Animated.View entering={FadeIn} exiting={FadeOut}>
-      <Text style={styles.title}>Sign In</Text>
-      <Text style={styles.subtitle}>Enter your email and password.</Text>
+      <Text style={styles.title}>{t('auth.signin_title')}</Text>
+      <Text style={styles.description}>{t('auth.signin_description')}</Text>
 
       <FormErrors control={control} />
 
       <View style={styles.fields}>
         {SIGNIN_FIELDS.map((field) => {
-          const { name, placeholder, textContentType, secureTextEntry } = field;
+          const { name, textContentType, secureTextEntry } = field;
 
           return (
             <Controller
@@ -89,7 +88,7 @@ const SigninForm = (props: SigninFormProps) => {
               render={({ field: { value, onChange } }) => (
                 <Input
                   id={name}
-                  placeholder={placeholder}
+                  placeholder={t(`auth.field_${name}`)}
                   value={value}
                   onChange={onChange}
                   secureTextEntry={secureTextEntry}
@@ -102,7 +101,7 @@ const SigninForm = (props: SigninFormProps) => {
       </View>
 
       <Button uppercase={false} onPress={() => setMode('resetPasswordRequest')}>
-        Forgot passeword ?
+        {t('auth.forgot_password')}
       </Button>
 
       <View style={styles.actions}>
@@ -114,7 +113,7 @@ const SigninForm = (props: SigninFormProps) => {
           loading={isPending}
           disabled={isPending}
         >
-          Sign in
+          {t('auth.signin_title')}
         </Button>
         <Divider />
         <Button
@@ -122,7 +121,7 @@ const SigninForm = (props: SigninFormProps) => {
           onPress={() => setMode('signupRequest')}
           uppercase={false}
         >
-          Create an account
+          {t('auth.signup_title')}
         </Button>
       </View>
     </Animated.View>

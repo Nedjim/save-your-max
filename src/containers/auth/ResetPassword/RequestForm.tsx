@@ -1,11 +1,12 @@
-import { Controller, Path, useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import * as z from 'zod';
 import Divider from '@/src/components/Divider';
 import FormErrors from '@/src/components/Form/Errors';
-import Input, { TextContentType } from '@/src/components/Input';
+import Input from '@/src/components/Input';
 import { LIGHT_GREY, TURQUOISE, WHITE } from '@/src/constants/colors';
 import { requestSchema } from '@/src/schemas/auth/request.schema';
 import { resetPasswordEmail } from '@/src/services/supabase';
@@ -19,22 +20,9 @@ type RequestFormProps = {
 
 type RequestFormValues = z.infer<typeof requestSchema>;
 
-type RequestFormFieldType = {
-  name: Path<RequestFormValues>;
-  placeholder: string;
-  textContentType: TextContentType;
-};
-
-const REQUEST_FIELDS: RequestFormFieldType[] = [
-  {
-    name: 'email',
-    placeholder: 'E-mail',
-    textContentType: 'emailAddress',
-  },
-];
-
 function ResetPasswordRequestForm(props: RequestFormProps) {
   const { setMode } = props;
+  const { t } = useTranslation();
 
   const {
     control,
@@ -59,41 +47,35 @@ function ResetPasswordRequestForm(props: RequestFormProps) {
     } catch {
       setError('root', {
         type: 'server',
-        message: 'Reset password error.',
+        message: t('errors.default'),
       });
     }
   };
 
   return (
     <Animated.View entering={FadeIn} exiting={FadeOut}>
-      <Text style={styles.title}>Reset password</Text>
-      <Text style={styles.subtitle}>
-        Enter your email to receive a link to change your password.
+      <Text style={styles.title}>{t('auth.reset_password_title')}</Text>
+      <Text style={styles.description}>
+        {t('auth.reset_password_description')}
       </Text>
 
       <FormErrors control={control} />
 
       <View style={styles.fields}>
-        {REQUEST_FIELDS.map((field) => {
-          const { name, placeholder, textContentType } = field;
-
-          return (
-            <Controller
-              key={name}
-              control={control}
-              name={name}
-              render={({ field: { value, onChange } }) => (
-                <Input
-                  id={name}
-                  placeholder={placeholder}
-                  value={value}
-                  onChange={onChange}
-                  textContentType={textContentType}
-                />
-              )}
+        <Controller
+          key="email"
+          control={control}
+          name="email"
+          render={({ field: { value, onChange } }) => (
+            <Input
+              id="email"
+              placeholder={t('auth.field_email')}
+              value={value}
+              onChange={onChange}
+              textContentType="emailAddress"
             />
-          );
-        })}
+          )}
+        />
       </View>
 
       <View style={styles.actions}>
@@ -105,7 +87,7 @@ function ResetPasswordRequestForm(props: RequestFormProps) {
           loading={isSubmitting}
           disabled={isSubmitting}
         >
-          Apply
+          {t('actions.send')}
         </Button>
         <Divider />
         <Button
@@ -113,7 +95,7 @@ function ResetPasswordRequestForm(props: RequestFormProps) {
           onPress={() => setMode('signinRequest')}
           uppercase={false}
         >
-          Cancel
+          {t('actions.cancel')}
         </Button>
       </View>
     </Animated.View>

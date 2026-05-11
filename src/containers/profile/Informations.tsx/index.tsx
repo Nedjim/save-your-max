@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import Error from '@/src/components/Error';
 import { WHITE } from '@/src/constants/colors';
@@ -6,6 +7,7 @@ import ProfileDetails from './ProfileDetails';
 
 function UserProfileInformations() {
   const { data: profile, isLoading, isError, error, refetch } = useProfile();
+  const { t } = useTranslation();
 
   let content = null;
 
@@ -18,7 +20,7 @@ function UserProfileInformations() {
   }
 
   if (!isLoading && !isError && !profile) {
-    content = <View>Empty state</View>;
+    content = <View>{t('errors.default')}</View>;
   }
 
   if (profile) {

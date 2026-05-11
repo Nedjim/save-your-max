@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import PerformanceModal from './Modals/CreateModal';
@@ -11,6 +12,7 @@ type PerformancesEmptyStateProps = {
 function PerformancesEmptyState(props: PerformancesEmptyStateProps) {
   const { refetch } = props;
   const [showModal, setShowModal] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <Animated.View
@@ -19,8 +21,8 @@ function PerformancesEmptyState(props: PerformancesEmptyStateProps) {
       style={styles.emptyPerformances}
     >
       <EmptyState
-        description="You don’t have any performances yet. Create your first one to get started."
-        buttonTitle="Create"
+        description={t('performance.empty_state_description')}
+        buttonTitle={t('actions.create')}
         onPressButton={() => {
           setShowModal(true);
         }}

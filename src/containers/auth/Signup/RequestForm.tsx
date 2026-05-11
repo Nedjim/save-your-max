@@ -1,4 +1,5 @@
 import { Controller, Path, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
@@ -21,7 +22,6 @@ type SignupFormValues = z.infer<typeof signupSchema>;
 
 type SignupFormFieldType = {
   name: Path<SignupFormValues>;
-  placeholder: string;
   textContentType: TextContentType;
   secureTextEntry: boolean;
 };
@@ -29,19 +29,16 @@ type SignupFormFieldType = {
 const SIGNUP_FIELDS: SignupFormFieldType[] = [
   {
     name: 'email',
-    placeholder: 'E-mail',
     textContentType: 'emailAddress',
     secureTextEntry: false,
   },
   {
     name: 'password',
-    placeholder: 'Password',
     textContentType: 'password',
     secureTextEntry: true,
   },
   {
     name: 'confirmedPassword',
-    placeholder: 'Confirm password',
     textContentType: 'password',
     secureTextEntry: true,
   },
@@ -50,6 +47,7 @@ const SIGNUP_FIELDS: SignupFormFieldType[] = [
 function SignupRequestForm(props: SignupFormProps) {
   const { setMode } = props;
   const { mutateAsync: signupUserMutation, isPending } = useSignupUser();
+  const { t } = useTranslation();
 
   const { control, handleSubmit, setError, reset } = useForm({
     resolver: zodResolver(signupSchema),
@@ -80,14 +78,12 @@ function SignupRequestForm(props: SignupFormProps) {
 
   return (
     <Animated.View entering={FadeIn} exiting={FadeOut}>
-      <Text style={styles.title}>Sign Up</Text>
-      <Text style={styles.subtitle}>
-        Enter your email and password to create your account.
-      </Text>
+      <Text style={styles.title}>{t('auth.signup_title')}</Text>
+      <Text style={styles.description}>{t('auth.signup_description')} </Text>
       <FormErrors control={control} />
       <View style={styles.fields}>
         {SIGNUP_FIELDS.map((field) => {
-          const { name, placeholder, textContentType, secureTextEntry } = field;
+          const { name, textContentType, secureTextEntry } = field;
 
           return (
             <Controller
@@ -97,7 +93,7 @@ function SignupRequestForm(props: SignupFormProps) {
               render={({ field: { value, onChange } }) => (
                 <Input
                   id={name}
-                  placeholder={placeholder}
+                  placeholder={t(`auth.field_${name}`)}
                   secureTextEntry={secureTextEntry}
                   value={value}
                   onChange={onChange}
@@ -119,7 +115,7 @@ function SignupRequestForm(props: SignupFormProps) {
           loading={isPending}
           disabled={isPending}
         >
-          Create
+          {t('actions.create')}
         </Button>
         <Divider />
         <Button
@@ -127,7 +123,7 @@ function SignupRequestForm(props: SignupFormProps) {
           uppercase={false}
           buttonColor={LIGHT_GREY}
         >
-          Sign in
+          {t('auth.signin_title')}
         </Button>
       </View>
     </Animated.View>

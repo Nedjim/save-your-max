@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import Animated, { FadeIn } from 'react-native-reanimated';
@@ -20,12 +21,13 @@ type ModalContentProps = {
 };
 
 const ModalContent = (props: ModalContentProps) => {
+  const { t } = useTranslation();
   const {
     children,
     title,
     onClose,
     onSubmit,
-    submitButtonLabel = 'Ok',
+    submitButtonLabel = t('actions.ok'),
     isPending = false,
   } = props;
 

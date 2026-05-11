@@ -7,6 +7,7 @@ import ToasterComponent from '../components/Toaster';
 import { TURQUOISE } from '../constants/colors';
 import RootNavigator from '../containers/routes';
 import SupabaseOnAuthStateChange from '../containers/supabase/SupabaseOnAuthStateChange';
+import '../i18n';
 
 const queryClient = new QueryClient({
   defaultOptions: {

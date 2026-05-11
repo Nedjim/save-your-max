@@ -1,4 +1,6 @@
+import { useTranslation } from 'react-i18next';
 import { Modal, StyleSheet, Text, View } from 'react-native';
+import { toast } from 'sonner-native';
 import { WHITE } from '@/src/constants/colors';
 import ModalContent from '@/src/containers/modal/ModalContent';
 import { useDeletePerformance } from '@/src/hooks/performances';
@@ -13,6 +15,7 @@ function DeletePerformanceModal(props: DeletePerformanceModalProps) {
   const { id, refetch, closeModal } = props;
   const { mutateAsync: deletePerformanceMutation, isPending } =
     useDeletePerformance();
+  const { t } = useTranslation();
 
   const handleDelete = async () => {
     try {
@@ -20,7 +23,7 @@ function DeletePerformanceModal(props: DeletePerformanceModalProps) {
       refetch();
       closeModal();
     } catch {
-      // WIP: error toast
+      toast.error(t('errors.default'));
     }
   };
 
@@ -35,15 +38,13 @@ function DeletePerformanceModal(props: DeletePerformanceModalProps) {
       <ModalContent
         onClose={closeModal}
         onSubmit={handleDelete}
-        submitButtonLabel="Yes"
-        title="Delete"
+        submitButtonLabel={t('actions.yes')}
+        title={t('actions.delete')}
         isPending={isPending}
       >
         <View style={styles.main}>
-          <Text style={styles.text}>
-            This performance is about to be deleted.
-          </Text>
-          <Text style={styles.text}>Are you sure ?</Text>
+          <Text style={styles.text}>{t('performance.delete_message')}</Text>
+          <Text style={styles.text}>{t('modal.confirm_message')}</Text>
         </View>
       </ModalContent>
     </Modal>

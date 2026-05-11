@@ -1,23 +1,21 @@
 import { Control, Controller, Path } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import Input, { TextContentType } from '@/src/components/Input';
 import { UpdatedEmailFormValues } from '@/src/types';
 
 type UpdateEmailField = {
   name: Path<UpdatedEmailFormValues>;
-  placeholder: string;
   textContentType: TextContentType;
 };
 
 const FIELDS: UpdateEmailField[] = [
   {
     name: 'email',
-    placeholder: 'New e-mail',
     textContentType: 'emailAddress',
   },
   {
     name: 'confirmedEmail',
-    placeholder: 'Confirmed e-mail',
     textContentType: 'emailAddress',
   },
 ];
@@ -28,11 +26,12 @@ type UpdateEmailFieldsProps = {
 
 const UpdateEmailFields = (props: UpdateEmailFieldsProps) => {
   const { control } = props;
+  const { t } = useTranslation();
 
   return (
     <View style={styles.fields}>
       {FIELDS.map((field) => {
-        const { name, placeholder, textContentType } = field;
+        const { name, textContentType } = field;
 
         return (
           <Controller
@@ -42,7 +41,7 @@ const UpdateEmailFields = (props: UpdateEmailFieldsProps) => {
             render={({ field: { value, onChange } }) => (
               <Input
                 id={name}
-                placeholder={placeholder}
+                placeholder={t(`auth.field_${name}`)}
                 value={value}
                 onChange={onChange}
                 textContentType={textContentType}

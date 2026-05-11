@@ -1,11 +1,11 @@
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-import { Button } from 'react-native-paper';
 import { toast } from 'sonner-native';
+import SaveProfileButton from '../Buttons/SaveProfileButton';
 import UpdateEmailButton from '../Buttons/UpdateEmailButton';
 import UpdatePasswordButton from '../Buttons/UpdatePasswordButton';
 import Divider from '@/src/components/Divider';
-import { DARK_GREY, TURQUOISE, WHITE } from '@/src/constants/colors';
 import { useUpdateProfile } from '@/src/hooks/profile';
 import { updateProfileSchema } from '@/src/schemas/profile/editProfile.schema';
 import {
@@ -24,14 +24,9 @@ type ProfileDetailsProps = {
 
 function ProfileDetails(props: ProfileDetailsProps) {
   const { profile, refetch } = props;
-
   const { mutateAsync: updateProfileMutation } = useUpdateProfile();
-  const {
-    control,
-    handleSubmit,
-    reset,
-    formState: { isDirty, isSubmitting },
-  } = useForm({
+  const { t } = useTranslation();
+  const { control, handleSubmit, reset } = useForm({
     resolver: zodResolver(updateProfileSchema),
     defaultValues: {
       name: profile.name,
@@ -41,16 +36,14 @@ function ProfileDetails(props: ProfileDetailsProps) {
     },
   });
 
-  const isSubmitDisabled = !isDirty || isSubmitting;
-
   const onSubmit = async (data: UpdateProfileFormValues) => {
     try {
       await updateProfileMutation(data);
       refetch();
       reset(data);
-      toast.success('Updated successfully!');
+      toast.success(t('success.saved'));
     } catch {
-      toast.error('Something went wrong');
+      toast.error(t('errors.default'));
     }
   };
 
@@ -65,17 +58,10 @@ function ProfileDetails(props: ProfileDetailsProps) {
     <>
       <UserProfileFieldsController control={control} />
       <View>
-        <Button
-          onPress={handleSubmit(onSubmit, onError)}
-          style={{
-            backgroundColor: isSubmitDisabled ? DARK_GREY : TURQUOISE,
-          }}
-          labelStyle={{ color: WHITE }}
-          disabled={isSubmitDisabled}
-          loading={isSubmitting}
-        >
-          Save changes
-        </Button>
+        <SaveProfileButton
+          onPress={() => handleSubmit(onSubmit, onError)}
+          control={control}
+        />
         <Divider />
         <UpdateEmailButton />
         <UpdatePasswordButton />

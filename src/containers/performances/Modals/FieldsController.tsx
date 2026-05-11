@@ -1,4 +1,5 @@
 import { Control, Controller } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import Input from '../../../components/Input';
 import Label from '../../../components/Label';
@@ -19,11 +20,12 @@ type FieldsControllerProps = {
 
 function FieldsController(props: FieldsControllerProps) {
   const { control } = props;
+  const { t } = useTranslation();
 
   return (
     <View style={styles.fields}>
       <View>
-        <Label label="Weight (kg)" nativeId="performance-weight" />
+        <Label label={t('performance.weight')} nativeId="performance-weight" />
         <Controller
           control={control}
           name="weight"
@@ -32,13 +34,13 @@ function FieldsController(props: FieldsControllerProps) {
               value={value}
               onChange={onChange}
               id="performance-weight"
-              placeholder="ex: 34 kg"
+              placeholder={t('performance.weight_placeholder')}
             />
           )}
         />
       </View>
       <View>
-        <Label label="Reps" nativeId="performance-reps" />
+        <Label label={t('performance.reps')} nativeId="performance-reps" />
         <Controller
           control={control}
           name="reps"
@@ -47,13 +49,13 @@ function FieldsController(props: FieldsControllerProps) {
               value={value}
               onChange={onChange}
               id="performance-reps"
-              placeholder="ex: 10 repetitions"
+              placeholder={t('performance.reps_placeholder')}
             />
           )}
         />
       </View>
       <View style={styles.datePicker}>
-        <Label label="Date" nativeId="performance-date" />
+        <Label label={t('performance.date')} nativeId="performance-date" />
         <Controller
           control={control}
           name="date"

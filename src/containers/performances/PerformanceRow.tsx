@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import EditListButton from '../../components/Buttons/EditListButton';
@@ -15,12 +16,13 @@ type PerformanceRowProps = {
   onDelete: (id: string) => void;
 };
 
-const PerformanceRow = (props: PerformanceRowProps) => {
+function PerformanceRow(props: PerformanceRowProps) {
   const { performance, onUpdate, onDelete } = props;
   const { weight, reps } = performance;
+  const { t } = useTranslation();
 
   const date = dayjs(performance.date).format('DD/MM/YYYY');
-  const weightLabel = 'Weight';
+  const weightLabel = t('performance.weight');
 
   return (
     <Animated.View
@@ -45,7 +47,7 @@ const PerformanceRow = (props: PerformanceRowProps) => {
       </View>
     </Animated.View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   performanceRow: {

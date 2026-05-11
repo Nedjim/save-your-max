@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
@@ -9,14 +10,16 @@ import styles from './styles';
 
 type EmailSentType = {
   setMode: (mode: AuthMode) => void;
-  subtitle: string;
+  description: string;
 };
 
 function EmailSent(props: EmailSentType) {
-  const { setMode, subtitle } = props;
+  const { setMode, description } = props;
+  const { t } = useTranslation();
+
   return (
     <Animated.View entering={FadeIn} exiting={FadeOut}>
-      <Text style={styles.title}>Email successfuly sent!</Text>
+      <Text style={styles.title}>{t('auth.email_sent_title')}</Text>
 
       <View style={styles.icon}>
         <Ionicons
@@ -28,14 +31,14 @@ function EmailSent(props: EmailSentType) {
         />
       </View>
 
-      <Text style={styles.subtitle}>{subtitle}</Text>
+      <Text style={styles.description}>{description}</Text>
       <Divider />
       <Button
         buttonColor={LIGHT_GREY}
         onPress={() => setMode('signinRequest')}
         uppercase={false}
       >
-        Cancel
+        {t('actions.cancel')}
       </Button>
     </Animated.View>
   );

@@ -1,4 +1,5 @@
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Modal } from 'react-native';
 import { toast } from 'sonner-native';
 import ModalContent from '@/src/containers/modal/ModalContent';
@@ -15,9 +16,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import FieldsController from './FieldsController';
 
 type UpdatePerformanceModalProps = {
-  onClose: () => void;
   performance: Performance;
   refetch: () => void;
+  onClose: () => void;
 };
 
 function UpdatePerformanceModal(props: UpdatePerformanceModalProps) {
@@ -25,6 +26,7 @@ function UpdatePerformanceModal(props: UpdatePerformanceModalProps) {
   const { mutateAsync: updatePerformanceMutation, isPending } =
     useUpdatePerformance();
   const exerciseName = useExerciseNameParams();
+  const { t } = useTranslation();
 
   const { control, handleSubmit, reset } = useForm({
     resolver: zodResolver(editPerformanceSchema),
@@ -47,11 +49,11 @@ function UpdatePerformanceModal(props: UpdatePerformanceModalProps) {
       };
 
       await updatePerformanceMutation(payload);
-      toast.success('Nice! Your performance is up to date.');
+      toast.success(t('performance.create_success'));
       refetch();
       onClose();
     } catch {
-      toast.error('Something went wrong');
+      toast.error(t('errors.default'));
     }
   };
 
@@ -76,7 +78,7 @@ function UpdatePerformanceModal(props: UpdatePerformanceModalProps) {
           onClose();
         }}
         onSubmit={handleSubmit(onSubmit, onError)}
-        submitButtonLabel="Update"
+        submitButtonLabel={t('actions.update')}
         title={exerciseName}
         isPending={isPending}
       >

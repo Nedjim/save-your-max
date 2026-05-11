@@ -1,4 +1,5 @@
 import { Controller, Path, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
@@ -21,25 +22,24 @@ type ConfirmFormValues = z.infer<typeof confirmSchema>;
 
 type ConfirmFormFieldType = {
   name: Path<ConfirmFormValues>;
-  placeholder: string;
   textContentType: TextContentType;
 };
 
 const CONFIRM_FIELDS: ConfirmFormFieldType[] = [
   {
     name: 'password',
-    placeholder: 'Password',
     textContentType: 'password',
   },
   {
     name: 'confirmedPassword',
-    placeholder: 'Confirm password',
     textContentType: 'password',
   },
 ];
 
 function ResetPasswordConfirmForm(props: ConfirmFormProps) {
   const { setMode } = props;
+  const { t } = useTranslation();
+
   const {
     access_token: token,
     type,
@@ -64,7 +64,7 @@ function ResetPasswordConfirmForm(props: ConfirmFormProps) {
     if (!token || type !== 'recovery' || !refreshToken) {
       setError('root', {
         type: 'server',
-        message: 'Invalid URL.',
+        message: t('errors.invalid_url'),
       });
 
       return;
@@ -85,12 +85,12 @@ function ResetPasswordConfirmForm(props: ConfirmFormProps) {
 
   return (
     <Animated.View entering={FadeIn} exiting={FadeOut}>
-      <Text style={styles.title}>Reset password</Text>
+      <Text style={styles.title}>{t('auth.reset_password_title')}</Text>
       <FormErrors control={control} />
 
       <View style={styles.fields}>
         {CONFIRM_FIELDS.map((field) => {
-          const { name, placeholder, textContentType } = field;
+          const { name, textContentType } = field;
 
           return (
             <Controller
@@ -100,7 +100,7 @@ function ResetPasswordConfirmForm(props: ConfirmFormProps) {
               render={({ field: { value, onChange } }) => (
                 <Input
                   id={name}
-                  placeholder={placeholder}
+                  placeholder={t(`auth.field_${name}`)}
                   secureTextEntry
                   value={value}
                   onChange={onChange}
@@ -120,7 +120,7 @@ function ResetPasswordConfirmForm(props: ConfirmFormProps) {
           loading={isSubmitting}
           disabled={isSubmitting}
         >
-          Update
+          {t('actions.update')}
         </Button>
       </View>
     </Animated.View>

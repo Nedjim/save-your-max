@@ -1,30 +1,36 @@
+import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { Button } from 'react-native-paper';
+import { toast } from 'sonner-native';
 import { ERROR } from '@/src/constants/colors';
 import { useSignOutUser, useSupabaseSession } from '@/src/hooks/auth';
 
-const SignoutButton = () => {
-  const { mutateAsync: signoutUserMutation } = useSignOutUser();
+const SignOutButton = () => {
+  const { mutateAsync: signOutUserMutation } = useSignOutUser();
   const { resetSession } = useSupabaseSession();
+  const router = useRouter();
+  const { t } = useTranslation();
 
-  const handleSignout = async () => {
+  const handleSignOut = async () => {
     try {
-      await signoutUserMutation();
+      await signOutUserMutation();
       resetSession();
+      router.replace('/login');
     } catch {
-      // WIP: error toast
+      toast.error(t('errors.default'));
     }
   };
 
   return (
     <Button
       labelStyle={{ color: ERROR }}
-      accessibilityLabel="Log out"
-      onPress={handleSignout}
+      accessibilityLabel={t('actions.logout')}
+      onPress={handleSignOut}
       mode="text"
     >
-      Log out
+      {t('actions.logout')}
     </Button>
   );
 };
 
-export default SignoutButton;
+export default SignOutButton;

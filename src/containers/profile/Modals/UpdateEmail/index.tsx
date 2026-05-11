@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Modal } from 'react-native';
+import { toast } from 'sonner-native';
 import FormErrors from '@/src/components/Form/Errors';
 import ModalContent from '@/src/containers/modal/ModalContent';
 import { useUpdateUser } from '@/src/hooks/auth';
@@ -18,9 +20,10 @@ const UpdateEmailModal = (props: UpdateEmailModalProps) => {
   const { closeModal } = props;
 
   const [success, setSuccess] = useState(false);
+  const { t } = useTranslation();
   const { mutateAsync: updateUserMutation, isPending } = useUpdateUser();
 
-  const { control, handleSubmit, setError, reset } = useForm({
+  const { control, handleSubmit, reset } = useForm({
     resolver: zodResolver(updateEmailSchema),
     defaultValues: {
       email: '',
@@ -36,13 +39,8 @@ const UpdateEmailModal = (props: UpdateEmailModalProps) => {
       await updateUserMutation(payload);
       reset();
       setSuccess(true);
-    } catch (error) {
-      if (error instanceof Error) {
-        setError('root', {
-          type: 'server',
-          message: error.message,
-        });
-      }
+    } catch {
+      toast.error(t('errors.default'));
     }
   };
 
@@ -58,8 +56,8 @@ const UpdateEmailModal = (props: UpdateEmailModalProps) => {
         onClose={closeModal}
         onSubmit={!success ? handleSubmit(onSubmit) : undefined}
         isPending={isPending}
-        submitButtonLabel="Update"
-        title="Change email"
+        submitButtonLabel={t('actions.update')}
+        title={t('auth.reset_email_title')}
       >
         {success ? (
           <UpdateEmailSent />

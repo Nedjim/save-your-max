@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
@@ -8,13 +9,14 @@ import { useSignOutUser } from '@/src/hooks/auth';
 import styles from './styles';
 
 type DoneProps = {
-  subtitle: string;
+  description: string;
 };
 
 function Done(props: DoneProps) {
-  const { subtitle } = props;
+  const { description } = props;
 
   const router = useRouter();
+  const { t } = useTranslation();
   const { mutate: signoutUserMutation, isPending } = useSignOutUser();
 
   const handlePress = () => {
@@ -36,7 +38,7 @@ function Done(props: DoneProps) {
           style={styles.checkmarkIcon}
         />
       </View>
-      <Text style={styles.subtitle}>{subtitle}</Text>
+      <Text style={styles.description}>{description}</Text>
       <Button
         onPress={handlePress}
         uppercase={false}
@@ -45,7 +47,7 @@ function Done(props: DoneProps) {
         loading={isPending}
         disabled={isPending}
       >
-        Sign in
+        {t('auth.signin_title')}
       </Button>
     </Animated.View>
   );

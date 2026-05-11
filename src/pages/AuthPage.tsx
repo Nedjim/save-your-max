@@ -1,12 +1,13 @@
 import { useSegments } from 'expo-router';
 import React, { ReactNode, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import { MODAL_OPACITY } from '../constants/colors';
 import Done from '../containers/auth/Done';
 import EmailSent from '../containers/auth/EmailSent';
 import ResetPasswordConfirmForm from '../containers/auth/ResetPassword/ConfirmForm';
 import ResetPasswordRequestForm from '../containers/auth/ResetPassword/RequestForm';
-import SigninForm from '../containers/auth/Signin/RequestForm';
+import SigninRequestForm from '../containers/auth/Signin/RequestForm';
 import SignupConfirmForm from '../containers/auth/Signup/ConfirmForm';
 import SignupRequestForm from '../containers/auth/Signup/RequestForm';
 import { AuthMode } from '../types';
@@ -14,17 +15,18 @@ import { AuthMode } from '../types';
 function AuthPage() {
   const segments = useSegments();
   const [mode, setMode] = useState<AuthMode>('signinRequest');
+  const { t } = useTranslation();
   const isResetPasswordConfirm = segments.some((s) => s === 'reset-password');
   const isResetEmailConfirm = segments.some((s) => s === 'reset-email');
   const isSignupConfirm = segments.some((s) => s === 'signup-confirm');
 
   const SCREENS: Record<AuthMode, ReactNode> = {
-    signinRequest: <SigninForm setMode={setMode} />,
+    signinRequest: <SigninRequestForm setMode={setMode} />,
     signupRequest: <SignupRequestForm setMode={setMode} />,
     signupEmailSent: (
       <EmailSent
         setMode={setMode}
-        subtitle="Please check your email to confirm your account."
+        description={t('auth.email_sent_signup_description')}
       />
     ),
     signupConfirm: <SignupConfirmForm />,
@@ -32,18 +34,15 @@ function AuthPage() {
     resetPasswordEmailSent: (
       <EmailSent
         setMode={setMode}
-        subtitle="If an account exists, you’ll receive a password reset link shortly. Please follow the instructions."
+        description={t('auth.email_sent_reset_password_description')}
       />
     ),
     resetPasswordConfirm: <ResetPasswordConfirmForm setMode={setMode} />,
     resetPasswordDone: (
-      <Done
-        subtitle="Your password has been updated successfully. Please sign in with your
-        new password."
-      />
+      <Done description={t('auth.reset_password_done_description')} />
     ),
     resetEmailDone: (
-      <Done subtitle="Your password has been updated successfully. Please sign in with you new Email." />
+      <Done description={t('auth.reset_email_done_description')} />
     ),
   };
 

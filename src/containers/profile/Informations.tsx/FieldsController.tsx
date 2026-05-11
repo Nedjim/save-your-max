@@ -1,4 +1,5 @@
 import { Control, Controller, Path } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, TextInput, View } from 'react-native';
 import DatePicker from '@/src/components/DatePicker';
 import Label from '@/src/components/Label';
@@ -21,47 +22,37 @@ const minimumDate = new Date(
   today.getDate(),
 );
 
+const TEXT_FIELDS: Path<Omit<UpdateProfileFormValues, 'birthday'>>[] = [
+  'name',
+  'surname',
+  'pseudo',
+];
+
 type UserProfileFieldsControllerProps = {
   control: Control<UpdateProfileFormValues>;
 };
 
-type UserProfileField = {
-  name: Path<UpdateProfileFormValues>;
-  label: string;
-  placeholder?: string;
-};
-
-const DEFAULT_TEXT_FIELDS: UserProfileField[] = [
-  { placeholder: 'Ex: John', label: 'First name', name: 'name' },
-  { placeholder: 'Ex: Doe', label: 'Last name', name: 'surname' },
-  {
-    placeholder: 'Ex: Mimi Siku',
-    label: 'Pseudo',
-    name: 'pseudo',
-  },
-];
-
 function UserProfileFieldsController(props: UserProfileFieldsControllerProps) {
   const { control } = props;
+  const { t } = useTranslation();
 
   return (
     <>
-      {DEFAULT_TEXT_FIELDS.map((field) => {
-        const { name, label, placeholder } = field;
-        const formattedId = `user-profile-${name}`;
+      {TEXT_FIELDS.map((key) => {
+        const formattedId = `user-profile-${key}`;
 
         return (
           <View style={styles.field} key={formattedId}>
-            <Label label={label} nativeId={formattedId} />
+            <Label label={t(`profile.${key}`)} nativeId={formattedId} />
             <Controller
               key={formattedId}
               control={control}
-              name={name}
+              name={key}
               render={({ field: { value, onChange } }) => {
                 return (
                   <TextInput
                     id={formattedId}
-                    placeholder={placeholder}
+                    placeholder={t(`profile.${key}_placeholder`)}
                     style={styles.input}
                     accessibilityLabelledBy={formattedId}
                     onChangeText={onChange}
@@ -79,7 +70,10 @@ function UserProfileFieldsController(props: UserProfileFieldsControllerProps) {
         );
       })}
       <View style={[styles.field, styles.datePicker]}>
-        <Label label="Date of birth" nativeId="user-profile-birthday" />
+        <Label
+          label={t('profile.date_of_birth')}
+          nativeId="user-profile-date-of-birth"
+        />
         <Controller
           control={control}
           name="birthday"

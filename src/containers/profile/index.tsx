@@ -1,9 +1,9 @@
 import { StyleSheet, View } from 'react-native';
 import DeleteUserProfileButton from './Buttons/DeleteUserProfileButton';
-import SignoutButton from './Buttons/SignoutButton';
 import { DEFAULT_CONTAINER_BACKGROUND } from '@/src/constants/colors';
 import UserProfileHeader from './Header';
 import UserProfileInformations from './Informations.tsx';
+import SignOutButton from './Buttons/SignOutButton';
 
 const UserProfile = () => {
   return (
@@ -11,7 +11,7 @@ const UserProfile = () => {
       <UserProfileHeader />
       <UserProfileInformations />
       <View style={styles.actions}>
-        <SignoutButton />
+        <SignOutButton />
         <DeleteUserProfileButton />
       </View>
     </View>

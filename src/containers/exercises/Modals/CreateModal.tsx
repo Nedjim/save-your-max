@@ -1,4 +1,5 @@
 import { Controller, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Modal, StyleSheet, View } from 'react-native';
 import { toast } from 'sonner-native';
 import * as z from 'zod';
@@ -21,6 +22,7 @@ function CreateExerciseModal(props: CreateExerciseModalProps) {
   const { refetch, closeModal } = props;
   const { mutateAsync: createExerciseMutation, isPending } =
     useCreateExercise();
+  const { t } = useTranslation();
 
   const { control, handleSubmit, setError, reset } = useForm({
     resolver: zodResolver(createExerciseSchema),
@@ -36,9 +38,11 @@ function CreateExerciseModal(props: CreateExerciseModalProps) {
 
   const onSubmit = async (data: CreateExerciseFormValues) => {
     try {
-      await createExerciseMutation(data.name);
+      const { name } = data;
+
+      await createExerciseMutation(name);
       refetch();
-      toast.success(`Exercise "${data.name}" was created successfully 🎉`);
+      toast.success(t('exercise.create_success', { name }));
 
       handleClose();
     } catch (error) {
@@ -62,8 +66,8 @@ function CreateExerciseModal(props: CreateExerciseModalProps) {
       <ModalContent
         onClose={handleClose}
         onSubmit={handleSubmit(onSubmit)}
-        submitButtonLabel="Create"
-        title="New exercise"
+        submitButtonLabel={t('actions.create')}
+        title={t('exercise.create_title')}
         isPending={isPending}
       >
         <Controller
@@ -73,7 +77,7 @@ function CreateExerciseModal(props: CreateExerciseModalProps) {
           render={({ field: { value, onChange } }) => (
             <Input
               id="exercise-name"
-              placeholder="Bench press"
+              placeholder={t('exercise.create_title_placeholder')}
               value={value}
               onChange={onChange}
               textContentType="none"

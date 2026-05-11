@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
   },
-  subtitle: {
+  description: {
     color: '#ccc',
     marginVertical: 16,
   },

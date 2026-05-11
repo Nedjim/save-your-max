@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Modal } from 'react-native';
 import FormErrors from '@/src/components/Form/Errors';
 import ModalContent from '@/src/containers/modal/ModalContent';
@@ -18,6 +19,7 @@ function UpdatePasswordModal(props: UpdatePasswordModalProps) {
   const { closeModal } = props;
   const { mutateAsync: updateUserMutation, isPending } = useUpdateUser();
   const [success, setSuccess] = useState(false);
+  const { t } = useTranslation();
 
   const { control, handleSubmit, setError, reset } = useForm({
     resolver: zodResolver(updatePasswordSchema),
@@ -57,8 +59,8 @@ function UpdatePasswordModal(props: UpdatePasswordModalProps) {
         onClose={closeModal}
         onSubmit={!success ? handleSubmit(onSubmit) : undefined}
         isPending={isPending}
-        submitButtonLabel="Update"
-        title={!success ? 'Change password' : ''}
+        submitButtonLabel={t('actions.update')}
+        title={!success ? t('auth.reset_password_title') : ''}
       >
         {success ? (
           <UpdatePasswordSuccess />

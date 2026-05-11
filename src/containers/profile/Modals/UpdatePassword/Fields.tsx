@@ -1,23 +1,21 @@
 import { Control, Controller, Path } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import Input from '@/src/components/Input';
 import { RequestFormValues } from '@/src/types';
 
 type UpdatePasswordFieldType = {
   name: Path<RequestFormValues>;
-  placeholder: string;
   textContentType: 'password';
 };
 
 const UPDATE_PASSWORD_FIELDS: UpdatePasswordFieldType[] = [
   {
     name: 'password',
-    placeholder: 'New password',
     textContentType: 'password',
   },
   {
     name: 'confirmedPassword',
-    placeholder: 'Confirmed password',
     textContentType: 'password',
   },
 ];
@@ -28,11 +26,12 @@ type UpdatePasswordFieldsProps = {
 
 const UpdatePasswordFields = (props: UpdatePasswordFieldsProps) => {
   const { control } = props;
+  const { t } = useTranslation();
 
   return (
     <View style={styles.fields}>
       {UPDATE_PASSWORD_FIELDS.map((field) => {
-        const { name, placeholder, textContentType } = field;
+        const { name, textContentType } = field;
 
         return (
           <Controller
@@ -42,7 +41,7 @@ const UpdatePasswordFields = (props: UpdatePasswordFieldsProps) => {
             render={({ field: { value, onChange } }) => (
               <Input
                 id={name}
-                placeholder={placeholder}
+                placeholder={t(`auth.field_${name}`)}
                 value={value}
                 onChange={onChange}
                 textContentType={textContentType}
