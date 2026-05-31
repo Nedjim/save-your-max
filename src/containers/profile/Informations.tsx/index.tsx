@@ -1,8 +1,9 @@
-import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import Error from '@/src/components/Error';
+import Loader from '@/src/components/Loader';
 import { WHITE } from '@/src/constants/colors';
 import { useProfile } from '@/src/hooks/profile';
+import { useTranslation } from 'react-i18next';
+import { StyleSheet, View } from 'react-native';
 import ProfileDetails from './ProfileDetails';
 
 function UserProfileInformations() {
@@ -12,7 +13,7 @@ function UserProfileInformations() {
   let content = null;
 
   if (isLoading) {
-    content = <ActivityIndicator size="large" color={WHITE} />;
+    content = <Loader />;
   }
 
   if (!isLoading && isError) {

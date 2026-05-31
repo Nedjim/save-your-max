@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Modal, StyleSheet, Text, View } from 'react-native';
 import { toast } from 'sonner-native';
@@ -14,12 +15,14 @@ function DeleteProfileModal(props: DeleteProfileModalProps) {
   const { closeModal } = props;
   const { resetSession } = useSupabaseSession();
   const { t } = useTranslation();
+  const router = useRouter();
   const { mutateAsync: deleteProfileMutation, isPending } = useDeleteProfile();
 
   const handleDelete = async () => {
     try {
       await deleteProfileMutation();
       resetSession();
+      router.replace('/login');
     } catch {
       toast.error(t('errors.default'));
     }
@@ -41,7 +44,9 @@ function DeleteProfileModal(props: DeleteProfileModalProps) {
         isPending={isPending}
       >
         <View style={styles.main}>
-          <Text style={styles.text}>{t('auth.delete_account_description')}</Text>
+          <Text style={styles.text}>
+            {t('auth.delete_account_description')}
+          </Text>
           <Text style={styles.text}>{t('modal.confirm_message')}</Text>
         </View>
       </ModalContent>

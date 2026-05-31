@@ -1,0 +1,15 @@
+# Projet rules
+
+Objectif :
+Construire un MVP mobile simple et maintenable.
+
+Règles :
+- Modifier le minimum nécessaire
+- Respecter les patterns existants
+- Ne jamais introduire de complexité inutile
+- Réutiliser les composants existants
+- Expliquer brièvement le plan avant de coder
+- Écrire du code production-ready mais simple
+- Ne jamais casser les flows existants
+- Si une décision est ambiguë, proposer 2 options avec tradeoffs
+- Ajouter des commentaires uniquement quand nécessaire

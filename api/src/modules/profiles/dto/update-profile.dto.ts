@@ -30,5 +30,5 @@ export class UpdateProfileDto {
   @IsOptional()
   @Type(() => Date)
   @IsDate()
-  birthday?: Date;
+  dateOfBirth?: Date;
 }

@@ -27,6 +27,9 @@ export const en = {
     signup_title: 'Create an account',
     signup_description:
       ' Enter your email and password to create your account.',
+    signup_confirm_error_title: 'Invalid verification link',
+    signup_confirm_error_description:
+      'This verification link is invalid or has expired. Please restart signup to receive a new verification link.',
     delete_account_title: 'Delete account',
     delete_account_description: 'Your account is about to be deleted.',
     reset_email_title: 'Change email address',

@@ -46,10 +46,10 @@ export function useSignupUser() {
   });
 }
 
-export function useSignupConfirmUser(token: string, refreshToken: string) {
+export function useSignupConfirmUser(code: string) {
   const query = useQuery({
-    queryKey: ['signup', 'confirm', token, refreshToken],
-    queryFn: () => signupConfirmUser(token, refreshToken),
+    queryKey: ['signup', 'confirm', code],
+    queryFn: () => signupConfirmUser(code),
   });
 
   return query;

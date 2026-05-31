@@ -1,7 +1,6 @@
-import { ActivityIndicator } from 'react-native';
-import { useExercises } from '../../hooks/exercises';
 import Error from '@/src/components/Error';
-import { WHITE } from '@/src/constants/colors';
+import Loader from '@/src/components/Loader';
+import { useExercises } from '../../hooks/exercises';
 import ExerciseList from './ExerciseList';
 import EmptyState from './ExercisesEmptyState';
 
@@ -11,7 +10,7 @@ function Exercises() {
   let content = null;
 
   if (isLoading) {
-    content = <ActivityIndicator size="large" color={WHITE} />;
+    content = <Loader />;
   }
 
   if (!isLoading && isError) {

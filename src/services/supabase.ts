@@ -1,7 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
-import * as Linking from 'expo-linking';
+import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
+import { toast } from 'sonner-native';
 import 'expo-sqlite/localStorage/install';
 import {
   ApiError,
@@ -18,12 +19,9 @@ const supabasePublishableKey =
 const webStorage =
   typeof window !== 'undefined'
     ? {
-        getItem: (key: string) =>
-          Promise.resolve(window.localStorage.getItem(key)),
-        setItem: (key: string, value: string) =>
-          Promise.resolve(window.localStorage.setItem(key, value)),
-        removeItem: (key: string) =>
-          Promise.resolve(window.localStorage.removeItem(key)),
+        getItem: SecureStore.getItemAsync,
+        setItem: SecureStore.setItemAsync,
+        removeItem: SecureStore.deleteItemAsync,
       }
     : undefined;
 
@@ -32,6 +30,7 @@ const storage = Platform.OS === 'web' ? webStorage : AsyncStorage;
 export const supabase = createClient(supabaseUrl, supabasePublishableKey, {
   auth: {
     storage,
+    flowType: 'pkce',
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: false,
@@ -127,9 +126,9 @@ export const getUserSession = async () => {
   }
 };
 
-const signupUrl = Linking.createURL('signup-confirm');
-
 export const signupUser = async (user: SupabasePayload) => {
+  const signupUrl = 'saveyourmax://signup-confirm';
+
   const { data, error: sessionError } = await supabase.auth.signUp({
     ...user,
     options: {
@@ -144,25 +143,35 @@ export const signupUser = async (user: SupabasePayload) => {
   return data;
 };
 
-export const signupConfirmUser = async (
-  token: string,
-  refreshToken: string,
-) => {
-  const { error: sessionError } = await supabase.auth.setSession({
-    access_token: token,
-    refresh_token: refreshToken,
-  });
+export const signupConfirmUser = async (code: string) => {
+  const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
-  if (sessionError) {
-    throw sessionError;
+  if (error) {
+    throw error;
   }
 
-  return await createProfile();
+  if (!data.user) {
+    throw new Error('No user returned after signup confirmation');
+  }
+
+  try {
+    const profile = await createProfile();
+
+    toast.success('Votre compte a été créé avec succès');
+
+    return profile;
+  } catch (error) {
+    await signOutUser();
+
+    toast.error('Oups ! La création de votre profil a échoué.');
+
+    throw error;
+  }
 };
 
-const resetPasswordUrl = Linking.createURL('reset-password');
-
 export const resetPasswordEmail = async (email: string) => {
+  const resetPasswordUrl = 'saveyourmax://reset-password';
+
   return await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: resetPasswordUrl,
   });
@@ -193,9 +202,9 @@ export const resetPassword = async (
   await supabase.auth.signOut();
 };
 
-const resetEmailURL = Linking.createURL('reset-email');
-
 export const updateUser = async (payload: UpdateUserPayload) => {
+  const resetEmailURL = 'saveyourmax://reset-email';
+
   const { data, error } = await supabase.auth.updateUser(payload, {
     emailRedirectTo: resetEmailURL,
   });

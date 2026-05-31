@@ -1,8 +1,8 @@
+import { DARK_GREY, TURQUOISE, WHITE } from '@/src/constants/colors';
+import { UpdateProfileFormValues } from '@/src/types';
 import { Control, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-native-paper';
-import { DARK_GREY, TURQUOISE, WHITE } from '@/src/constants/colors';
-import { UpdateProfileFormValues } from '@/src/types';
 
 type SaveProfileButtonProps = {
   onPress: () => void;

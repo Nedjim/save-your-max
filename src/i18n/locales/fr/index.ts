@@ -27,6 +27,9 @@ export const fr = {
     signup_title: 'Créer un compte',
     signup_description:
       'Entrez votre e-mail et votre mot de passe pour créer un compte.',
+    signup_confirm_error_title: 'Lien de vérification invalide',
+    signup_confirm_error_description:
+      'Ce lien de vérification est invalide ou a expiré. Relancez l’inscription pour recevoir un nouveau lien.',
     delete_account_title: 'Supprimer le compte',
     delete_account_description:
       'Vous êtes sur le point de supprimer de votre compte.',
