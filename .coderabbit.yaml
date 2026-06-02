@@ -1,0 +1,49 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+
+language: "en-US"
+
+reviews:
+  profile: chill
+  high_level_summary: true
+  review_status: true
+
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - main
+      - staging
+
+  path_instructions:
+    - path: "src/**/*.{ts,tsx}"
+      instructions: |
+        Review as a senior React Native engineer.
+
+        Focus on:
+        - React Native performance
+        - Expo Router conventions
+        - hooks correctness
+        - unnecessary re-renders
+        - TypeScript strictness
+        - deep link edge cases
+
+    - path: "api/**/*.{ts,tsx}"
+      instructions: |
+        Review as a senior backend engineer.
+
+        Focus on:
+        - API safety
+        - Prisma consistency
+        - timezone handling (UTC)
+        - auth edge cases
+        - async race conditions
+        - database consistency
+
+    - path: "**/*.{ts,tsx}"
+      instructions: |
+        Focus on:
+        - clean architecture
+        - naming consistency
+        - dead code
+        - error handling
+        - maintainability
