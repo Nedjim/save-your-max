@@ -13,6 +13,7 @@ reviews:
     base_branches:
       - main
       - staging
+      - develop
 
   path_instructions:
     - path: "src/**/*.{ts,tsx}"

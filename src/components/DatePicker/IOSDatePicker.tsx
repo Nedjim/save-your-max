@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import { DatePickerProps } from '.';
 
 const IOSDatePicker = (props: DatePickerProps) => {
-  const { date, onChange, ...rest } = props;
+  const { date, onChange, maximumDate, ...rest } = props;
 
   const [selectedDate, setSelectedDate] = useState(date);
 
@@ -15,6 +15,7 @@ const IOSDatePicker = (props: DatePickerProps) => {
         testID="ios-date-picker"
         locale={deviceLanguage}
         value={selectedDate}
+        maximumDate={maximumDate ?? new Date()}
         mode="date"
         is24Hour={true}
         themeVariant="dark"

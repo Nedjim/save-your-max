@@ -46,13 +46,10 @@ export function useSignupUser() {
   });
 }
 
-export function useSignupConfirmUser(code: string) {
-  const query = useQuery({
-    queryKey: ['signup', 'confirm', code],
-    queryFn: () => signupConfirmUser(code),
+export function useSignupConfirmUser() {
+  return useMutation({
+    mutationFn: (code: string) => signupConfirmUser(code),
   });
-
-  return query;
 }
 
 export function useSignOutUser() {

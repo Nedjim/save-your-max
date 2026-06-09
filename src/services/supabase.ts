@@ -1,9 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
 import * as SecureStore from 'expo-secure-store';
-import { Platform } from 'react-native';
-import { toast } from 'sonner-native';
 import 'expo-sqlite/localStorage/install';
+import { Platform } from 'react-native';
+import { BASE_SUPABASE_DEEP_LINK } from '../constants';
 import {
   ApiError,
   ApiFetchPayload,
@@ -127,7 +127,7 @@ export const getUserSession = async () => {
 };
 
 export const signupUser = async (user: SupabasePayload) => {
-  const signupUrl = 'saveyourmax://signup-confirm';
+  const signupUrl = `${BASE_SUPABASE_DEEP_LINK}signup-confirm`;
 
   const { data, error: sessionError } = await supabase.auth.signUp({
     ...user,
@@ -151,26 +151,20 @@ export const signupConfirmUser = async (code: string) => {
   }
 
   if (!data.user) {
-    throw new Error('No user returned after signup confirmation');
+    throw new Error('SIGNUP_EXCHANGE_CODE_ERROR');
   }
 
   try {
-    const profile = await createProfile();
-
-    toast.success('Votre compte a été créé avec succès');
-
-    return profile;
-  } catch (error) {
+    return await createProfile();
+  } catch {
     await signOutUser();
 
-    toast.error('Oups ! La création de votre profil a échoué.');
-
-    throw error;
+    throw new Error('SIGNUP_CREATE_PROFILE_ERROR');
   }
 };
 
 export const resetPasswordEmail = async (email: string) => {
-  const resetPasswordUrl = 'saveyourmax://reset-password';
+  const resetPasswordUrl = `${BASE_SUPABASE_DEEP_LINK}reset-password`;
 
   return await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: resetPasswordUrl,
@@ -203,7 +197,7 @@ export const resetPassword = async (
 };
 
 export const updateUser = async (payload: UpdateUserPayload) => {
-  const resetEmailURL = 'saveyourmax://reset-email';
+  const resetEmailURL = `${BASE_SUPABASE_DEEP_LINK}reset-email`;
 
   const { data, error } = await supabase.auth.updateUser(payload, {
     emailRedirectTo: resetEmailURL,

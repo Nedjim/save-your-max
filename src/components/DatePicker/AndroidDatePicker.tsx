@@ -1,11 +1,11 @@
+import { WHITE } from '@/src/constants/colors';
+import { deviceLanguage } from '@/src/i18n';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
-import EditListButton from '../Buttons/EditListButton';
-import { WHITE } from '@/src/constants/colors';
-import { deviceLanguage } from '@/src/i18n';
 import { DatePickerProps } from '.';
+import EditListButton from '../Buttons/EditListButton';
 
 function AndroidDatePicker(props: DatePickerProps) {
   const { date, onChange, ...rest } = props;
