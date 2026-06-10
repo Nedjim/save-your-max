@@ -59,7 +59,7 @@ export type AuthSearchParams = {
  * 3. **name** - User name
  * 4. **surname** - User surname
  * 5. **pseudo** - User pseudonyme
- * 6. **birthday** - User birthday date (ISO 8601 string)
+ * 6. **dateOfBirth** - User date of birth (ISO 8601 string)
  * 7. **createdAt** - Identifier of the associated Supabase Auth user (ISO 8601 string)
  * 8. **updatedAt** - Last profile update date (ISO 8601 string)
  *
@@ -76,7 +76,7 @@ export type Profile = {
   name?: string;
   surname?: string;
   pseudo?: string;
-  birthday?: string;
+  dateOfBirth?: string;
   createdAt: string;
   updatedAt: string;
 };

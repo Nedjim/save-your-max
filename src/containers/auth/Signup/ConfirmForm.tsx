@@ -1,25 +1,19 @@
+import { useLocalSearchParams } from 'expo-router';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
-import { useAuthSearchParams } from '@/src/hooks/auth';
 import ConfirmFormError from './ConfirmFormError';
 import ConfirmFormValidation from './ConfirmFormValidation';
 
 function SignupConfirmForm() {
-  const {
-    access_token: token,
-    refresh_token: refreshToken,
-    type,
-  } = useAuthSearchParams();
-
-  const isValidLink = type === 'signup' && token && refreshToken;
+  const { code } = useLocalSearchParams<{
+    code?: string;
+  }>();
 
   let content = null;
 
-  if (!isValidLink) {
+  if (!code) {
     content = <ConfirmFormError />;
   } else {
-    content = (
-      <ConfirmFormValidation token={token} refreshToken={refreshToken} />
-    );
+    content = <ConfirmFormValidation code={code} />;
   }
 
   return (
