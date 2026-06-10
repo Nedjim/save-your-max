@@ -1,19 +1,20 @@
-import { useRouter } from 'expo-router';
-import { Text, View } from 'react-native';
-import { Button } from 'react-native-paper';
 import Divider from '@/src/components/Divider';
 import { LIGHT_GREY } from '@/src/constants/colors';
+import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
+import { Text, View } from 'react-native';
+import { Button } from 'react-native-paper';
 import styles from '../styles';
 
 function ConfirmFormError() {
   const router = useRouter();
+  const { t } = useTranslation();
 
   return (
     <View>
-      <Text style={styles.title}>Invalid verification link</Text>
-      <Text style={styles.subtitle}>
-        The link you used is invalid or has expired for security reasons. Please
-        restart the signup process to receive a new verification link.
+      <Text style={styles.title}>{t('auth.signup_confirm_error_title')}</Text>
+      <Text style={styles.description}>
+        {t('auth.signup_confirm_error_description')}
       </Text>
       <View style={styles.actions}>
         <Divider />
@@ -22,7 +23,7 @@ function ConfirmFormError() {
           onPress={() => router.push('/')}
           uppercase={false}
         >
-          Cancel
+          {t('actions.cancel')}
         </Button>
       </View>
     </View>

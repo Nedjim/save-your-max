@@ -1,10 +1,3 @@
-import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { View } from 'react-native';
-import { toast } from 'sonner-native';
-import SaveProfileButton from '../Buttons/SaveProfileButton';
-import UpdateEmailButton from '../Buttons/UpdateEmailButton';
-import UpdatePasswordButton from '../Buttons/UpdatePasswordButton';
 import Divider from '@/src/components/Divider';
 import { useUpdateProfile } from '@/src/hooks/profile';
 import { updateProfileSchema } from '@/src/schemas/profile/editProfile.schema';
@@ -15,6 +8,13 @@ import {
 } from '@/src/types';
 import { toastFormFieldError } from '@/src/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { View } from 'react-native';
+import { toast } from 'sonner-native';
+import SaveProfileButton from '../Buttons/SaveProfileButton';
+import UpdateEmailButton from '../Buttons/UpdateEmailButton';
+import UpdatePasswordButton from '../Buttons/UpdatePasswordButton';
 import UserProfileFieldsController from './FieldsController';
 
 type ProfileDetailsProps = {
@@ -26,14 +26,17 @@ function ProfileDetails(props: ProfileDetailsProps) {
   const { profile, refetch } = props;
   const { mutateAsync: updateProfileMutation } = useUpdateProfile();
   const { t } = useTranslation();
+
+  const defaultValues: UpdateProfileFormValues = {
+    name: profile.name ?? undefined,
+    surname: profile.surname ?? undefined,
+    pseudo: profile.pseudo ?? undefined,
+    dateOfBirth: profile.dateOfBirth ?? undefined,
+  };
+
   const { control, handleSubmit, reset } = useForm({
     resolver: zodResolver(updateProfileSchema),
-    defaultValues: {
-      name: profile.name,
-      surname: profile.surname,
-      pseudo: profile.pseudo,
-      birthday: profile.birthday,
-    },
+    defaultValues,
   });
 
   const onSubmit = async (data: UpdateProfileFormValues) => {
@@ -59,7 +62,7 @@ function ProfileDetails(props: ProfileDetailsProps) {
       <UserProfileFieldsController control={control} />
       <View>
         <SaveProfileButton
-          onPress={() => handleSubmit(onSubmit, onError)}
+          onPress={handleSubmit(onSubmit, onError)}
           control={control}
         />
         <Divider />

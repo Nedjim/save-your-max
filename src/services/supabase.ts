@@ -1,8 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
-import * as Linking from 'expo-linking';
-import { Platform } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 import 'expo-sqlite/localStorage/install';
+import { Platform } from 'react-native';
+import { BASE_SUPABASE_DEEP_LINK } from '../constants';
 import {
   ApiError,
   ApiFetchPayload,
@@ -18,12 +19,9 @@ const supabasePublishableKey =
 const webStorage =
   typeof window !== 'undefined'
     ? {
-        getItem: (key: string) =>
-          Promise.resolve(window.localStorage.getItem(key)),
-        setItem: (key: string, value: string) =>
-          Promise.resolve(window.localStorage.setItem(key, value)),
-        removeItem: (key: string) =>
-          Promise.resolve(window.localStorage.removeItem(key)),
+        getItem: SecureStore.getItemAsync,
+        setItem: SecureStore.setItemAsync,
+        removeItem: SecureStore.deleteItemAsync,
       }
     : undefined;
 
@@ -32,6 +30,7 @@ const storage = Platform.OS === 'web' ? webStorage : AsyncStorage;
 export const supabase = createClient(supabaseUrl, supabasePublishableKey, {
   auth: {
     storage,
+    flowType: 'pkce',
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: false,
@@ -127,9 +126,9 @@ export const getUserSession = async () => {
   }
 };
 
-const signupUrl = Linking.createURL('signup-confirm');
-
 export const signupUser = async (user: SupabasePayload) => {
+  const signupUrl = `${BASE_SUPABASE_DEEP_LINK}signup-confirm`;
+
   const { data, error: sessionError } = await supabase.auth.signUp({
     ...user,
     options: {
@@ -144,25 +143,29 @@ export const signupUser = async (user: SupabasePayload) => {
   return data;
 };
 
-export const signupConfirmUser = async (
-  token: string,
-  refreshToken: string,
-) => {
-  const { error: sessionError } = await supabase.auth.setSession({
-    access_token: token,
-    refresh_token: refreshToken,
-  });
+export const signupConfirmUser = async (code: string) => {
+  const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
-  if (sessionError) {
-    throw sessionError;
+  if (error) {
+    throw error;
   }
 
-  return await createProfile();
+  if (!data.user) {
+    throw new Error('SIGNUP_EXCHANGE_CODE_ERROR');
+  }
+
+  try {
+    return await createProfile();
+  } catch {
+    await signOutUser();
+
+    throw new Error('SIGNUP_CREATE_PROFILE_ERROR');
+  }
 };
 
-const resetPasswordUrl = Linking.createURL('reset-password');
-
 export const resetPasswordEmail = async (email: string) => {
+  const resetPasswordUrl = `${BASE_SUPABASE_DEEP_LINK}reset-password`;
+
   return await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: resetPasswordUrl,
   });
@@ -193,9 +196,9 @@ export const resetPassword = async (
   await supabase.auth.signOut();
 };
 
-const resetEmailURL = Linking.createURL('reset-email');
-
 export const updateUser = async (payload: UpdateUserPayload) => {
+  const resetEmailURL = `${BASE_SUPABASE_DEEP_LINK}reset-email`;
+
   const { data, error } = await supabase.auth.updateUser(payload, {
     emailRedirectTo: resetEmailURL,
   });

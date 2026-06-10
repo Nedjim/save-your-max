@@ -7,16 +7,16 @@ datasource db {
 }
 
 model Profile {
-    id        String     @id @default(uuid()) @db.Uuid
-    userId    String     @unique @db.Uuid
-    name      String?
-    surname   String?
-    pseudo    String?    @unique
-    avatarUrl String?
-    birthday  DateTime?
-    createdAt DateTime   @default(now())
-    updatedAt DateTime   @updatedAt
-    exercise  Exercise[]
+    id          String     @id @default(uuid()) @db.Uuid
+    userId      String     @unique @db.Uuid
+    name        String?
+    surname     String?
+    pseudo      String?    @unique
+    avatarUrl   String?
+    dateOfBirth DateTime?
+    createdAt   DateTime   @default(now()) @db.Timestamptz(3)
+    updatedAt   DateTime   @updatedAt @db.Timestamptz(3)
+    exercise    Exercise[]
 }
 
 model Exercise {

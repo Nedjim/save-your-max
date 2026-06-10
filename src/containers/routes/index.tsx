@@ -1,6 +1,7 @@
+import Loader from '@/src/components/Loader';
+import { useSupabaseSession } from '@/src/hooks/auth';
 import { Redirect, Stack, useSegments } from 'expo-router';
 import PageWrapper from '../page/PageWrapper';
-import { useSupabaseSession } from '@/src/hooks/auth';
 import { screenOptions } from './screenOptions';
 
 function RootNavigator() {
@@ -8,7 +9,7 @@ function RootNavigator() {
   const segments = useSegments();
 
   if (isLoading) {
-    return null;
+    return <Loader />;
   }
 
   const inAuthGroup = segments[0] === '(auth)';

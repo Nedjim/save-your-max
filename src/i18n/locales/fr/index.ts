@@ -27,6 +27,15 @@ export const fr = {
     signup_title: 'Créer un compte',
     signup_description:
       'Entrez votre e-mail et votre mot de passe pour créer un compte.',
+    signup_confirm_error_title: 'Lien de vérification invalide',
+    signup_confirm_error_description:
+      'Ce lien de vérification est invalide ou a expiré. Relancez l’inscription pour recevoir un nouveau lien.',
+    signup_exchange_code_error:
+      "Votre compte a bien été confirmé, mais la connexion automatique a échoué. Essayez de vous connecter manuellement ou contactez notre équipe d'assistance si le problème persiste.",
+    signup_create_profile_error:
+      "La création de votre profil a échoué. Veuillez contacter notre équipe d'assistance pour obtenir de l'aide.",
+    signup_create_profile_success:
+      'Bienvenue ! Votre compte a été créé avec succès.',
     delete_account_title: 'Supprimer le compte',
     delete_account_description:
       'Vous êtes sur le point de supprimer de votre compte.',

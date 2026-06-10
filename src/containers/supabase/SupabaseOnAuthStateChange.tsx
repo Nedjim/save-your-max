@@ -1,13 +1,13 @@
-import { useQueryClient } from '@tanstack/react-query';
-import { ReactNode, useEffect } from 'react';
 import { useAuthSearchParams } from '@/src/hooks/auth';
 import { supabase } from '@/src/services/supabase';
 import { AuthSearchParams } from '@/src/types';
+import { useQueryClient } from '@tanstack/react-query';
+import { ReactNode, useEffect } from 'react';
 
 const REFRESH_TYPES_EXCEPTION: AuthSearchParams['type'][] = [
   'signup',
   'recovery',
-  'email_change'
+  'email_change',
 ];
 
 function SupabaseOnAuthStateChange({ children }: { children: ReactNode }) {

@@ -1,11 +1,11 @@
-import { Control, Controller, Path } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { StyleSheet, TextInput, View } from 'react-native';
 import DatePicker from '@/src/components/DatePicker';
 import Label from '@/src/components/Label';
 import { WHITE } from '@/src/constants/colors';
 import { UpdateProfileFormValues } from '@/src/types';
 import { today } from '@/src/utils/date';
+import { Control, Controller, Path } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { StyleSheet, TextInput, View } from 'react-native';
 
 const MIN_AGE = 13;
 const MAX_AGE = 120;
@@ -22,7 +22,13 @@ const minimumDate = new Date(
   today.getDate(),
 );
 
-const TEXT_FIELDS: Path<Omit<UpdateProfileFormValues, 'birthday'>>[] = [
+const defaultDate = new Date(
+  today.getFullYear() - 25,
+  today.getMonth(),
+  today.getDate(),
+);
+
+const TEXT_FIELDS: Path<Omit<UpdateProfileFormValues, 'dateOfBirth'>>[] = [
   'name',
   'surname',
   'pseudo',
@@ -76,9 +82,9 @@ function UserProfileFieldsController(props: UserProfileFieldsControllerProps) {
         />
         <Controller
           control={control}
-          name="birthday"
+          name="dateOfBirth"
           render={({ field: { value, onChange } }) => {
-            const date = value ? new Date(value) : today;
+            const date = value ? new Date(value) : defaultDate;
 
             return (
               <DatePicker

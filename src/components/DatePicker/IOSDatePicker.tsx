@@ -1,11 +1,11 @@
+import { deviceLanguage } from '@/src/i18n';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { deviceLanguage } from '@/src/i18n';
 import { DatePickerProps } from '.';
 
 const IOSDatePicker = (props: DatePickerProps) => {
-  const { date, onChange, ...rest } = props;
+  const { date, onChange, maximumDate, ...rest } = props;
 
   const [selectedDate, setSelectedDate] = useState(date);
 
@@ -15,6 +15,7 @@ const IOSDatePicker = (props: DatePickerProps) => {
         testID="ios-date-picker"
         locale={deviceLanguage}
         value={selectedDate}
+        maximumDate={maximumDate ?? new Date()}
         mode="date"
         is24Hour={true}
         themeVariant="dark"

@@ -1,8 +1,7 @@
-import { useLocalSearchParams } from 'expo-router';
-import { ActivityIndicator } from 'react-native';
 import Error from '@/src/components/Error';
-import { WHITE } from '@/src/constants/colors';
+import Loader from '@/src/components/Loader';
 import { usePerformances } from '@/src/hooks/performances';
+import { useLocalSearchParams } from 'expo-router';
 import PerformanceList from './PerformanceList';
 import EmptyState from './PerformancesEmptyState';
 
@@ -13,7 +12,7 @@ function Performances() {
   let content = null;
 
   if (isLoading) {
-    content = <ActivityIndicator size="large" color={WHITE} />;
+    content = <Loader />;
   }
 
   if (!isLoading && isError) {
