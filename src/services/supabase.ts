@@ -1,8 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
-import * as SecureStore from 'expo-secure-store';
 import 'expo-sqlite/localStorage/install';
-import { Platform } from 'react-native';
 import { BASE_SUPABASE_DEEP_LINK } from '../constants';
 import {
   ApiError,
@@ -16,20 +14,9 @@ const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL!;
 const supabasePublishableKey =
   process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
 
-const webStorage =
-  typeof window !== 'undefined'
-    ? {
-        getItem: SecureStore.getItemAsync,
-        setItem: SecureStore.setItemAsync,
-        removeItem: SecureStore.deleteItemAsync,
-      }
-    : undefined;
-
-const storage = Platform.OS === 'web' ? webStorage : AsyncStorage;
-
 export const supabase = createClient(supabaseUrl, supabasePublishableKey, {
   auth: {
-    storage,
+    storage: AsyncStorage,
     flowType: 'pkce',
     autoRefreshToken: true,
     persistSession: true,
