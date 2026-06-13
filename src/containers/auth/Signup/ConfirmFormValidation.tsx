@@ -24,6 +24,9 @@ function ConfirmFormValidation(props: ConfirmFormValidationProps) {
           case 'SIGNUP_EXCHANGE_CODE_ERROR':
             toast.error(t('auth.signup_exchange_code_error'));
             return;
+          case 'SIGNUP_EXCHANGE_CODE_EMPTY_USER':
+            toast.error(t('auth.signup_exchange_empty_user'));
+            return;
           case 'SIGNUP_CREATE_PROFILE_ERROR':
             toast.error(t('auth.signup_create_profile_error'));
             return;

@@ -32,6 +32,8 @@ export const fr = {
       'Ce lien de vérification est invalide ou a expiré. Relancez l’inscription pour recevoir un nouveau lien.',
     signup_exchange_code_error:
       "Votre compte a bien été confirmé, mais la connexion automatique a échoué. Essayez de vous connecter manuellement ou contactez notre équipe d'assistance si le problème persiste.",
+    signup_exchange_empty_user:
+      'Impossible de finaliser la création de votre compte. Veuillez réessayer.',
     signup_create_profile_error:
       "La création de votre profil a échoué. Veuillez contacter notre équipe d'assistance pour obtenir de l'aide.",
     signup_create_profile_success:

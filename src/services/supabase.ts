@@ -144,22 +144,23 @@ export const signupUser = async (user: SupabasePayload) => {
 };
 
 export const signupConfirmUser = async (code: string) => {
-  const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+  const { data, error: codeError } =
+    await supabase.auth.exchangeCodeForSession(code);
 
-  if (error) {
-    throw error;
+  if (codeError) {
+    throw new Error('SIGNUP_EXCHANGE_CODE_ERROR', { cause: codeError });
   }
 
   if (!data.user) {
-    throw new Error('SIGNUP_EXCHANGE_CODE_ERROR');
+    throw new Error('SIGNUP_EXCHANGE_CODE_EMPTY_USER');
   }
 
   try {
     return await createProfile();
-  } catch {
+  } catch (error: unknown) {
     await signOutUser();
 
-    throw new Error('SIGNUP_CREATE_PROFILE_ERROR');
+    throw new Error('SIGNUP_CREATE_PROFILE_ERROR', { cause: error });
   }
 };
 
