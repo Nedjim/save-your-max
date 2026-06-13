@@ -32,6 +32,8 @@ export const en = {
       'This verification link is invalid or has expired. Please restart signup to receive a new verification link.',
     signup_exchange_code_error:
       "Your account has been confirmed, but we couldn't sign you in automatically. Please try signing in manually or contact our support team if the issue persists",
+    signup_exchange_empty_user:
+      'Unable to complete your account creation. Please try again.',
     signup_create_profile_error:
       'We were unable to create your profile. Please contact our support team for assistance.',
     signup_create_profile_success:
