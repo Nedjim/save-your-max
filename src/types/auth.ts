@@ -1,4 +1,5 @@
 import * as z from 'zod';
+import { SIGNUP_ERROR } from '../constants';
 import { updateEmailSchema } from '../schemas/auth/updateEmail.schema';
 import { updatePasswordSchema } from '../schemas/auth/updatePassword.schema';
 import { updateProfileSchema } from '../schemas/profile/editProfile.schema';
@@ -129,6 +130,8 @@ export type UpdateUserPayload = {
   password?: string;
   email?: string;
 };
+
+export type SignupErrorType = (typeof SIGNUP_ERROR)[number];
 
 export type RequestFormValues = z.infer<typeof updatePasswordSchema>;
 export type UpdatedEmailFormValues = z.infer<typeof updateEmailSchema>;

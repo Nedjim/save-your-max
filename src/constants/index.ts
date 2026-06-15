@@ -1,2 +1,8 @@
 export const DATE_FORMAT = 'DD/MM/YYYY';
 export const BASE_SUPABASE_DEEP_LINK = 'saveyourmax://';
+
+export const SIGNUP_ERROR = [
+  'SIGNUP_EXCHANGE_CODE_ERROR',
+  'SIGNUP_EXCHANGE_CODE_EMPTY_USER',
+  'SIGNUP_CREATE_PROFILE_ERROR',
+] as const;
