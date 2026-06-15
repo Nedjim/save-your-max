@@ -1,3 +1,4 @@
+import { SignupError } from '@/src/errors/SignupError';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
 import 'expo-sqlite/localStorage/install';
@@ -135,19 +136,32 @@ export const signupConfirmUser = async (code: string) => {
     await supabase.auth.exchangeCodeForSession(code);
 
   if (codeError) {
-    throw new Error('SIGNUP_EXCHANGE_CODE_ERROR', { cause: codeError });
+    throw new SignupError('SIGNUP_EXCHANGE_CODE_ERROR', { cause: codeError });
   }
 
   if (!data.user) {
-    throw new Error('SIGNUP_EXCHANGE_CODE_EMPTY_USER');
+    throw new SignupError('SIGNUP_EXCHANGE_CODE_EMPTY_USER');
   }
 
   try {
     return await createProfile();
-  } catch (error: unknown) {
-    await signOutUser();
+  } catch (createProfileError: unknown) {
+    try {
+      const { error: signoutError } = await signOutUser();
 
-    throw new Error('SIGNUP_CREATE_PROFILE_ERROR', { cause: error });
+      if (signoutError) {
+        console.error('[signupConfirmUser] Failed to sign out', signoutError);
+      }
+    } catch (err) {
+      console.error(
+        '[signupConfirmUser] Unexpected error during sign-out',
+        err,
+      );
+    }
+
+    throw new SignupError('SIGNUP_CREATE_PROFILE_ERROR', {
+      cause: createProfileError,
+    });
   }
 };
 
