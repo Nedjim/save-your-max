@@ -60,7 +60,14 @@ export const fr = {
     reset_email_done_description:
       'Votre e-mail a été mis à jour avec succès. Veuillez vous connecter avec votre nouvel e-mail.',
   },
+  home: {
+    navigation_title: 'Accueil',
+  },
+  planner: {
+    navigation_title: 'Planner',
+  },
   profile: {
+    navigation_title: 'Profile',
     name: 'Nom',
     name_placeholder: 'Ex: John',
     surname: 'Prénom',
@@ -80,7 +87,8 @@ export const fr = {
     empty_state_description:
       'Aucune performance pour le moment. Créez la première pour commencer.',
   },
-  exercise: {
+  exercises: {
+    navigation_title: 'Exercices',
     create_title: 'Nouvel exercice',
     create_title_placeholder: 'Bench press',
     create_success: 'Votre exercice: {{name}} a été créé avec succès!',

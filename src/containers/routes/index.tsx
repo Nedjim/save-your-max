@@ -1,8 +1,17 @@
-import Loader from '@/src/components/Loader';
-import { useSupabaseSession } from '@/src/hooks/auth';
 import { Redirect, Stack, useSegments } from 'expo-router';
 import PageWrapper from '../page/PageWrapper';
-import { screenOptions } from './screenOptions';
+import Loader from '@/src/components/Loader';
+import { useSupabaseSession } from '@/src/hooks/auth';
+
+const screenOptions = {
+  headerStyle: {
+    backgroundColor: 'transparent',
+  },
+  contentStyle: {
+    backgroundColor: '#001117',
+  },
+  headerShown: false,
+};
 
 function RootNavigator() {
   const { data: session, isLoading } = useSupabaseSession();

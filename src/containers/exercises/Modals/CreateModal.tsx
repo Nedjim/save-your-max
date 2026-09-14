@@ -42,7 +42,7 @@ function CreateExerciseModal(props: CreateExerciseModalProps) {
 
       await createExerciseMutation(name);
       refetch();
-      toast.success(t('exercise.create_success', { name }));
+      toast.success(t('exercises.create_success', { name }));
 
       handleClose();
     } catch (error) {
@@ -67,7 +67,7 @@ function CreateExerciseModal(props: CreateExerciseModalProps) {
         onClose={handleClose}
         onSubmit={handleSubmit(onSubmit)}
         submitButtonLabel={t('actions.create')}
-        title={t('exercise.create_title')}
+        title={t('exercises.create_title')}
         isPending={isPending}
       >
         <Controller
@@ -77,7 +77,7 @@ function CreateExerciseModal(props: CreateExerciseModalProps) {
           render={({ field: { value, onChange } }) => (
             <Input
               id="exercise-name"
-              placeholder={t('exercise.create_title_placeholder')}
+              placeholder={t('exercises.create_title_placeholder')}
               value={value}
               onChange={onChange}
               textContentType="none"

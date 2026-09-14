@@ -1,13 +1,13 @@
 import { StyleSheet, View } from 'react-native';
 import DeleteUserProfileButton from './Buttons/DeleteUserProfileButton';
+import SignOutButton from './Buttons/SignOutButton';
 import { DEFAULT_CONTAINER_BACKGROUND } from '@/src/constants/colors';
 import UserProfileHeader from './Header';
 import UserProfileInformations from './Informations.tsx';
-import SignOutButton from './Buttons/SignOutButton';
 
-const UserProfile = () => {
+const ProfilePage = () => {
   return (
-    <View style={styles.userProfile}>
+    <View style={styles.profile}>
       <UserProfileHeader />
       <UserProfileInformations />
       <View style={styles.actions}>
@@ -19,7 +19,7 @@ const UserProfile = () => {
 };
 
 const styles = StyleSheet.create({
-  userProfile: {
+  profile: {
     backgroundColor: DEFAULT_CONTAINER_BACKGROUND,
     padding: 8,
     borderRadius: 8,
@@ -29,4 +29,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UserProfile;
+export default ProfilePage;
