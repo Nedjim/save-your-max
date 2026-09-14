@@ -43,7 +43,7 @@ function DeleteExerciseModal(props: ExerciseModalProps) {
         isPending={isPending}
       >
         <View style={styles.main}>
-          <Text style={styles.text}>{t('exercise.delete_message')}</Text>
+          <Text style={styles.text}>{t('exercises.delete_message')}</Text>
           <Text style={styles.text}>{t('modal.confirm_message')}</Text>
         </View>
       </ModalContent>

@@ -57,7 +57,14 @@ export const en = {
     reset_password_done_description:
       'Your password has been successfully updated. Please sign in with your new password.',
   },
+  home: {
+    navigation_title: 'Home',
+  },
+  planner: {
+    navigation_title: 'Planner',
+  },
   profile: {
+    navigation_title: 'Profil',
     name: 'Name',
     name_placeholder: 'Ex: John',
     surname: 'Surname',
@@ -77,7 +84,8 @@ export const en = {
     empty_state_description:
       'You don’t have any performances yet. Create your first one to get started.',
   },
-  exercise: {
+  exercises: {
+    navigation_title: 'Exercises',
     create_title: 'New exercise',
     create_title_placeholder: 'Bench press',
     create_success: 'Exercise {{name}} was created successfully 🎉',

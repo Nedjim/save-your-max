@@ -1,11 +1,11 @@
+import { Control, Controller, Path } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { StyleSheet, TextInput, View } from 'react-native';
 import DatePicker from '@/src/components/DatePicker';
 import Label from '@/src/components/Label';
 import { WHITE } from '@/src/constants/colors';
 import { UpdateProfileFormValues } from '@/src/types';
 import { today } from '@/src/utils/date';
-import { Control, Controller, Path } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { StyleSheet, TextInput, View } from 'react-native';
 
 const MIN_AGE = 13;
 const MAX_AGE = 120;
@@ -77,7 +77,7 @@ function UserProfileFieldsController(props: UserProfileFieldsControllerProps) {
       })}
       <View style={[styles.field, styles.datePicker]}>
         <Label
-          label={t('profile.date_of_birth')}
+          label={t('profil.date_of_birth')}
           nativeId="user-profile-date-of-birth"
         />
         <Controller
