@@ -1,17 +1,8 @@
 import { Redirect, Stack, useSegments } from 'expo-router';
 import PageWrapper from '../page/PageWrapper';
 import Loader from '@/src/components/Loader';
+import { DEFAULT_SCREEN_OPTIONS } from '@/src/constants/screen';
 import { useSupabaseSession } from '@/src/hooks/auth';
-
-const screenOptions = {
-  headerStyle: {
-    backgroundColor: 'transparent',
-  },
-  contentStyle: {
-    backgroundColor: '#001117',
-  },
-  headerShown: false,
-};
 
 function RootNavigator() {
   const { data: session, isLoading } = useSupabaseSession();
@@ -32,7 +23,7 @@ function RootNavigator() {
 
   return (
     <PageWrapper>
-      <Stack screenOptions={screenOptions}>
+      <Stack screenOptions={{ ...DEFAULT_SCREEN_OPTIONS, headerShown: false }}>
         <Stack.Protected guard={!!session}>
           <Stack.Screen name="(app)" />
         </Stack.Protected>

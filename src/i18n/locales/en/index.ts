@@ -1,6 +1,7 @@
 export const en = {
   actions: {
     add: 'Add',
+    back: 'Back',
     create: 'Create',
     update: 'Update',
     save: 'Save',

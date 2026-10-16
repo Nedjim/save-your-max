@@ -95,7 +95,11 @@ export const signInUser = async (supabasePayload: SupabasePayload) => {
 };
 
 export const signOutUser = async () => {
-  return await supabase.auth.signOut();
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    throw error;
+  }
 };
 
 export const getUserSession = async () => {

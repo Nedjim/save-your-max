@@ -1,6 +1,7 @@
 export const fr = {
   actions: {
     add: 'Ajouter',
+    back: 'Retour',
     create: 'Créer',
     update: 'Mettre à jour',
     save: 'Sauvegarder',
