@@ -1,30 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
-import type { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
 import { Tabs } from 'expo-router';
 import { ComponentProps } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DARK_GREY, GREY, TURQUOISE, WHITE } from '@/src/constants/colors';
-
-const SCREEN_OPTIONS: BottomTabNavigationOptions = {
-  sceneStyle: {
-    backgroundColor: 'transparent',
-  },
-  headerStyle: {
-    backgroundColor: 'transparent',
-  },
-  headerShadowVisible: false,
-  headerTitleStyle: {
-    color: WHITE,
-    fontSize: 22,
-    fontWeight: '700',
-  },
-  tabBarStyle: {
-    backgroundColor: 'transparent',
-    borderTopColor: DARK_GREY,
-  },
-  tabBarActiveTintColor: TURQUOISE,
-  tabBarInactiveTintColor: GREY,
-};
+import { BOTTOM_TAB_SCREEN_OPTIONS } from '@/src/constants/screen';
 
 type NavigationItem = {
   name: string;
@@ -47,10 +25,11 @@ export default function AppLayout() {
   const { t } = useTranslation();
 
   return (
-    <Tabs screenOptions={SCREEN_OPTIONS}>
+    <Tabs screenOptions={BOTTOM_TAB_SCREEN_OPTIONS}>
       {NAVIGATION_ITEMS.map((item) => {
         const key = `${item.name}-navigation-tab`;
-        const name = `${item.name}/index`;
+        const name =
+          item.name === 'exercises' ? 'exercises' : `${item.name}/index`;
         const title = t(`${item.name}.navigation_title`);
 
         return (
@@ -59,6 +38,7 @@ export default function AppLayout() {
             name={name}
             options={{
               title,
+              headerShown: false,
               tabBarIcon: ({ color, size, focused }) => (
                 <Ionicons
                   name={focused ? item.icon : item.iconOutline}
@@ -66,17 +46,6 @@ export default function AppLayout() {
                   color={color}
                 />
               ),
-            }}
-          />
-        );
-      })}
-      {NAVIGATION_ITEMS.map((item) => {
-        return (
-          <Tabs.Screen
-            key={`${item.name}[id]-navigation-tab`}
-            name={`${item.name}/[id]`}
-            options={{
-              href: null,
             }}
           />
         );

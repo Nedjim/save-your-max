@@ -1,7 +1,19 @@
+import { Stack, useLocalSearchParams } from 'expo-router';
 import ExercisePage from '@/src/pages/ExercisePage';
 
-const Exercise = () => {
-  return <ExercisePage />;
-};
+export default function Exercise() {
+  const { title } = useLocalSearchParams<{
+    title?: string;
+  }>();
 
-export default Exercise;
+  return (
+    <>
+      <Stack.Screen
+        options={{
+          title: title ?? '',
+        }}
+      />
+      <ExercisePage />
+    </>
+  );
+}

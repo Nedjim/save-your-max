@@ -28,7 +28,6 @@ function ExerciseList(props: ExerciseListProps) {
         keyExtractor={(exercise) => exercise.id}
         renderItem={({ item: exercise }) => {
           const { id, title } = exercise;
-          const name = encodeURIComponent(title.replace(/\s+/g, '_'));
 
           return (
             <ExerciseRow
@@ -38,7 +37,7 @@ function ExerciseList(props: ExerciseListProps) {
               onPress={() => {
                 router.push({
                   pathname: '/exercises/[id]',
-                  params: { id, name },
+                  params: { id, title },
                 });
               }}
             />
