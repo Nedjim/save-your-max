@@ -1,9 +1,10 @@
+import { useLocalSearchParams } from 'expo-router';
 import Error from '@/src/components/Error';
 import Loader from '@/src/components/Loader';
 import { usePerformances } from '@/src/hooks/performances';
-import { useLocalSearchParams } from 'expo-router';
 import PerformanceList from './PerformanceList';
 import EmptyState from './PerformancesEmptyState';
+import PersonalRecord from './PersonalRecord';
 
 function Performances() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -26,7 +27,10 @@ function Performances() {
   return content ? (
     content
   ) : (
-    <PerformanceList performances={data} refetch={refetch} />
+    <>
+      {data.length && <PersonalRecord performances={data} />}
+      <PerformanceList performances={data} refetch={refetch} />
+    </>
   );
 }
 

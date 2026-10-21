@@ -1,9 +1,12 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import CreatePerformanceModal from './Modals/CreateModal';
 import DeletePerformanceModal from './Modals/DeleteModal';
 import UpdatePerformanceModal from './Modals/UpdateModal';
 import AddMoreButton from '@/src/components/Buttons/AddMoreButton';
+import { TURQUOISE, WHITE } from '@/src/constants/colors';
 import { Performance } from '@/src/types';
 import PerformanceRow from './PerformanceRow';
 
@@ -14,6 +17,8 @@ type PerformanceListProps = {
 
 const PerformanceList = (props: PerformanceListProps) => {
   const { performances, refetch } = props;
+
+  const { t } = useTranslation();
   const [createPerformance, setCreatePerformance] = useState(false);
   const [deletePerformanceId, setDeletePerformanceId] = useState<string | null>(
     null,
@@ -35,6 +40,12 @@ const PerformanceList = (props: PerformanceListProps) => {
 
   return (
     <View style={styles.performanceContent}>
+      <View style={styles.performanceHeader}>
+        <Ionicons name="bar-chart-outline" size={24} color={TURQUOISE} />
+        <Text style={styles.performanceHeaderTitle}>
+          {t('performance.historyTitle')}
+        </Text>
+      </View>
       <FlatList
         data={performances}
         style={styles.performanceList}
@@ -91,6 +102,18 @@ const PerformanceList = (props: PerformanceListProps) => {
 const styles = StyleSheet.create({
   performanceContent: {
     flex: 1,
+  },
+  performanceHeader: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+    marginVertical: 16,
+    marginHorizontal: 8,
+  },
+  performanceHeaderTitle: {
+    color: WHITE,
+    fontSize: 16,
   },
   performanceList: {
     flex: 1,

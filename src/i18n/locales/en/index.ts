@@ -84,6 +84,9 @@ export const en = {
     delete_message: 'This performance is about to be deleted.',
     empty_state_description:
       'You don’t have any performances yet. Create your first one to get started.',
+    historyTitle: 'Performance history',
+    bestEstimatedOneRM: 'Best Estimated 1RM',
+    pr: 'PR',
   },
   exercises: {
     navigation_title: 'Exercises',
