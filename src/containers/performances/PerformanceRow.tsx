@@ -9,6 +9,7 @@ import {
   TURQUOISE,
 } from '@/src/constants/colors';
 import { Performance } from '@/src/types';
+import { DATE_FORMAT } from '@/src/utils/date';
 
 type PerformanceRowProps = {
   performance: Performance;
@@ -21,7 +22,7 @@ function PerformanceRow(props: PerformanceRowProps) {
   const { weight, reps } = performance;
   const { t } = useTranslation();
 
-  const date = dayjs(performance.date).format('DD/MM/YYYY');
+  const date = dayjs(performance.date).format(DATE_FORMAT);
   const weightLabel = t('performance.weight');
 
   return (
@@ -31,7 +32,7 @@ function PerformanceRow(props: PerformanceRowProps) {
       style={styles.performanceRow}
     >
       <View style={styles.details}>
-        <Text style={[styles.text, styles.date]}> {date}</Text>
+        <Text style={styles.text}> {date}</Text>
         <View style={styles.weight}>
           <Text style={styles.text}>
             <Text style={styles.firstLetter}>{weightLabel[0]}</Text>
@@ -59,9 +60,6 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
     borderRadius: 4,
     marginBottom: 8,
-  },
-  date: {
-    fontSize: 16,
   },
   weight: {
     display: 'flex',

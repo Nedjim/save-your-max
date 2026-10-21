@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { View } from 'react-native';
 import { Button } from 'react-native-paper';
 import { DatePickerModal } from 'react-native-paper-dates';
-import { DATE_FORMAT } from '@/src/constants';
 import { WHITE } from '@/src/constants/colors';
+import { DATE_FORMAT } from '@/src/utils/date';
 import { CalendarDate } from 'react-native-paper-dates/lib/typescript/Date/Calendar';
 import { DatePickerProps } from '.';
 
