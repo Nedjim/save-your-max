@@ -1,13 +1,13 @@
 #!/bin/sh
 
+set -e
+
 echo "🚀 Pre-push hook started"
 
-# Check files formatting
-npx expo lint
+echo "🔍 Running lint and TypeScript checks..."
+pnpm run lint
 
-if [ $? -ne 0 ]; then
-  echo "❌ Check failed. Push aborted."
-  exit 1
-fi
+echo "🧪 Running API and front-end tests..."
+pnpm run test:all
 
 echo "✅ All checks passed. Push allowed 🚀"

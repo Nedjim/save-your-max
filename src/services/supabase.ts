@@ -1,6 +1,6 @@
-import { SignupError } from '@/src/errors/SignupError';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
+import { SignupError } from '@/src/errors/SignupError';
 import 'expo-sqlite/localStorage/install';
 import { BASE_SUPABASE_DEEP_LINK } from '../constants';
 import {
@@ -151,11 +151,7 @@ export const signupConfirmUser = async (code: string) => {
     return await createProfile();
   } catch (createProfileError: unknown) {
     try {
-      const { error: signoutError } = await signOutUser();
-
-      if (signoutError) {
-        console.error('[signupConfirmUser] Failed to sign out', signoutError);
-      }
+      await signOutUser();
     } catch (err) {
       console.error(
         '[signupConfirmUser] Unexpected error during sign-out',
