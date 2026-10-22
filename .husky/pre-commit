@@ -1,13 +1,13 @@
 #!/bin/sh
 
+set -e
+
 echo "🚀 Pre-commit hook started"
 
-# Check files formatting
-npx expo lint
+echo "🔍 Running lint and TypeScript checks..."
+pnpm run lint
 
-if [ $? -ne 0 ]; then
-  echo "❌ Formatting failed. Commit aborted."
-  exit 1
-fi
+echo "🧪 Running API and front-end tests..."
+pnpm run test:all
 
-echo "✅ Files are correctly formatted. Commit allowed 🚀"
+echo "✅ All checks passed. Commit allowed 🚀"

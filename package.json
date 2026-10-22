@@ -8,11 +8,11 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "lint": "expo lint . & tsc --noEmit",
+    "lint": "expo lint . && tsc --noEmit",
     "prepare": "husky",
     "test": "jest",
     "test:api": "pnpm --dir api exec prisma generate --schema prisma/schema.prisma && pnpm --dir api exec jest --runInBand",
-    "test:front": "jest --config ./jest.config.js",
+    "test:front": "jest --config ./jest.config.js --runInBand --watch=false",
     "test:all": "pnpm run test:api && pnpm run test:front"
   },
   "dependencies": {
