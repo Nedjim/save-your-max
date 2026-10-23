@@ -8,6 +8,10 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import type {
+  AuthenticatedRequest,
+  ProfileRequest,
+} from '../../common/types/authenticated-request';
 import { SupabaseAuthGuard } from '../auth/jwt-auth.guard';
 import { ProfileGuard } from '../auth/profile.guard';
 import { SupabaseService } from '../supabase/supabase.service';
@@ -23,7 +27,7 @@ export class ProfilesController {
 
   @Post()
   @UseGuards(SupabaseAuthGuard)
-  async create(@Req() req) {
+  async create(@Req() req: AuthenticatedRequest) {
     const userId = req.user.id;
 
     return this.profilesService.create(userId);
@@ -31,7 +35,10 @@ export class ProfilesController {
 
   @UseGuards(SupabaseAuthGuard, ProfileGuard)
   @Patch()
-  async update(@Req() req, @Body() data: UpdateProfileDto) {
+  async update(
+    @Req() req: AuthenticatedRequest,
+    @Body() data: UpdateProfileDto,
+  ) {
     const userId = req.user.id;
 
     return this.profilesService.update(userId, data);
@@ -39,7 +46,7 @@ export class ProfilesController {
 
   @Delete()
   @UseGuards(SupabaseAuthGuard, ProfileGuard)
-  async delete(@Req() req) {
+  async delete(@Req() req: AuthenticatedRequest) {
     const userId = req.user.id;
 
     await this.profilesService.delete(userId);
@@ -50,7 +57,7 @@ export class ProfilesController {
 
   @Get()
   @UseGuards(SupabaseAuthGuard, ProfileGuard)
-  async get(@Req() req) {
+  async get(@Req() req: ProfileRequest) {
     return this.profilesService.findOne(req.profile.id);
   }
 }
