@@ -7,7 +7,7 @@ export class ExercisesService {
   constructor(private prisma: PrismaService) {}
 
   async create(profileId: string, dto: CreateExercisesDto) {
-    return await this.prisma.exercise.create({
+    return this.prisma.exercise.create({
       data: {
         ...dto,
         profile: {
