@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { UpdateProfileDto } from '../dto/update-profile.dto';
 import { ProfilesService } from '../profiles.service';
 import { prismaServiceMock } from './prisma.mock';
 
@@ -58,7 +59,11 @@ describe('ProfilesService', () => {
 
   it('should exclude undefined values when updating a profile', async () => {
     const userId = 'user-123';
-    const dto = { name: 'Test', surname: undefined, pseudo: undefined };
+    const dto = {
+      name: 'Test',
+      surname: undefined,
+      pseudo: undefined,
+    } satisfies UpdateProfileDto;
     const filteredDto = { name: 'Test' };
     const expectedProfile = { id: 'profile-id', name: 'Test' };
 
