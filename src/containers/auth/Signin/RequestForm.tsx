@@ -106,7 +106,7 @@ const SigninForm = (props: SigninFormProps) => {
 
       <View style={styles.actions}>
         <Button
-          onPress={handleSubmit(onSubmit)}
+          onPress={() => handleSubmit(onSubmit)()}
           style={{ backgroundColor: TURQUOISE }}
           labelStyle={{ color: WHITE }}
           uppercase={false}

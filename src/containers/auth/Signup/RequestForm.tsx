@@ -108,7 +108,7 @@ function SignupRequestForm(props: SignupFormProps) {
       <View style={styles.actions}>
         <Button
           mode="contained"
-          onPress={handleSubmit(onSubmit)}
+          onPress={() => handleSubmit(onSubmit)()}
           style={{ backgroundColor: TURQUOISE }}
           labelStyle={{ color: WHITE }}
           uppercase={false}

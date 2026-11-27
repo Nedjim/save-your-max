@@ -1,2 +1,5 @@
+packages:
+  - 'api'
+
 patchedDependencies:
   '@expo/cli@58.1.21': patches/@expo__cli@58.1.21.patch
