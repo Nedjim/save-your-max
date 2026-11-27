@@ -1,0 +1,35 @@
+diff --git a/build/src/start/platforms/ios/ensureSimulatorAppRunning.js b/build/src/start/platforms/ios/ensureSimulatorAppRunning.js
+index 1ab473eb2fa400802d9b401b91212d090c37774c..dbb47e1adc0d030baedc8e1f73da35689652fc00 100644
+--- a/build/src/start/platforms/ios/ensureSimulatorAppRunning.js
++++ b/build/src/start/platforms/ios/ensureSimulatorAppRunning.js
+@@ -95,17 +95,22 @@ async function waitForSimulatorAppToStart({ maxWaitTime } = {}) {
+ // I think the app can be open while no simulators are booted.
+ async function isSimulatorAppRunningAsync() {
+     try {
+-        const result = await (0, _osascript().spawnAsync)('tell app "System Events" to count processes whose name is "Simulator" or name is "DeviceHub"');
+-        if (result.stdout.trim() === '0') {
+-            return false;
+-        }
+-    } catch (error) {
+-        if (error.message.includes('Application isn’t running')) {
++        const result = await (0, _spawnasync().default)('pgrep', [
++            '-x',
++            'DeviceHub'
++        ]);
++        return result.stdout.trim().length > 0;
++    } catch {
++        try {
++            const result = await (0, _spawnasync().default)('pgrep', [
++                '-x',
++                'Simulator'
++            ]);
++            return result.stdout.trim().length > 0;
++        } catch {
+             return false;
+         }
+-        throw error;
+     }
+-    return true;
+ }
+ async function openSimulatorAppAsync(device) {
+     try {

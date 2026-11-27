@@ -1,2 +1,2 @@
 patchedDependencies:
-  '@expo/cli@54.0.27': patches/@expo__cli@54.0.27.patch
+  '@expo/cli@58.1.21': patches/@expo__cli@58.1.21.patch
