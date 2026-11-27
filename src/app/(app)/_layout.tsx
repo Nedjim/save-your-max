@@ -43,7 +43,7 @@ export default function AppLayout() {
                 <Ionicons
                   name={focused ? item.icon : item.iconOutline}
                   size={size}
-                  color={color}
+                  color={color as ComponentProps<typeof Ionicons>['color']}
                 />
               ),
             }}
