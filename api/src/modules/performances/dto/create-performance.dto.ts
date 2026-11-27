@@ -15,5 +15,5 @@ export class CreatePerformanceDto {
   @IsOptional()
   @Type(() => Date)
   @IsDate()
-  date: Date;
+  date?: Date;
 }
