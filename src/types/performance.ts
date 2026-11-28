@@ -107,3 +107,5 @@ export type EditPerformanceFormValues = {
 export type UpdatePerformanceFormErrors = Partial<
   Record<keyof EditPerformanceFormValues, FormError>
 >;
+
+export type FetchPerformancesResponse = { data: Performance[]; total: number };

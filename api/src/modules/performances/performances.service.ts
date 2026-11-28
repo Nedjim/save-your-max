@@ -60,13 +60,22 @@ export class PerformancesService {
       throw new NotFoundException(`Exercise with id ${exerciseId} not found`);
     }
 
-    return await this.prisma.performance.findMany({
-      where: {
-        exerciseId,
-      },
-      orderBy: {
-        date: 'desc',
-      },
-    });
+    const [data, total] = await Promise.all([
+      this.prisma.performance.findMany({
+        where: {
+          exerciseId,
+        },
+        orderBy: {
+          date: 'desc',
+        },
+      }),
+      this.prisma.performance.count({
+        where: {
+          exerciseId,
+        },
+      }),
+    ]);
+
+    return { data, total };
   }
 }

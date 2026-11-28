@@ -17,6 +17,7 @@ describe('PerformancesService', () => {
       updateMany: jest.fn(),
       delete: jest.fn(),
       findMany: jest.fn(),
+      count: jest.fn(),
     },
   };
 
@@ -197,8 +198,8 @@ describe('PerformancesService', () => {
     await expect(service.delete(performanceId)).rejects.toThrow(prismaError);
   });
 
-  it('should return all performances of an existing exercise ordered by date descending', async () => {
-    const expectedResult = [
+  it('should return all performances and total count of an existing exercise ordered by date descending', async () => {
+    const expectedPerformances = [
       {
         id: 'performance-2',
         weight: 120,
@@ -215,8 +216,16 @@ describe('PerformancesService', () => {
       },
     ];
 
+    const expectedResult = {
+      data: expectedPerformances,
+      total: 2,
+    };
+
     mockPrismaService.exercise.findUnique.mockResolvedValue(mockExercise);
-    mockPrismaService.performance.findMany.mockResolvedValue(expectedResult);
+    mockPrismaService.performance.findMany.mockResolvedValue(
+      expectedPerformances,
+    );
+    mockPrismaService.performance.count.mockResolvedValue(2);
 
     const result = await service.findAll(exerciseId);
 
@@ -236,13 +245,17 @@ describe('PerformancesService', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  it('should return an empty array when the exercise has no performances', async () => {
+  it('should return an empty array and zero total when the exercise has no performances', async () => {
     mockPrismaService.exercise.findUnique.mockResolvedValue(mockExercise);
     mockPrismaService.performance.findMany.mockResolvedValue([]);
+    mockPrismaService.performance.count.mockResolvedValue(0);
 
     const result = await service.findAll(exerciseId);
 
-    expect(result).toEqual([]);
+    expect(result).toEqual({
+      data: [],
+      total: 0,
+    });
   });
 
   it('should throw NotFoundException when the exercise does not exist', async () => {
@@ -253,5 +266,6 @@ describe('PerformancesService', () => {
     );
 
     expect(mockPrismaService.performance.findMany).not.toHaveBeenCalled();
+    expect(mockPrismaService.performance.count).not.toHaveBeenCalled();
   });
 });
