@@ -7,7 +7,7 @@ module.exports = function (api) {
       [
         'babel-plugin-react-compiler',
         {
-          target: '18',
+          target: '19',
           sources: (filename) => {
             return filename.includes('/src/');
           },
