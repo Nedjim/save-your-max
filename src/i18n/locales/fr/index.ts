@@ -87,9 +87,11 @@ export const fr = {
     delete_message: 'Vous êtes sur le point de supprimer cette performance.',
     empty_state_description:
       'Aucune performance pour le moment. Créez la première pour commencer.',
-    historyTitle: 'Historique des performances',
     bestEstimatedOneRM: 'Meilleur 1RM estimé',
-    pr: 'PR'
+    pr: 'PR',
+    historyBannerTitle: 'Historique',
+    historyBannerResult_one: '{{count}} resultat',
+    historyBannerResult_other: '{{count}} resultats',
   },
   exercises: {
     navigation_title: 'Exercices',

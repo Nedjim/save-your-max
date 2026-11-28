@@ -8,7 +8,15 @@ import PersonalRecord from './PersonalRecord';
 
 function Performances() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { data = [], isLoading, isError, error, refetch } = usePerformances(id);
+  const {
+    data: dataPerformances,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = usePerformances(id);
+
+  const { data: performances = [], total = 0 } = dataPerformances ?? {};
 
   let content = null;
 
@@ -20,7 +28,7 @@ function Performances() {
     content = <Error message={error.message} />;
   }
 
-  if (!isLoading && !isError && !data.length) {
+  if (!isLoading && !isError && !total) {
     content = <EmptyState refetch={refetch} />;
   }
 
@@ -28,8 +36,12 @@ function Performances() {
     content
   ) : (
     <>
-      {data.length && <PersonalRecord performances={data} />}
-      <PerformanceList performances={data} refetch={refetch} />
+      {total > 0 && <PersonalRecord performances={performances} />}
+      <PerformanceList
+        performances={performances}
+        refetch={refetch}
+        total={total}
+      />
     </>
   );
 }

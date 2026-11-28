@@ -1,12 +1,13 @@
 import {
   CreatePerformancePayload,
+  FetchPerformancesResponse,
   Performance,
   UpdatePerformancePayload,
 } from '@/src/types';
 import { apiFetch } from './supabase';
 
 export async function getPerformances(exerciseId: string) {
-  return await apiFetch<Performance[]>({
+  return await apiFetch<FetchPerformancesResponse>({
     endpoint: `exercises/${exerciseId}/performances`,
     method: 'GET',
   });

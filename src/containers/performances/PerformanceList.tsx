@@ -13,10 +13,11 @@ import PerformanceRow from './PerformanceRow';
 type PerformanceListProps = {
   performances: Performance[];
   refetch: () => void;
+  total: number;
 };
 
 const PerformanceList = (props: PerformanceListProps) => {
-  const { performances, refetch } = props;
+  const { performances, refetch, total } = props;
 
   const { t } = useTranslation();
   const [createPerformance, setCreatePerformance] = useState(false);
@@ -40,10 +41,15 @@ const PerformanceList = (props: PerformanceListProps) => {
 
   return (
     <View style={styles.performanceContent}>
-      <View style={styles.performanceHeader}>
-        <Ionicons name="bar-chart-outline" size={24} color={TURQUOISE} />
-        <Text style={styles.performanceHeaderTitle}>
-          {t('performance.historyTitle')}
+      <View style={styles.historyBanner}>
+        <View style={styles.historyBannerContent}>
+          <Ionicons name="bar-chart-outline" size={24} color={TURQUOISE} />
+          <Text style={styles.historyBannerTitle}>
+            {t('performance.historyBannerTitle')}
+          </Text>
+        </View>
+        <Text style={styles.historyBannerCount}>
+          {t('performance.historyBannerResult', { count: total })}
         </Text>
       </View>
       <FlatList
@@ -103,17 +109,24 @@ const styles = StyleSheet.create({
   performanceContent: {
     flex: 1,
   },
-  performanceHeader: {
+  historyBanner: {
+    display: 'flex',
+    marginVertical: 24,
+    marginHorizontal: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  historyBannerContent: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
-    marginVertical: 16,
-    marginHorizontal: 8,
   },
-  performanceHeaderTitle: {
+  historyBannerTitle: {
     color: WHITE,
-    fontSize: 16,
+  },
+  historyBannerCount: {
+    color: '#86a7a7',
   },
   performanceList: {
     flex: 1,
